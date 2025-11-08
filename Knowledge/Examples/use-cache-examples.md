@@ -1,17 +1,29 @@
 ---
 created: 2025-11-08
-tags: [example, nextjs, cache, use-cache, performance]
-status: 完了
+updated: 2025-11-08
+tags: [example, nextjs, cache, use-cache, performance, migration]
+status: 移行完了（unstable_cache使用）
 related:
   - "[[Next.js-16-Setup]]"
   - "[[Cache-Strategies]]"
 ---
 
-# use cache 実装サンプル
+# Cache 実装サンプル（Next.js 16.0.1 対応）
+
+## ⚠️ 重要な変更
+
+**Next.js 16.0.1 では `"use cache"` ディレクティブがまだサポートされていません。**
+
+このプロジェクトでは以下の代替手段に移行しました：
+
+1. **関数キャッシュ**: `unstable_cache` API を使用
+2. **ページ/コンポーネントキャッシュ**: fetch の `cache` オプションを使用
+
+---
 
 ## 概要
 
-Next.js 16の`use cache`ディレクティブを使った3種類のキャッシュパターンの実装例。
+Next.js 16 のキャッシュ機能を使った3種類のキャッシュパターンの実装例。
 
 ## 実装場所
 
@@ -28,11 +40,39 @@ Projects/next16-sandbox/
 
 ## 1. ページキャッシュ（Page-level Cache）
 
-### 実装例
+### Next.js 16.0.1 での実装例
 
 ```typescript
 // app/cached-page/page.tsx
-"use cache";
+
+async function fetchData() {
+  // fetch の cache オプションでキャッシュを制御
+  const response = await fetch("https://api.example.com/data", {
+    cache: "force-cache", // キャッシュを強制
+    next: { revalidate: 3600 }, // 1時間ごとに再検証
+  });
+  return response.json();
+}
+
+export default async function CachedPage() {
+  const data = await fetchData();
+  const now = new Date().toISOString();
+
+  return (
+    <div>
+      <h1>キャッシュされたページ</h1>
+      <p>レンダリング時刻: {now}</p>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
+    </div>
+  );
+}
+```
+
+### 将来的な実装例（"use cache" サポート後）
+
+```typescript
+// app/cached-page/page.tsx
+"use cache"; // Next.js 16 の将来バージョンでサポート予定
 
 export default async function CachedPage() {
   const data = await fetch("https://api.example.com/data");
@@ -85,7 +125,40 @@ export default async function CachedPage() {
 
 ## 2. コンポーネントキャッシュ（Component-level Cache）
 
-### 実装例
+### Next.js 16.0.1 での実装例
+
+```typescript
+// app/components/CachedProduct.tsx
+
+interface Product {
+  id: number;
+  title: string;
+  price: number;
+}
+
+async function fetchProduct(id: number, useCache: boolean = true): Promise<Product> {
+  const res = await fetch(`https://api.example.com/products/${id}`, {
+    cache: useCache ? "force-cache" : "no-store",
+    next: useCache ? { revalidate: 3600 } : undefined,
+  });
+  return res.json();
+}
+
+export async function CachedProduct({ productId }: { productId: number }) {
+  const product = await fetchProduct(productId, true);
+  const fetchTime = new Date().toISOString();
+
+  return (
+    <div className="product-card">
+      <h3>{product.title}</h3>
+      <p>${product.price}</p>
+      <small>Cached at: {fetchTime}</small>
+    </div>
+  );
+}
+```
+
+### 将来的な実装例（"use cache" サポート後）
 
 ```typescript
 // app/components/CachedProduct.tsx
@@ -172,7 +245,50 @@ export async function UncachedProduct({ id }: { id: number }) {
 
 ## 3. 関数キャッシュ（Function-level Cache）
 
-### 実装例
+### Next.js 16.0.1 での実装例（unstable_cache 使用）
+
+```typescript
+// app/actions/cachedActions.ts
+import { unstable_cache } from "next/cache";
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+export const getCachedUser = unstable_cache(
+  async (userId: number): Promise<User> => {
+    console.log(`[Cache] Fetching user ${userId}...`); // 初回のみ実行される
+
+    const res = await fetch(`https://api.example.com/users/${userId}`);
+    return res.json();
+  },
+  ["user"], // キャッシュキー
+  { tags: ["users"] } // タグでグループ化
+);
+
+export const calculateFibonacci = unstable_cache(
+  async (n: number): Promise<number> => {
+    console.log(`[Cache] Calculating fibonacci(${n})...`);
+
+    if (n <= 1) return n;
+
+    let a = 0, b = 1;
+    for (let i = 2; i <= n; i++) {
+      const temp = a + b;
+      a = b;
+      b = temp;
+    }
+
+    return b;
+  },
+  ["fibonacci"], // キャッシュキー
+  { tags: ["calculations"] } // タグでグループ化
+);
+```
+
+### 将来的な実装例（"use cache" サポート後）
 
 ```typescript
 // app/actions/cachedActions.ts
