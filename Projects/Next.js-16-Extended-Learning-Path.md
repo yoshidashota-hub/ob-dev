@@ -10,7 +10,7 @@ related:
 
 ## 📋 概要
 
-Phase 1完了後、Next.js 16の残りの重要機能を体系的に学習するための拡張プラン。
+Phase 1 完了後、Next.js 16 の残りの重要機能を体系的に学習するための拡張プラン。
 
 ## ✅ Phase 1 完了項目（2025-11-08）
 
@@ -19,7 +19,7 @@ Phase 1完了後、Next.js 16の残りの重要機能を体系的に学習する
 - [x] Async Params
 - [x] View Transitions
 
-**成果物**: 11ページ実装、4ドキュメント作成
+**成果物**: 11 ページ実装、4 ドキュメント作成
 
 ---
 
@@ -28,6 +28,7 @@ Phase 1完了後、Next.js 16の残りの重要機能を体系的に学習する
 ### 1. Server Actions & Forms
 
 **実装内容**:
+
 - フォーム送信処理
 - データ作成・更新・削除
 - Optimistic UI
@@ -35,6 +36,7 @@ Phase 1完了後、Next.js 16の残りの重要機能を体系的に学習する
 - エラーハンドリング
 
 **実装ファイル**:
+
 ```
 app/
 ├── forms/
@@ -53,22 +55,25 @@ app/
 **ノート**: `Knowledge/Examples/server-actions-examples.md`
 
 **学習ポイント**:
-- Server Actionsの基本
+
+- Server Actions の基本
 - `useFormStatus` / `useFormState` / `useOptimistic`
-- Progressiveエンハンスメント
-- バリデーション（Zod連携）
+- Progressive エンハンスメント
+- バリデーション（Zod 連携）
 
 ---
 
 ### 2. Streaming & Suspense
 
 **実装内容**:
+
 - ページの段階的レンダリング
-- Suspense境界の配置
+- Suspense 境界の配置
 - Loading Skeletons
 - 並列データ取得
 
 **実装ファイル**:
+
 ```
 app/
 ├── streaming/
@@ -82,8 +87,9 @@ app/
 **ノート**: `Knowledge/Examples/streaming-suspense-examples.md`
 
 **学習ポイント**:
-- Streaming SSRの仕組み
-- Suspenseの適切な配置
+
+- Streaming SSR の仕組み
+- Suspense の適切な配置
 - パフォーマンス最適化
 - ユーザー体験向上
 
@@ -92,12 +98,14 @@ app/
 ### 3. Error Handling
 
 **実装内容**:
+
 - エラーページ（`error.tsx`）
-- 404ページ（`not-found.tsx`）
+- 404 ページ（`not-found.tsx`）
 - グローバルエラー（`global-error.tsx`）
 - セグメントごとのエラー処理
 
 **実装ファイル**:
+
 ```
 app/
 ├── error.tsx                    # ルートエラー
@@ -112,7 +120,8 @@ app/
 **ノート**: `Knowledge/Examples/error-handling-examples.md`
 
 **学習ポイント**:
-- Error Boundaryの配置
+
+- Error Boundary の配置
 - エラーリカバリー
 - ユーザーフレンドリーなエラー表示
 - ログ送信
@@ -122,12 +131,14 @@ app/
 ### 4. Loading UI & Skeletons
 
 **実装内容**:
+
 - `loading.tsx`の実装
 - スケルトンスクリーン
 - プログレスバー
 - ローディング状態管理
 
 **実装ファイル**:
+
 ```
 app/
 ├── products/
@@ -143,6 +154,7 @@ app/
 **ノート**: `Knowledge/Examples/loading-ui-examples.md`
 
 **学習ポイント**:
+
 - Instant Loading State
 - Suspense Fallback
 - スケルトンデザイン
@@ -153,12 +165,14 @@ app/
 ### 5. Route Handlers (API Routes)
 
 **実装内容**:
+
 - GET/POST/PUT/DELETE エンドポイント
 - リクエスト/レスポンス処理
-- CORS設定
+- CORS 設定
 - 認証ミドルウェア
 
 **実装ファイル**:
+
 ```
 app/
 └── api/
@@ -175,7 +189,8 @@ app/
 **ノート**: `Knowledge/Examples/route-handlers-examples.md`
 
 **学習ポイント**:
-- RESTful API設計
+
+- RESTful API 設計
 - リクエストハンドリング
 - レスポンス形式
 - エラーハンドリング
@@ -185,12 +200,14 @@ app/
 ### 6. Image & Font Optimization
 
 **実装内容**:
+
 - `next/image`コンポーネント
 - 画像最適化設定
-- Google Fonts最適化
+- Google Fonts 最適化
 - カスタムフォント
 
 **実装ファイル**:
+
 ```
 app/
 ├── images/
@@ -201,6 +218,7 @@ app/
 ```
 
 **設定ファイル**:
+
 ```typescript
 // next.config.ts
 images: {
@@ -212,6 +230,7 @@ images: {
 **ノート**: `Knowledge/Examples/optimization-examples.md`
 
 **学習ポイント**:
+
 - 画像の自動最適化
 - レスポンシブ画像
 - フォントのサブセット化
@@ -222,12 +241,14 @@ images: {
 ### 7. Metadata API (SEO)
 
 **実装内容**:
+
 - 静的メタデータ
 - 動的メタデータ
-- Open Graph画像
+- Open Graph 画像
 - Sitemap/Robots.txt
 
 **実装ファイル**:
+
 ```
 app/
 ├── layout.tsx                   # ルートメタデータ
@@ -241,7 +262,8 @@ app/
 **ノート**: `Knowledge/Examples/metadata-seo-examples.md`
 
 **学習ポイント**:
-- SEO最適化
+
+- SEO 最適化
 - ソーシャルシェア対応
 - 検索エンジン対策
 - メタデータ継承
@@ -251,12 +273,14 @@ app/
 ### 8. Middleware
 
 **実装内容**:
+
 - 認証チェック
 - リダイレクト処理
 - ヘッダー追加
-- A/Bテスト
+- A/B テスト
 
 **実装ファイル**:
+
 ```
 middleware.ts                    # ルートミドルウェア
 app/
@@ -267,6 +291,7 @@ app/
 **ノート**: `Knowledge/Examples/middleware-examples.md`
 
 **学習ポイント**:
+
 - Edge Runtime
 - リクエストインターセプト
 - 認証フロー
@@ -277,12 +302,14 @@ app/
 ### 9. Route Groups & Layouts
 
 **実装内容**:
+
 - Route Groups `(group)`
 - 複数レイアウト
 - ネストしたレイアウト
 - レイアウト継承
 
 **実装ファイル**:
+
 ```
 app/
 ├── (marketing)/
@@ -301,7 +328,8 @@ app/
 **ノート**: `Knowledge/Examples/route-groups-examples.md`
 
 **学習ポイント**:
-- URLに影響しないグループ化
+
+- URL に影響しないグループ化
 - レイアウトの使い分け
 - コード整理
 - 保守性向上
@@ -311,12 +339,14 @@ app/
 ### 10. Parallel & Intercepting Routes
 
 **実装内容**:
+
 - Parallel Routes `@slot`
 - Intercepting Routes `(.)`
 - モーダル実装
 - 複雑なレイアウト
 
 **実装ファイル**:
+
 ```
 app/
 ├── @modal/
@@ -331,7 +361,8 @@ app/
 **ノート**: `Knowledge/Examples/advanced-routing-examples.md`
 
 **学習ポイント**:
-- 複雑なUI構成
+
+- 複雑な UI 構成
 - モーダルパターン
 - 並列レンダリング
 - ルートインターセプト
@@ -341,21 +372,25 @@ app/
 ## 📅 推奨スケジュール（Phase 1.5）
 
 ### Week 1: Forms & Data
-- Day 1-2: Server Actions基礎
+
+- Day 1-2: Server Actions 基礎
 - Day 3-4: フォーム実装
 - Day 5-7: Optimistic UI
 
 ### Week 2: UI States
+
 - Day 1-2: Streaming & Suspense
 - Day 3-4: Error Handling
 - Day 5-7: Loading UI
 
 ### Week 3: API & Optimization
+
 - Day 1-2: Route Handlers
-- Day 3-4: Image & Font最適化
+- Day 3-4: Image & Font 最適化
 - Day 5-7: Metadata & SEO
 
 ### Week 4: Advanced Routing
+
 - Day 1-2: Middleware
 - Day 3-4: Route Groups
 - Day 5-7: Parallel & Intercepting Routes
@@ -365,20 +400,23 @@ app/
 ## 🎯 学習優先度
 
 ### 🔥 最優先（すぐに使う）
+
 1. **Server Actions** - フォーム処理の基本
 2. **Error Handling** - 本番環境必須
-3. **Loading UI** - UX向上
-4. **Metadata API** - SEO対策
+3. **Loading UI** - UX 向上
+4. **Metadata API** - SEO 対策
 
 ### ⭐ 重要（プロジェクトで頻繁に使用）
-5. **Route Handlers** - API構築
+
+5. **Route Handlers** - API 構築
 6. **Image Optimization** - パフォーマンス
-7. **Streaming & Suspense** - UX向上
+7. **Streaming & Suspense** - UX 向上
 8. **Middleware** - 認証・セキュリティ
 
 ### 📚 応用（大規模アプリで使用）
+
 9. **Route Groups** - コード整理
-10. **Parallel Routes** - 複雑なUI
+10. **Parallel Routes** - 複雑な UI
 
 ---
 
@@ -411,23 +449,26 @@ Phase 3: 横展開・比較 ⏹️ 未着手
 
 ## 🚀 次のアクション
 
-### オプション1: 優先度順に実装
+### オプション 1: 優先度順に実装
+
 最優先の**Server Actions**から開始
 
-### オプション2: カテゴリ別に実装
+### オプション 2: カテゴリ別に実装
+
 **Forms & Data**カテゴリから順番に
 
-### オプション3: 興味のある機能から
+### オプション 3: 興味のある機能から
+
 好きな機能を選んで実装
 
 ---
 
 どのアプローチで進めますか？
 
-**推奨**: Server Actionsから始めると、実践的なアプリケーション構築スキルが身につきます！
+**推奨**: Server Actions から始めると、実践的なアプリケーション構築スキルが身につきます！
 
 ---
 
 **作成日**: 2025-11-08
-**Phase 1完了日**: 2025-11-08
-**次の目標**: Phase 1.5 - Server Actions実装
+**Phase 1 完了日**: 2025-11-08
+**次の目標**: Phase 1.5 - Server Actions 実装
