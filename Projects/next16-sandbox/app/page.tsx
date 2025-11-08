@@ -219,7 +219,8 @@ export default function Home() {
                 <li>✅ Streaming & Suspense</li>
                 <li>✅ Error Handling</li>
                 <li>✅ Route Handlers (API Routes)</li>
-                <li>⏳ Loading UI （次回）</li>
+                <li>✅ Loading UI & Skeletons</li>
+                <li>⏳ Image & Font Optimization （次回）</li>
               </ul>
             </div>
           </div>
