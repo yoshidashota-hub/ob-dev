@@ -162,28 +162,30 @@ app/
 
 ---
 
-### 5. Route Handlers (API Routes)
+### 5. Route Handlers (API Routes) ✅
 
 **実装内容**:
 
 - GET/POST/PUT/DELETE エンドポイント
 - リクエスト/レスポンス処理
 - CORS 設定
-- 認証ミドルウェア
+- 認証サンプル実装
 
 **実装ファイル**:
 
 ```
 app/
-└── api/
-    ├── posts/
-    │   ├── route.ts             # GET /api/posts, POST
-    │   └── [id]/
-    │       └── route.ts         # GET /api/posts/[id], PUT, DELETE
-    ├── auth/
-    │   └── route.ts             # POST /api/auth
-    └── upload/
-        └── route.ts             # POST /api/upload
+├── api/
+│   ├── posts/
+│   │   ├── route.ts             # GET /api/posts, POST
+│   │   └── [id]/
+│   │       └── route.ts         # GET /api/posts/[id], PUT, DELETE
+│   ├── auth/
+│   │   └── route.ts             # POST /api/auth (login), DELETE (logout)
+│   └── lib/
+│       └── helpers.ts           # CORS & Error Handling helpers
+└── api-demo/
+    └── page.tsx                 # API呼び出しデモページ
 ```
 
 **ノート**: `Knowledge/Examples/route-handlers-examples.md`
@@ -192,8 +194,11 @@ app/
 
 - RESTful API 設計
 - リクエストハンドリング
-- レスポンス形式
-- エラーハンドリング
+- レスポンス形式の統一
+- エラーハンドリング & CORS
+- Cookie 操作（認証トークン）
+
+**実装日**: 2025-11-08
 
 ---
 

@@ -173,6 +173,28 @@ export default function Home() {
               <div>✓ Segment-specific Errors</div>
             </div>
           </a>
+
+          {/* Route Handlers (API Routes) */}
+          <a
+            href="/api-demo"
+            className="group block p-6 bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-teal-500"
+          >
+            <div className="flex items-center mb-4">
+              <span className="text-4xl mr-3">🚀</span>
+              <h2 className="text-2xl font-semibold text-gray-900 group-hover:text-teal-600">
+                Route Handlers
+              </h2>
+            </div>
+            <p className="text-gray-600 mb-4">
+              RESTful API、GET/POST/PUT/DELETE、認証サンプル
+            </p>
+            <div className="space-y-1 text-sm text-gray-500">
+              <div>✓ /api/posts (GET, POST)</div>
+              <div>✓ /api/posts/[id] (GET, PUT, DELETE)</div>
+              <div>✓ /api/auth (POST, DELETE)</div>
+              <div>✓ CORS & Error Handling</div>
+            </div>
+          </a>
         </div>
 
         {/* フッター情報 */}
@@ -196,6 +218,7 @@ export default function Home() {
                 <li>✅ Server Actions & Forms</li>
                 <li>✅ Streaming & Suspense</li>
                 <li>✅ Error Handling</li>
+                <li>✅ Route Handlers (API Routes)</li>
                 <li>⏳ Loading UI （次回）</li>
               </ul>
             </div>
