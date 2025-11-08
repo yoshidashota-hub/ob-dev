@@ -37,12 +37,6 @@ export default function NotFound() {
           >
             🏠 ホームに戻る
           </a>
-          <button
-            onClick={() => window.history.back()}
-            className="px-8 py-4 bg-white text-gray-700 rounded-lg hover:bg-gray-100 font-bold text-lg transition-all border-2 border-gray-300"
-          >
-            ← 前のページへ
-          </button>
         </div>
 
         {/* おすすめリンク */}
