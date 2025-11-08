@@ -1,65 +1,218 @@
-import Image from "next/image";
+/**
+ * Next.js 16 学習サンドボックス
+ *
+ * Phase 1.5 の実装例へのナビゲーション
+ */
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-12 px-4">
+      <div className="max-w-6xl mx-auto">
+        {/* ヘッダー */}
+        <div className="text-center mb-12">
+          <h1 className="text-5xl font-bold text-gray-900 mb-4">
+            Next.js 16 学習サンドボックス
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="text-xl text-gray-600">
+            Phase 1.5: 実践応用（拡張）の実装例
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
+
+        {/* デモカード */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Server Actions & Forms */}
           <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/forms"
+            className="group block p-6 bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-blue-500"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
+            <div className="flex items-center mb-4">
+              <span className="text-4xl mr-3">📝</span>
+              <h2 className="text-2xl font-semibold text-gray-900 group-hover:text-blue-600">
+                Server Actions
+              </h2>
+            </div>
+            <p className="text-gray-600 mb-4">
+              フォーム処理、CRUD操作、Optimistic UIの実装例
+            </p>
+            <div className="space-y-1 text-sm text-gray-500">
+              <div>✓ useFormState</div>
+              <div>✓ useFormStatus</div>
+              <div>✓ useOptimistic</div>
+              <div>✓ Progressive Enhancement</div>
+            </div>
           </a>
+
+          {/* Streaming & Suspense */}
           <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/streaming"
+            className="group block p-6 bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-green-500"
           >
-            Documentation
+            <div className="flex items-center mb-4">
+              <span className="text-4xl mr-3">🌊</span>
+              <h2 className="text-2xl font-semibold text-gray-900 group-hover:text-green-600">
+                Streaming
+              </h2>
+            </div>
+            <p className="text-gray-600 mb-4">
+              Suspense、段階的レンダリング、並列データフェッチング
+            </p>
+            <div className="space-y-1 text-sm text-gray-500">
+              <div>✓ Suspense Boundaries</div>
+              <div>✓ Loading Skeletons</div>
+              <div>✓ Parallel Fetching</div>
+              <div>✓ Streaming SSR</div>
+            </div>
+          </a>
+
+          {/* Cache Components */}
+          <a
+            href="/cache-demo"
+            className="group block p-6 bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-purple-500"
+          >
+            <div className="flex items-center mb-4">
+              <span className="text-4xl mr-3">⚡</span>
+              <h2 className="text-2xl font-semibold text-gray-900 group-hover:text-purple-600">
+                Cache
+              </h2>
+            </div>
+            <p className="text-gray-600 mb-4">
+              unstable_cache、fetch キャッシング、パフォーマンス最適化
+            </p>
+            <div className="space-y-1 text-sm text-gray-500">
+              <div>✓ unstable_cache</div>
+              <div>✓ Force Cache</div>
+              <div>✓ Revalidation</div>
+              <div>✓ Cache Tags</div>
+            </div>
+          </a>
+
+          {/* Turbopack */}
+          <a
+            href="/turbopack"
+            className="group block p-6 bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-orange-500"
+          >
+            <div className="flex items-center mb-4">
+              <span className="text-4xl mr-3">⚙️</span>
+              <h2 className="text-2xl font-semibold text-gray-900 group-hover:text-orange-600">
+                Turbopack
+              </h2>
+            </div>
+            <p className="text-gray-600 mb-4">
+              Next.js 16 のデフォルトバンドラー、高速開発体験
+            </p>
+            <div className="space-y-1 text-sm text-gray-500">
+              <div>✓ Fast Refresh</div>
+              <div>✓ HMR</div>
+              <div>✓ Build Performance</div>
+              <div>✓ Dev Experience</div>
+            </div>
+          </a>
+
+          {/* View Transitions */}
+          <a
+            href="/gallery"
+            className="group block p-6 bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-pink-500"
+          >
+            <div className="flex items-center mb-4">
+              <span className="text-4xl mr-3">✨</span>
+              <h2 className="text-2xl font-semibold text-gray-900 group-hover:text-pink-600">
+                View Transitions
+              </h2>
+            </div>
+            <p className="text-gray-600 mb-4">
+              ページ遷移アニメーション、スムーズなUX
+            </p>
+            <div className="space-y-1 text-sm text-gray-500">
+              <div>✓ Page Transitions</div>
+              <div>✓ Shared Elements</div>
+              <div>✓ Smooth Navigation</div>
+              <div>✓ Modern UX</div>
+            </div>
+          </a>
+
+          {/* Async Params */}
+          <a
+            href="/dashboard"
+            className="group block p-6 bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-indigo-500"
+          >
+            <div className="flex items-center mb-4">
+              <span className="text-4xl mr-3">🔄</span>
+              <h2 className="text-2xl font-semibold text-gray-900 group-hover:text-indigo-600">
+                Async Params
+              </h2>
+            </div>
+            <p className="text-gray-600 mb-4">
+              非同期パラメータ、動的ルーティング
+            </p>
+            <div className="space-y-1 text-sm text-gray-500">
+              <div>✓ Dynamic Routes</div>
+              <div>✓ Async params/searchParams</div>
+              <div>✓ Type Safety</div>
+              <div>✓ Migration Pattern</div>
+            </div>
+          </a>
+
+          {/* Error Handling */}
+          <a
+            href="/error-demo"
+            className="group block p-6 bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-red-500"
+          >
+            <div className="flex items-center mb-4">
+              <span className="text-4xl mr-3">⚠️</span>
+              <h2 className="text-2xl font-semibold text-gray-900 group-hover:text-red-600">
+                Error Handling
+              </h2>
+            </div>
+            <p className="text-gray-600 mb-4">
+              エラーバウンダリー、404ページ、エラーリカバリー
+            </p>
+            <div className="space-y-1 text-sm text-gray-500">
+              <div>✓ error.tsx</div>
+              <div>✓ global-error.tsx</div>
+              <div>✓ not-found.tsx</div>
+              <div>✓ Segment-specific Errors</div>
+            </div>
           </a>
         </div>
-      </main>
+
+        {/* フッター情報 */}
+        <div className="mt-12 p-6 bg-white rounded-lg shadow-md">
+          <h3 className="text-xl font-semibold text-gray-900 mb-4">
+            📚 実装済み機能
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600">
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-2">Phase 1: 実践基礎</h4>
+              <ul className="space-y-1">
+                <li>✅ Turbopack （デフォルト有効）</li>
+                <li>✅ Cache Components → unstable_cache</li>
+                <li>✅ Async params/searchParams</li>
+                <li>✅ View Transitions</li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-2">Phase 1.5: 実践応用</h4>
+              <ul className="space-y-1">
+                <li>✅ Server Actions & Forms</li>
+                <li>✅ Streaming & Suspense</li>
+                <li>✅ Error Handling</li>
+                <li>⏳ Loading UI （次回）</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {/* 技術スタック */}
+        <div className="mt-6 text-center text-sm text-gray-500">
+          <p>Next.js 16.0.1 • React 19.2.0 • TypeScript 5 • Tailwind CSS 3</p>
+          <p className="mt-2">
+            📖 ドキュメント:{" "}
+            <code className="bg-gray-100 px-2 py-1 rounded text-xs">
+              Knowledge/Examples/
+            </code>
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
