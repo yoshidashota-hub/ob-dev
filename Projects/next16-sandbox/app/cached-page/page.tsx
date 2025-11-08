@@ -1,10 +1,8 @@
-"use cache";
-
 /**
  * ページレベルのキャッシュ実装
  *
- * `use cache`ディレクティブをファイルの最初に配置することで、
- * このページ全体がキャッシュされる
+ * Next.js 16.0.1 では "use cache" がサポートされていないため、
+ * fetch の cache オプションを使用してキャッシュを実装
  */
 
 interface GitHubRepo {
@@ -17,7 +15,11 @@ interface GitHubRepo {
 }
 
 async function fetchNextJsRepo(): Promise<GitHubRepo> {
-  const response = await fetch("https://api.github.com/repos/vercel/next.js");
+  // force-cache でデータをキャッシュ
+  const response = await fetch("https://api.github.com/repos/vercel/next.js", {
+    cache: "force-cache",
+    next: { revalidate: 3600 }, // 1時間ごとに再検証
+  });
 
   if (!response.ok) {
     throw new Error("Failed to fetch repository data");
@@ -40,7 +42,7 @@ export default async function CachedPage() {
 
           <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded">
             <p className="text-sm text-blue-800">
-              <strong>キャッシュ動作:</strong> このページ全体が<code className="bg-blue-100 px-1 rounded">use cache</code>
+              <strong>キャッシュ動作:</strong> このページは fetch の<code className="bg-blue-100 px-1 rounded">cache: &quot;force-cache&quot;</code>
               でキャッシュされています。ページをリロードしても、同じタイムスタンプが表示されます。
             </p>
           </div>
@@ -125,14 +127,14 @@ export default async function CachedPage() {
           </h3>
           <div className="space-y-2 text-sm text-gray-600">
             <p>
-              <code className="bg-gray-100 px-2 py-1 rounded">use cache</code>
-              ディレクティブを使用すると:
+              <code className="bg-gray-100 px-2 py-1 rounded">cache: &quot;force-cache&quot;</code>
+              を使用すると:
             </p>
             <ul className="list-disc list-inside space-y-1 ml-4">
-              <li>ページ全体がビルド時または初回アクセス時にキャッシュされる</li>
+              <li>fetch でのデータ取得がビルド時または初回アクセス時にキャッシュされる</li>
               <li>API呼び出しは1回のみ実行される</li>
               <li>後続のリクエストはキャッシュから提供される</li>
-              <li>パフォーマンスが大幅に向上</li>
+              <li>revalidate オプションで再検証タイミングを制御可能</li>
             </ul>
           </div>
         </div>

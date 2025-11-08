@@ -34,8 +34,8 @@ export default async function CacheDemoPage() {
             Cache Components デモ
           </h1>
           <p className="text-lg text-gray-600 mb-6">
-            Next.js 16の<code className="bg-gray-100 px-2 py-1 rounded">use cache</code>
-            ディレクティブを使った3種類のキャッシュパターン
+            Next.js 16 の<code className="bg-gray-100 px-2 py-1 rounded">unstable_cache</code>
+            と fetch キャッシュを使った3種類のキャッシュパターン
           </p>
 
           <div className="grid grid-cols-3 gap-4 p-4 bg-blue-50 border border-blue-200 rounded">
@@ -60,7 +60,7 @@ export default async function CacheDemoPage() {
             1️⃣ 関数キャッシュ (Function Cache)
           </h2>
           <p className="text-gray-600 mb-6">
-            個別の関数に<code className="bg-gray-100 px-1 rounded">use cache</code>
+            個別の関数に<code className="bg-gray-100 px-1 rounded">unstable_cache</code>
             を適用し、戻り値をキャッシュ
           </p>
 
@@ -223,7 +223,7 @@ export default async function CacheDemoPage() {
                 ページ全体をキャッシュ。静的コンテンツに最適。
               </p>
               <code className="text-xs bg-gray-100 p-1 rounded block mt-2">
-                &quot;use cache&quot; at top
+                fetch with cache: &quot;force-cache&quot;
               </code>
             </div>
 
@@ -233,7 +233,7 @@ export default async function CacheDemoPage() {
                 個別コンポーネントをキャッシュ。部分的な静的化に最適。
               </p>
               <code className="text-xs bg-gray-100 p-1 rounded block mt-2">
-                Component with &quot;use cache&quot;
+                Component with cache options
               </code>
             </div>
 
@@ -243,7 +243,7 @@ export default async function CacheDemoPage() {
                 関数の戻り値をキャッシュ。API呼び出しや重い計算に最適。
               </p>
               <code className="text-xs bg-gray-100 p-1 rounded block mt-2">
-                Function with &quot;use cache&quot;
+                unstable_cache(fn, keys, tags)
               </code>
             </div>
           </div>

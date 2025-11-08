@@ -1,10 +1,8 @@
-"use cache";
-
 /**
  * コンポーネントレベルのキャッシュ実装
  *
- * 個別のコンポーネントに`use cache`を適用することで、
- * そのコンポーネントのみをキャッシュできる
+ * Next.js 16.0.1 では "use cache" がサポートされていないため、
+ * fetch の cache オプションを使用してキャッシュを実装
  */
 
 interface Product {
@@ -19,8 +17,11 @@ interface Product {
   };
 }
 
-async function fetchProduct(id: number): Promise<Product> {
-  const response = await fetch(`https://fakestoreapi.com/products/${id}`);
+async function fetchProduct(id: number, useCache: boolean = true): Promise<Product> {
+  const response = await fetch(`https://fakestoreapi.com/products/${id}`, {
+    cache: useCache ? "force-cache" : "no-store",
+    next: useCache ? { revalidate: 3600 } : undefined,
+  });
 
   if (!response.ok) {
     throw new Error(`Failed to fetch product ${id}`);
@@ -36,11 +37,11 @@ interface CachedProductProps {
 /**
  * キャッシュされる商品コンポーネント
  *
- * このコンポーネントは`use cache`によってキャッシュされるため、
+ * fetch の cache: "force-cache" によってキャッシュされるため、
  * 同じproductIdに対するAPI呼び出しは1回のみ実行される
  */
 export async function CachedProduct({ productId }: CachedProductProps) {
-  const product = await fetchProduct(productId);
+  const product = await fetchProduct(productId, true);
   const fetchTime = new Date().toISOString();
 
   return (
@@ -79,7 +80,7 @@ export async function CachedProduct({ productId }: CachedProductProps) {
 
       <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded">
         <p className="text-xs text-green-800">
-          <strong>✓ キャッシュ済み:</strong> このコンポーネントは<code className="bg-green-100 px-1 rounded">use cache</code>
+          <strong>✓ キャッシュ済み:</strong> このコンポーネントは<code className="bg-green-100 px-1 rounded">cache: &quot;force-cache&quot;</code>
           でキャッシュされています
         </p>
       </div>
@@ -91,7 +92,7 @@ export async function CachedProduct({ productId }: CachedProductProps) {
  * キャッシュされない商品コンポーネント（比較用）
  */
 export async function UncachedProduct({ productId }: CachedProductProps) {
-  const product = await fetchProduct(productId);
+  const product = await fetchProduct(productId, false);
   const fetchTime = new Date().toISOString();
 
   return (
