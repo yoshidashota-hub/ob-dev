@@ -1,7 +1,7 @@
 ---
 created: 2025-11-08
 tags: [project, nextjs, typescript, learning-path, extended]
-status: 計画中
+status: 進行中
 related:
   - "[[Next.js-16-Learning-Path]]"
 ---
@@ -21,11 +21,26 @@ Phase 1 完了後、Next.js 16 の残りの重要機能を体系的に学習す�
 
 **成果物**: 11 ページ実装、4 ドキュメント作成
 
+## ⏳ Phase 1.5 進行中（2025-11-08〜）
+
+- [x] Server Actions & Forms
+- [x] Streaming & Suspense
+- [x] Error Handling
+- [x] Route Handlers (API Routes)
+- [ ] Loading UI & Skeletons
+- [ ] Image & Font Optimization
+- [ ] Metadata API (SEO)
+- [ ] Middleware
+- [ ] Route Groups & Layouts
+- [ ] Parallel & Intercepting Routes
+
+**成果物**: 1 API 実装（6 エンドポイント）、1 デモページ、1 ドキュメント追加
+
 ---
 
 ## 🚀 Phase 1.5: 実践応用（拡張）
 
-### 1. Server Actions & Forms
+### 1. Server Actions & Forms ✅
 
 **実装内容**:
 
@@ -63,7 +78,7 @@ app/
 
 ---
 
-### 2. Streaming & Suspense
+### 2. Streaming & Suspense ✅
 
 **実装内容**:
 
@@ -95,7 +110,7 @@ app/
 
 ---
 
-### 3. Error Handling
+### 3. Error Handling ✅
 
 **実装内容**:
 
@@ -434,12 +449,12 @@ Phase 1: 基礎機能 ✅ 完了 (4/4)
 ├── ✅ Async Params
 └── ✅ View Transitions
 
-Phase 1.5: 応用機能 ⏳ 計画中 (0/10)
-├── ⏹️ Server Actions
-├── ⏹️ Streaming & Suspense
-├── ⏹️ Error Handling
+Phase 1.5: 応用機能 ⏳ 進行中 (4/10)
+├── ✅ Server Actions & Forms
+├── ✅ Streaming & Suspense
+├── ✅ Error Handling
+├── ✅ Route Handlers (API Routes)
 ├── ⏹️ Loading UI
-├── ⏹️ Route Handlers
 ├── ⏹️ Image & Font Optimization
 ├── ⏹️ Metadata API
 ├── ⏹️ Middleware
@@ -470,10 +485,12 @@ Phase 3: 横展開・比較 ⏹️ 未着手
 
 どのアプローチで進めますか？
 
-**推奨**: Server Actions から始めると、実践的なアプリケーション構築スキルが身につきます！
+**推奨**: 残りの機能の中では、Loading UI、Image Optimization、Metadata API の順で実装すると、実用的なスキルが効率的に身につきます！
 
 ---
 
 **作成日**: 2025-11-08
 **Phase 1 完了日**: 2025-11-08
-**次の目標**: Phase 1.5 - Server Actions 実装
+**Phase 1.5 進行中**: Server Actions、Streaming、Error Handling、Route Handlers 実装完了 (4/10)
+**Route Handlers 実装日**: 2025-11-08
+**次の目標**: Phase 1.5 - Loading UI / Image Optimization
