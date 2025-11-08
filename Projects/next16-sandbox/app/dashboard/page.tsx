@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * View Transitions デモ: ダッシュボードページ
  *
@@ -107,9 +109,7 @@ export default function DashboardPage() {
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
-                Dashboard
-              </h1>
+              <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
               <p className="text-gray-600 mt-1">
                 システムの概要とアクティビティ
               </p>
@@ -157,7 +157,11 @@ export default function DashboardPage() {
                   animation: `slideIn 0.5s ease-out ${index * 0.1}s both`,
                 }}
               >
-                <div className={`h-2 bg-gradient-to-r ${colorClasses[stat.color as keyof typeof colorClasses]}`}></div>
+                <div
+                  className={`h-2 bg-gradient-to-r ${
+                    colorClasses[stat.color as keyof typeof colorClasses]
+                  }`}
+                ></div>
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-4xl">{stat.icon}</span>
@@ -173,9 +177,7 @@ export default function DashboardPage() {
                       {stat.change}
                     </span>
                   </div>
-                  <div className="text-sm text-gray-600 mb-1">
-                    {stat.label}
-                  </div>
+                  <div className="text-sm text-gray-600 mb-1">{stat.label}</div>
                   <div className="text-3xl font-bold text-gray-900">
                     {stat.value}
                   </div>
