@@ -12,7 +12,7 @@ related:
 
 ## 概要
 
-Next.js 16でのページ遷移アニメーションとCSSアニメーションの実装例。
+Next.js 16 でのページ遷移アニメーションと CSS アニメーションの実装例。
 スムーズなユーザー体験を提供するためのテクニック集。
 
 ## 実装場所
@@ -23,7 +23,7 @@ Projects/next16-sandbox/app/
 └── dashboard/page.tsx   # ダッシュボード（スライドイン + フェードイン）
 ```
 
-## CSSアニメーションの基本
+## CSS アニメーションの基本
 
 ### 1. フェードイン + 上昇アニメーション
 
@@ -53,9 +53,10 @@ Projects/next16-sandbox/app/
 ```
 
 **特徴**:
+
 - 下から上にフェードインする効果
 - `both`により、アニメーション開始前と終了後のスタイルを維持
-- `index * 0.1s`で順次表示（ストagger効果）
+- `index * 0.1s`で順次表示（スト agger 効果）
 
 ### 2. スライドインアニメーション
 
@@ -84,6 +85,7 @@ Projects/next16-sandbox/app/
 ```
 
 **特徴**:
+
 - 左から右にスライドインする効果
 - `0.5s`の遅延で順次表示
 
@@ -104,10 +106,12 @@ Projects/next16-sandbox/app/
 
 ## 実装パターン
 
-### パターン1: グリッドアイテムの順次表示
+### パターン 1: グリッドアイテムの順次表示
 
 ```typescript
-const items = [/* データ */];
+const items = [
+  /* データ */
+];
 
 return (
   <div className="grid grid-cols-4 gap-6">
@@ -126,10 +130,11 @@ return (
 ```
 
 **効果**:
-- 各アイテムが0.1秒ずつずれて表示される
-- 4列の場合、1行目が0.0s, 0.1s, 0.2s, 0.3sで表示
 
-### パターン2: セクションの段階的表示
+- 各アイテムが 0.1 秒ずつずれて表示される
+- 4 列の場合、1 行目が 0.0s, 0.1s, 0.2s, 0.3s で表示
+
+### パターン 2: セクションの段階的表示
 
 ```typescript
 return (
@@ -150,10 +155,11 @@ return (
 ```
 
 **効果**:
+
 - ページの各セクションが順番に表示される
 - より自然な読み込み体験
 
-### パターン3: ホバーアニメーション
+### パターン 3: ホバーアニメーション
 
 ```typescript
 <div className="transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
@@ -161,10 +167,11 @@ return (
 </div>
 ```
 
-**Tailwind CSSクラス**:
+**Tailwind CSS クラス**:
+
 - `transition-all`: すべてのプロパティを遷移対象に
-- `duration-300`: 300msの遷移時間
-- `hover:-translate-y-2`: ホバー時に8px上に移動
+- `duration-300`: 300ms の遷移時間
+- `hover:-translate-y-2`: ホバー時に 8px 上に移動
 - `hover:shadow-xl`: ホバー時に大きな影
 
 ## アニメーションタイミング
@@ -190,14 +197,14 @@ animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 
 ### タイミング一覧
 
-| 要素 | 推奨時間 | 理由 |
-|------|---------|------|
+| 要素                           | 推奨時間  | 理由               |
+| ------------------------------ | --------- | ------------------ |
 | 小さな要素（ボタン、アイコン） | 150-200ms | 即座に反応する感覚 |
-| 中程度の要素（カード） | 300-400ms | 自然な動き |
+| 中程度の要素（カード）         | 300-400ms | 自然な動き         |
 | 大きな要素（モーダル、ページ） | 500-600ms | ダイナミックな効果 |
-| ページ遷移 | 400-500ms | スムーズな遷移 |
+| ページ遷移                     | 400-500ms | スムーズな遷移     |
 
-### ストagger（時間差）効果
+### スト agger（時間差）効果
 
 ```typescript
 const STAGGER_DELAY = 0.1; // 100ms
@@ -213,12 +220,13 @@ items.map((item, index) => (
 ```
 
 **パフォーマンス考慮**:
+
 - アイテム数が多い場合は、最大遅延時間を設定
 - `Math.min(index * STAGGER_DELAY, MAX_DELAY)`
 
 ## パフォーマンス最適化
 
-### 1. GPUアクセラレーション
+### 1. GPU アクセラレーション
 
 ```css
 /* ✅ GPUを使用するプロパティ（高速） */
@@ -234,7 +242,7 @@ width: 100px;
 height: 100px;
 ```
 
-### 2. will-changeの使用
+### 2. will-change の使用
 
 ```css
 /* アニメーション前にブラウザに通知 */
@@ -248,7 +256,7 @@ height: 100px;
 }
 ```
 
-### 3. Tailwind CSSでの実装
+### 3. Tailwind CSS での実装
 
 ```typescript
 // ✅ 推奨: GPUアクセラレーションを使用
@@ -265,7 +273,9 @@ height: 100px;
 ```typescript
 // app/gallery/page.tsx
 export default function GalleryPage() {
-  const images = [/* データ */];
+  const images = [
+    /* データ */
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">
@@ -286,10 +296,14 @@ export default function GalleryPage() {
                 animation: `fadeInUp 0.5s ease-out ${index * 0.1}s both`,
               }}
             >
-              <div className="bg-white rounded-lg shadow-md overflow-hidden
+              <div
+                className="bg-white rounded-lg shadow-md overflow-hidden
                             transition-all duration-300
-                            hover:shadow-xl hover:-translate-y-2">
-                <div className={`aspect-square bg-gradient-to-br ${image.color}`}>
+                            hover:shadow-xl hover:-translate-y-2"
+              >
+                <div
+                  className={`aspect-square bg-gradient-to-br ${image.color}`}
+                >
                   {/* 画像 */}
                 </div>
                 <div className="p-4">
@@ -325,7 +339,9 @@ export default function GalleryPage() {
 
 ```typescript
 // app/dashboard/page.tsx
-const stats = [/* 統計データ */];
+const stats = [
+  /* 統計データ */
+];
 
 return (
   <div className="grid grid-cols-4 gap-6">
@@ -351,9 +367,9 @@ return (
 );
 ```
 
-## CSSモジュールでの実装
+## CSS モジュールでの実装
 
-### styles.module.cssを作成
+### styles.module.css を作成
 
 ```css
 /* app/gallery/styles.module.css */
@@ -372,29 +388,31 @@ return (
   animation: fadeInUp 0.5s ease-out both;
 }
 
-.card:nth-child(1) { animation-delay: 0.0s; }
-.card:nth-child(2) { animation-delay: 0.1s; }
-.card:nth-child(3) { animation-delay: 0.2s; }
+.card:nth-child(1) {
+  animation-delay: 0s;
+}
+.card:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.card:nth-child(3) {
+  animation-delay: 0.2s;
+}
 /* ... */
 ```
 
 ### コンポーネントで使用
 
 ```typescript
-import styles from './styles.module.css';
+import styles from "./styles.module.css";
 
 export default function Page() {
-  return (
-    <div className={styles.card}>
-      {/* コンテンツ */}
-    </div>
-  );
+  return <div className={styles.card}>{/* コンテンツ */}</div>;
 }
 ```
 
 ## アクセシビリティ考慮
 
-### prefers-reduced-motionへの対応
+### prefers-reduced-motion への対応
 
 ```css
 /* ユーザーが動きの軽減を選択している場合 */
@@ -407,7 +425,7 @@ export default function Page() {
 }
 ```
 
-### TypeScriptでの実装
+### TypeScript での実装
 
 ```typescript
 "use client";
@@ -432,9 +450,7 @@ export default function Page() {
   return (
     <div
       style={{
-        animation: prefersReducedMotion
-          ? "none"
-          : "fadeIn 0.5s ease-out both",
+        animation: prefersReducedMotion ? "none" : "fadeIn 0.5s ease-out both",
       }}
     >
       {/* コンテンツ */}
@@ -445,7 +461,7 @@ export default function Page() {
 
 ## トラブルシューティング
 
-### 問題1: アニメーションが動作しない
+### 問題 1: アニメーションが動作しない
 
 ```typescript
 // ❌ 間違い: styleタグがコンポーネント外
@@ -461,8 +477,12 @@ export default function Page() {
       ...
       <style jsx>{`
         @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
         }
       `}</style>
     </div>
@@ -470,7 +490,7 @@ export default function Page() {
 }
 ```
 
-### 問題2: Server Componentでのスタイル
+### 問題 2: Server Component でのスタイル
 
 ```typescript
 // ❌ エラー: Server Componentでは<style jsx>は使えない
@@ -492,7 +512,7 @@ import styles from './page.module.css';
 <div style={{ animation: "fadeIn 0.5s" }}>
 ```
 
-### 問題3: Tailwindのtransitionが効かない
+### 問題 3: Tailwind の transition が効かない
 
 ```typescript
 // ❌ 間違い: transitionクラスがない
@@ -544,12 +564,12 @@ width: 100%;
 
 ### アニメーション手法
 
-| 手法 | 用途 | メリット |
-|------|------|---------|
-| CSS Keyframes | ページ読み込み時 | 柔軟性が高い |
-| Tailwind Transition | ホバー、状態変化 | 簡潔で保守しやすい |
-| Inline Styles | 動的なアニメーション | コンポーネント単位で完結 |
-| CSS Modules | 大規模プロジェクト | スコープが限定される |
+| 手法                | 用途                 | メリット                 |
+| ------------------- | -------------------- | ------------------------ |
+| CSS Keyframes       | ページ読み込み時     | 柔軟性が高い             |
+| Tailwind Transition | ホバー、状態変化     | 簡潔で保守しやすい       |
+| Inline Styles       | 動的なアニメーション | コンポーネント単位で完結 |
+| CSS Modules         | 大規模プロジェクト   | スコープが限定される     |
 
 ### パフォーマンスのポイント
 
@@ -563,7 +583,7 @@ width: 100%;
 
 1. アニメーションの目的を明確に
 2. 適切なタイミングと速度を設定
-3. GPUアクセラレーションを活用
+3. GPU アクセラレーションを活用
 4. アクセシビリティに配慮
 5. パフォーマンスをテスト
 

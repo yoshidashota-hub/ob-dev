@@ -11,7 +11,7 @@ related:
 
 ## 概要
 
-Next.js 16では、`params`と`searchParams`が**非同期（Promise）**になりました。
+Next.js 16 では、`params`と`searchParams`が**非同期（Promise）**になりました。
 この変更により、パラメータの取得が統一され、型安全性が向上しています。
 
 ## 実装場所
@@ -25,7 +25,7 @@ Projects/next16-sandbox/app/
 
 ## 主な変更点
 
-### Next.js 15以前
+### Next.js 15 以前
 
 ```typescript
 // 同期的にparamsを受け取る
@@ -35,7 +35,7 @@ export default function Page({ params }: { params: { slug: string } }) {
 }
 ```
 
-### Next.js 16以降
+### Next.js 16 以降
 
 ```typescript
 // ✅ paramsはPromiseとして受け取り、awaitで解決
@@ -89,11 +89,12 @@ export default async function BlogPostPage({
 ```
 
 **使用例**:
+
 - `/blog/nextjs-16-features`
 - `/blog/typescript-best-practices?preview=true`
 - `/blog/react-19-compiler?lang=ja`
 
-### 2. 数値IDの扱い
+### 2. 数値 ID の扱い
 
 **ファイル**: `app/products/[id]/page.tsx`
 
@@ -122,10 +123,11 @@ export default async function ProductPage({ params }: PageProps) {
 ```
 
 **バリデーション例**:
+
 - `/products/1` → OK (id = 1)
 - `/products/abc` → NG (NaN)
 - `/products/-5` → OK (id = -5) ※ビジネスロジックで追加検証が必要
-- `/products/1.5` → OK (id = 1) ※ parseIntは小数点以下を切り捨て
+- `/products/1.5` → OK (id = 1) ※ parseInt は小数点以下を切り捨て
 
 ### 3. ネストした動的ルート
 
@@ -168,6 +170,7 @@ export default async function UserPostPage({ params }: PageProps) {
 ```
 
 **使用例**:
+
 - `/users/1/posts/1`
 - `/users/2/posts/3`
 
@@ -187,7 +190,7 @@ interface PageProps {
 }
 ```
 
-### 関数をasyncに変更
+### 関数を async に変更
 
 ```typescript
 // ❌ 旧: 同期関数
@@ -203,7 +206,7 @@ export default async function Page({ params }: PageProps) {
 }
 ```
 
-### searchParamsも同様に更新
+### searchParams も同様に更新
 
 ```typescript
 // ✅ searchParamsもPromise
@@ -229,7 +232,7 @@ export default async function Page({ params, searchParams }: PageProps) {
 }
 ```
 
-## TypeScript型安全性
+## TypeScript 型安全性
 
 ### 基本的な型定義
 
@@ -267,7 +270,7 @@ export default async function Page({ searchParams }: PageProps) {
 }
 ```
 
-### Zodによるバリデーション
+### Zod によるバリデーション
 
 ```typescript
 import { z } from "zod";
@@ -311,7 +314,7 @@ export async function generateStaticParams() {
 
 ## エラーハンドリング
 
-### 404処理
+### 404 処理
 
 ```typescript
 export default async function Page({ params }: PageProps) {
@@ -390,7 +393,7 @@ export default async function Page({ params }: PageProps) {
 
 ## よくある問題と解決策
 
-### 問題1: awaitを忘れる
+### 問題 1: await を忘れる
 
 ```typescript
 // ❌ エラー: paramsはPromise
@@ -406,7 +409,7 @@ export default async function Page({ params }: PageProps) {
 }
 ```
 
-### 問題2: 関数をasyncにしていない
+### 問題 2: 関数を async にしていない
 
 ```typescript
 // ❌ エラー: awaitはasync関数内でのみ使用可能
@@ -422,7 +425,7 @@ export default async function Page({ params }: PageProps) {
 }
 ```
 
-### 問題3: 型定義が古い
+### 問題 3: 型定義が古い
 
 ```typescript
 // ❌ 旧: 同期的な型
@@ -484,7 +487,7 @@ export default async function Page({ searchParams }: PageProps) {
 }
 ```
 
-### 4. Zodなどでバリデーション
+### 4. Zod などでバリデーション
 
 ```typescript
 import { z } from "zod";
@@ -511,13 +514,13 @@ export default async function Page({ params }: PageProps) {
 ### 影響を受けるファイル
 
 - ✅ `app/**/page.tsx` - すべての動的ルートページ
-- ✅ `app/**/layout.tsx` - paramsを使用するレイアウト
-- ❌ `app/**/route.ts` - API Routesは影響なし
+- ✅ `app/**/layout.tsx` - params を使用するレイアウト
+- ❌ `app/**/route.ts` - API Routes は影響なし
 - ❌ `generateStaticParams` - 引き続き同期関数
 
 ### 自動移行ツール
 
-Next.js 16では、codemod（自動変換ツール）が提供されています：
+Next.js 16 では、codemod（自動変換ツール）が提供されています：
 
 ```bash
 npx @next/codemod@latest upgrade
@@ -526,17 +529,20 @@ npx @next/codemod@latest upgrade
 ## まとめ
 
 ### 変更点
+
 - `params`と`searchParams`が`Promise`型に
 - ページコンポーネントは`async`関数に
 - `await`でパラメータを解決
 
 ### メリット
+
 - ✅ 型安全性の向上
-- ✅ 統一されたAPI
+- ✅ 統一された API
 - ✅ より良いエラーハンドリング
 - ✅ パフォーマンス最適化の機会
 
 ### 移行ステップ
+
 1. 型定義を`Promise<>`に更新
 2. コンポーネントを`async`に変更
 3. `params`と`searchParams`を`await`
