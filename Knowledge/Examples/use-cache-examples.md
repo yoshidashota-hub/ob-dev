@@ -288,7 +288,7 @@ export const calculateFibonacci = unstable_cache(
 );
 ```
 
-### 将来的な実装例（"use cache" サポート後）
+### 将来的な実装例（関数キャッシュ - "use cache" サポート後）
 
 ```typescript
 // app/actions/cachedActions.ts
@@ -317,7 +317,7 @@ export async function calculateFibonacci(n: number): Promise<number> {
 }
 ```
 
-### 使用方法
+### 関数キャッシュの使用方法
 
 ```typescript
 // app/dashboard/page.tsx
@@ -339,14 +339,14 @@ export default async function DashboardPage() {
 }
 ```
 
-### 特徴
+### 関数キャッシュの特徴
 
 - ✅ 関数の戻り値がキャッシュされる
 - ✅ API呼び出しのキャッシュに最適
 - ✅ 重い計算処理のキャッシュに最適
 - ✅ 複数の場所で再利用可能
 
-### 使用ケース
+### 関数キャッシュの使用ケース
 
 #### API呼び出しのキャッシュ
 
