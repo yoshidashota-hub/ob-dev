@@ -458,12 +458,12 @@ Phase 1: 基礎機能 ✅ 完了 (4/4)
 ├── ✅ Async Params
 └── ✅ View Transitions
 
-Phase 1.5: 応用機能 ⏳ 進行中 (4/10)
+Phase 1.5: 応用機能 ⏳ 進行中 (5/10)
 ├── ✅ Server Actions & Forms
 ├── ✅ Streaming & Suspense
 ├── ✅ Error Handling
 ├── ✅ Route Handlers (API Routes)
-├── ⏹️ Loading UI
+├── ✅ Loading UI & Skeletons
 ├── ⏹️ Image & Font Optimization
 ├── ⏹️ Metadata API
 ├── ⏹️ Middleware
@@ -494,12 +494,13 @@ Phase 3: 横展開・比較 ⏹️ 未着手
 
 どのアプローチで進めますか？
 
-**推奨**: 残りの機能の中では、Loading UI、Image Optimization、Metadata API の順で実装すると、実用的なスキルが効率的に身につきます！
+**推奨**: 残りの機能の中では、Image Optimization、Metadata API、Middleware の順で実装すると、実用的なスキルが効率的に身につきます！
 
 ---
 
 **作成日**: 2025-11-08
 **Phase 1 完了日**: 2025-11-08
-**Phase 1.5 進行中**: Server Actions、Streaming、Error Handling、Route Handlers 実装完了 (4/10)
+**Phase 1.5 進行中**: Server Actions、Streaming、Error Handling、Route Handlers、Loading UI 実装完了 (5/10)
 **Route Handlers 実装日**: 2025-11-08
-**次の目標**: Phase 1.5 - Loading UI / Image Optimization
+**Loading UI 実装日**: 2025-11-08
+**次の目標**: Phase 1.5 - Image Optimization / Metadata API
