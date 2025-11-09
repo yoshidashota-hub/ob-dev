@@ -283,6 +283,28 @@ export default function Home() {
               <div>✓ 論理的なコード整理</div>
             </div>
           </a>
+
+          {/* Parallel & Intercepting Routes */}
+          <a
+            href="/photos"
+            className="group block p-6 bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-emerald-500"
+          >
+            <div className="flex items-center mb-4">
+              <span className="text-4xl mr-3">🔀</span>
+              <h2 className="text-2xl font-semibold text-gray-900 group-hover:text-emerald-600">
+                Parallel Routes
+              </h2>
+            </div>
+            <p className="text-gray-600 mb-4">
+              並列ルート、インターセプトルート、モーダルパターン
+            </p>
+            <div className="space-y-1 text-sm text-gray-500">
+              <div>✓ Parallel Routes (@modal)</div>
+              <div>✓ Intercepting Routes (.)</div>
+              <div>✓ モーダル実装パターン</div>
+              <div>✓ URLベースモーダル</div>
+            </div>
+          </a>
         </div>
 
         {/* フッター情報 */}
@@ -312,7 +334,7 @@ export default function Home() {
                 <li>✅ Metadata API (SEO)</li>
                 <li>✅ Middleware</li>
                 <li>✅ Route Groups & Layouts</li>
-                <li>⏳ Parallel Routes （次回）</li>
+                <li>✅ Parallel & Intercepting Routes</li>
               </ul>
             </div>
           </div>

@@ -32,7 +32,7 @@ Phase 1 完了後、Next.js 16 の残りの重要機能を体系的に学習す�
 - [x] Metadata API (SEO)
 - [x] Middleware
 - [x] Route Groups & Layouts
-- [ ] Parallel & Intercepting Routes
+- [x] Parallel & Intercepting Routes
 
 **成果物**:
 - 1 API実装（6エンドポイント）、1 APIデモページ
@@ -41,7 +41,8 @@ Phase 1 完了後、Next.js 16 の残りの重要機能を体系的に学習す�
 - Metadata API（layout.tsx更新、sitemap.ts、robots.ts、opengraph-image.tsx、blog 3記事）
 - Middleware（middleware.ts、login、admin、middleware-demo ページ）
 - Route Groups（(marketing)、(shop) レイアウト、about、contact、cart ページ）
-- 6 ドキュメント追加（route-handlers、loading-ui、optimization、metadata-seo、middleware、route-groups）
+- Parallel & Intercepting Routes（photos グリッド、モーダル、専用ページ、@modal スロット）
+- 7 ドキュメント追加（route-handlers、loading-ui、optimization、metadata-seo、middleware、route-groups、parallel-intercepting-routes）
 
 ---
 
@@ -455,36 +456,62 @@ app/
 
 ---
 
-### 10. Parallel & Intercepting Routes
+### 10. Parallel & Intercepting Routes ✅
 
 **実装内容**:
 
-- Parallel Routes `@slot`
-- Intercepting Routes `(.)`
-- モーダル実装
-- 複雑なレイアウト
+- Parallel Routes `@modal` - 複数のページを同時にレンダリング
+- Intercepting Routes `(.)` - クライアント遷移時にルートをインターセプト
+- フォトギャラリー & モーダル実装
+- URL ベースのモーダルパターン
+- default.tsx フォールバック
 
 **実装ファイル**:
 
 ```
 app/
-├── @modal/
-│   └── (.)photos/[id]/page.tsx  # モーダル
-├── @team/
-│   └── page.tsx                 # チームスロット
-├── @analytics/
-│   └── page.tsx                 # 分析スロット
-└── layout.tsx                   # Parallel Routes使用
+├── photos/
+│   ├── layout.tsx               # Parallel Routes レイアウト
+│   ├── page.tsx                 # 写真グリッド（9枚）
+│   ├── @modal/
+│   │   ├── (.)photo/
+│   │   │   └── [id]/
+│   │   │       └── page.tsx     # インターセプト - モーダル表示
+│   │   └── default.tsx          # モーダルフォールバック
+│   └── photo/
+│       └── [id]/
+│           └── page.tsx         # 専用ページ（直接アクセス時）
 ```
 
-**ノート**: `Knowledge/Examples/advanced-routing-examples.md`
+**機能詳細**:
+
+```typescript
+// Parallel Routes (layout.tsx)
+- children スロット: 写真グリッド
+- modal スロット: モーダル表示用
+- 両方を同時にレンダリング
+
+// Intercepting Routes (.)
+- ギャラリーから写真クリック → モーダル表示（URL: /photos/photo/1）
+- 直接 URL アクセス → 専用ページ表示
+- モーダル内でリロード → 専用ページに切り替え
+- ブラウザバック → モーダルを閉じてギャラリーに戻る
+```
+
+**ノート**: `Knowledge/Examples/parallel-intercepting-routes-examples.md`
 
 **学習ポイント**:
 
-- 複雑な UI 構成
-- モーダルパターン
-- 並列レンダリング
-- ルートインターセプト
+- Parallel Routes の `@slot` 構文と layout props
+- Intercepting Routes の `(.)`, `(..)`, `(...)` パターン
+- モーダル UI パターン（URL 同期、履歴管理）
+- default.tsx の役割（Parallel Routes のフォールバック）
+- クライアント遷移 vs 直接アクセスの違い
+- router.back() によるモーダル制御
+- Server Component と Client Component の使い分け
+- イベントバブリングの制御
+
+**実装日**: 2025-11-10
 
 ---
 
@@ -548,7 +575,7 @@ Phase 1: 基礎機能 ✅ 完了 (4/4)
 ├── ✅ Async Params
 └── ✅ View Transitions
 
-Phase 1.5: 応用機能 ⏳ 進行中 (9/10)
+Phase 1.5: 応用機能 ✅ 完了 (10/10)
 ├── ✅ Server Actions & Forms
 ├── ✅ Streaming & Suspense
 ├── ✅ Error Handling
@@ -558,7 +585,7 @@ Phase 1.5: 応用機能 ⏳ 進行中 (9/10)
 ├── ✅ Metadata API (SEO)
 ├── ✅ Middleware
 ├── ✅ Route Groups & Layouts
-└── ⏹️ Parallel Routes
+└── ✅ Parallel & Intercepting Routes
 
 Phase 2: 理論深掘り ⏹️ 未着手
 Phase 3: 横展開・比較 ⏹️ 未着手
@@ -590,11 +617,12 @@ Phase 3: 横展開・比較 ⏹️ 未着手
 
 **作成日**: 2025-11-08
 **Phase 1 完了日**: 2025-11-08
-**Phase 1.5 進行中**: Server Actions、Streaming、Error Handling、Route Handlers、Loading UI、Image & Font Optimization、Metadata API、Middleware、Route Groups 実装完了 (9/10)
+**Phase 1.5 完了日**: 2025-11-10 ✅ すべての応用機能実装完了 (10/10)
 **Route Handlers 実装日**: 2025-11-08
 **Loading UI 実装日**: 2025-11-08
 **Image & Font Optimization 実装日**: 2025-11-08
 **Metadata API 実装日**: 2025-11-08
 **Middleware 実装日**: 2025-11-08
 **Route Groups 実装日**: 2025-11-08
-**次の目標**: Phase 1.5 - Parallel & Intercepting Routes
+**Parallel & Intercepting Routes 実装日**: 2025-11-10
+**次の目標**: Phase 2 - 理論深掘り（Data Fetching、Rendering Strategies、Caching Deep Dive など）
