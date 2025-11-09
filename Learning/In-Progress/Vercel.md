@@ -31,13 +31,46 @@ Vercel は、静的サイトから AI エージェントまで、あらゆる種
 
 **他のホスティングとの違い:**
 
-| 項目 | Vercel | Netlify | AWS Amplify |
-|------|--------|---------|-------------|
-| Next.js 統合 | ネイティブ | 良好 | 良好 |
-| プレビューデプロイ | 標準 | 標準 | 制限あり |
-| Edge Functions | あり | あり | Lambda@Edge |
-| 無料枠 | 充実 | 充実 | 従量課金 |
-| セットアップ | 最も簡単 | 簡単 | 複雑 |
+| 項目               | Vercel     | Netlify | AWS Amplify |
+| ------------------ | ---------- | ------- | ----------- |
+| Next.js 統合       | ネイティブ | 良好    | 良好        |
+| プレビューデプロイ | 標準       | 標準    | 制限あり    |
+| Edge Functions     | あり       | あり    | Lambda@Edge |
+| 無料枠             | 充実       | 充実    | 従量課金    |
+| セットアップ       | 最も簡単   | 簡単    | 複雑        |
+
+### 🌐 Edge Network とインフラストラクチャ
+
+**Vercel Edge Network は CDN とグローバル分散プラットフォームの両方の機能を提供。**
+
+**ネットワーク規模:**
+
+- **119 Points of Presence (PoPs)**: 94 都市、51 カ国
+- **18 のコンピュート対応リージョン**: コードを実行可能な地域
+- **100+ のエッジロケーション**: コンテンツをキャッシュ
+
+**仕組み:**
+
+1. **ユーザーリクエスト**: 最寄りの PoP に到達
+2. **エッジ処理**: Edge Functions/Middleware を実行
+3. **ルーティング**: 必要に応じて最適なリージョンにルーティング
+4. **レスポンス**: キャッシュされた内容または動的コンテンツを返す
+
+**主要リージョン:**
+
+| コード | 地域                          | 用途         |
+| ------ | ----------------------------- | ------------ |
+| iad1   | Washington, D.C. (デフォルト) | 北米         |
+| sfo1   | San Francisco                 | 西海岸       |
+| lhr1   | London                        | ヨーロッパ   |
+| hnd1   | Tokyo                         | アジア太平洋 |
+
+**メリット:**
+
+- ユーザーに最も近いロケーションで処理
+- レイテンシの最小化（グローバルで 100ms 以下）
+- 自動的な負荷分散
+- DDoS 攻撃からの保護
 
 ### 📦 デプロイ方法
 
@@ -87,18 +120,18 @@ vercel --prod
 **プログラムからデプロイを制御。**
 
 ```javascript
-const response = await fetch('https://api.vercel.com/v13/deployments', {
-  method: 'POST',
+const response = await fetch("https://api.vercel.com/v13/deployments", {
+  method: "POST",
   headers: {
     Authorization: `Bearer ${process.env.VERCEL_TOKEN}`,
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
   body: JSON.stringify({
-    name: 'my-project',
+    name: "my-project",
     gitSource: {
-      type: 'github',
-      repo: 'username/repo',
-      ref: 'main',
+      type: "github",
+      repo: "username/repo",
+      ref: "main",
     },
   }),
 });
@@ -161,13 +194,75 @@ const response = await fetch('https://api.vercel.com/v13/deployments', {
 - `redirects`: リダイレクト設定
 - `rewrites`: リライト設定
 
-### 🔐 環境変数
+### 🏗️ ビルドプロセスとライフサイクル
+
+**Vercel のデプロイメントライフサイクル。**
+
+#### ビルドステップ
+
+1. **ソースコード取得**: Git リポジトリからコードを取得
+2. **依存関係インストール**: `npm install` または `yarn install`
+3. **ビルド実行**: `npm run build` を実行
+4. **出力の最適化**: 静的ファイルと Functions を分離
+5. **デプロイ**: グローバル CDN にデプロイ
+
+**ビルド環境:**
+
+- 隔離された仮想環境で実行
+- クリーンで一貫性のある環境
+- 他のユーザーのビルドと干渉しない
+- リソースが効率的に割り当てられる
+
+**ビルド制限:**
+
+| 項目               | Hobby  | Pro    | Enterprise |
+| ------------------ | ------ | ------ | ---------- |
+| ビルド時間         | 45 分  | 45 分  | カスタム   |
+| ビルドキャッシュ   | 1GB    | 1GB    | カスタム   |
+| キャッシュ保持期間 | 1 ヶ月 | 1 ヶ月 | カスタム   |
+| 並行ビルド         | 1      | 12     | カスタム   |
+
+**デプロイメントライフサイクル:**
+
+```
+コミット/プッシュ
+    ↓
+deployment.created webhook
+    ↓
+ビルド開始
+    ↓
+deployment.ready webhook
+    ↓
+Checks 実行（オプション）
+    ↓
+すべての Checks 完了
+    ↓
+エイリアス適用（本番 URL）
+    ↓
+デプロイ完了
+```
+
+**トリガー方法:**
+
+1. **Git プッシュ**: 自動的にトリガー
+2. **Vercel CLI**: `vercel` コマンド
+3. **API**: プログラムからトリガー
+4. **手動**: Dashboard からトリガー
+
+### 🔐 環境変数と環境の種類
 
 **3 種類の環境:**
 
 - **Production**: 本番環境（`main` ブランチ）
-- **Preview**: プレビュー環境（PR）
-- **Development**: ローカル開発
+- **Preview**: プレビュー環境（すべての非本番ブランチ）
+- **Development**: ローカル開発環境
+
+**Preview 環境の詳細:**
+
+- すべての非本番ブランチに適用
+- 特定のブランチにのみ適用する変数も設定可能
+- プルリクエストごとに独立した環境
+- 本番環境と同じインフラストラクチャを使用
 
 **設定方法:**
 
@@ -208,10 +303,10 @@ Next.js の Edge Runtime が Vercel Edge Network 上で実行される。
 
 ```typescript
 // app/api/edge/route.ts
-export const runtime = 'edge';
+export const runtime = "edge";
 
 export async function GET(request: Request) {
-  return new Response('Hello from the edge!');
+  return new Response("Hello from the edge!");
 }
 ```
 
@@ -234,15 +329,9 @@ export default async function Post({ params }) {
 Next.js の `next/image` が Vercel の Image Optimization で最適化される。
 
 ```typescript
-import Image from 'next/image';
+import Image from "next/image";
 
-<Image
-  src="/photo.jpg"
-  width={800}
-  height={600}
-  alt="Photo"
-  priority
-/>
+<Image src="/photo.jpg" width={800} height={600} alt="Photo" priority />;
 ```
 
 **5. Middleware**
@@ -251,7 +340,7 @@ Next.js Middleware が Vercel Edge Network 上で実行される。
 
 ```typescript
 // middleware.ts
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
 export function middleware(request: Request) {
   return NextResponse.next();
@@ -288,15 +377,39 @@ Vercel は `package.json` を読み取り、自動的に最適なビルド設定
 
 **Vercel Functions は Next.js API Routes と統合。**
 
-- **Serverless Functions**: 各 API Route が独立した関数として実行
-- **Edge Functions**: Edge Runtime で実行される関数
-- **自動スケーリング**: トラフィックに応じて自動的にスケール
+**Serverless Functions と Edge Functions の比較:**
 
-**制限:**
+| 項目                 | Serverless Functions               | Edge Functions               |
+| -------------------- | ---------------------------------- | ---------------------------- |
+| **実行場所**         | 単一リージョン（デフォルト: iad1） | ユーザーに最も近いエッジ     |
+| **レイテンシ**       | リージョンに依存                   | 常に低レイテンシ（<100ms）   |
+| **コールドスタート** | あり（数秒）                       | 最小限（数十 ms）            |
+| **サイズ制限**       | 50MB（Hobby）、250MB（Pro）        | 1MB（コードと依存関係）      |
+| **実行時間**         | 10 秒（Hobby）、60 秒（Pro）       | 30 秒                        |
+| **ストリーミング**   | フレームワーク依存                 | 常にサポート                 |
+| **使用ケース**       | データベース近接処理               | グローバルな低レイテンシ処理 |
+| **Node.js API**      | 完全サポート                       | 制限あり（Edge Runtime）     |
 
-- Serverless Functions: 50MB（Hobby）、250MB（Pro）
-- Edge Functions: 1MB（コード + 依存関係）
-- 実行時間: 10 秒（Hobby）、60 秒（Pro）
+**Serverless Functions の特徴:**
+
+- データベースに近いリージョンで実行可能
+- 完全な Node.js 環境
+- 大きな依存関係も使用可能
+- より長い実行時間
+
+**Edge Functions の特徴:**
+
+- グローバルに分散
+- ユーザーに最も近い場所で実行
+- 軽量で高速
+- Middleware は常に Edge で実行
+
+**自動スケーリング:**
+
+- トラフィックに応じて自動的にスケール
+- スパイクトラフィックにも対応
+- ピーク時の障害を防止
+- 低トラフィック時のコスト削減
 
 ### 🌐 Edge Functions 3.0
 
@@ -313,16 +426,16 @@ Vercel は `package.json` を読み取り、自動的に最適なビルド設定
 
 ```typescript
 // app/api/hello/route.ts
-export const runtime = 'edge';
+export const runtime = "edge";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const name = searchParams.get('name') || 'World';
+  const name = searchParams.get("name") || "World";
 
   return new Response(`Hello, ${name}!`, {
     status: 200,
     headers: {
-      'Content-Type': 'text/plain',
+      "Content-Type": "text/plain",
     },
   });
 }
@@ -332,15 +445,15 @@ export async function GET(request: Request) {
 
 ```typescript
 // middleware.ts
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
   // 地理情報に基づいてリダイレクト
   const country = request.geo?.country;
 
-  if (country === 'JP') {
-    return NextResponse.redirect(new URL('/ja', request.url));
+  if (country === "JP") {
+    return NextResponse.redirect(new URL("/ja", request.url));
   }
 
   return NextResponse.next();
@@ -358,10 +471,10 @@ export function middleware(request: NextRequest) {
 
 **プラン別の無料枠:**
 
-| プラン | 無料枠 | 以前 | 増加率 |
-|--------|--------|------|--------|
-| Hobby | 50K events/月 | 2.5K | 20 倍 |
-| Pro | 100K events/月 | 25K | 4 倍 |
+| プラン | 無料枠         | 以前 | 増加率 |
+| ------ | -------------- | ---- | ------ |
+| Hobby  | 50K events/月  | 2.5K | 20 倍  |
+| Pro    | 100K events/月 | 25K  | 4 倍   |
 
 **機能:**
 
@@ -383,7 +496,7 @@ export function middleware(request: NextRequest) {
 // next.config.js
 module.exports = {
   analytics: {
-    id: 'your-analytics-id',
+    id: "your-analytics-id",
   },
 };
 ```
@@ -551,9 +664,9 @@ export async function GET() {
   const apiKey = process.env.API_KEY;
   const dbUrl = process.env.DATABASE_URL;
 
-  const response = await fetch('https://api.example.com/data', {
+  const response = await fetch("https://api.example.com/data", {
     headers: {
-      'Authorization': `Bearer ${apiKey}`,
+      Authorization: `Bearer ${apiKey}`,
     },
   });
 
@@ -566,7 +679,7 @@ export async function GET() {
 
 ```typescript
 // app/api/geo/route.ts
-export const runtime = 'edge';
+export const runtime = "edge";
 
 export async function GET(request: Request) {
   // リクエストから地理情報を取得
@@ -589,7 +702,7 @@ export async function GET(request: Request) {
 export const revalidate = 60; // 60秒ごとに再生成
 
 async function getPosts() {
-  const res = await fetch('https://api.example.com/posts', {
+  const res = await fetch("https://api.example.com/posts", {
     next: { revalidate: 60 },
   });
   return res.json();
@@ -616,17 +729,17 @@ export default async function PostsPage() {
 
 ```typescript
 // middleware.ts
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
   // 認証トークンをチェック
-  const token = request.cookies.get('auth-token');
+  const token = request.cookies.get("auth-token");
 
   // 保護されたルート
-  if (request.nextUrl.pathname.startsWith('/dashboard')) {
+  if (request.nextUrl.pathname.startsWith("/dashboard")) {
     if (!token) {
-      return NextResponse.redirect(new URL('/login', request.url));
+      return NextResponse.redirect(new URL("/login", request.url));
     }
   }
 
@@ -634,7 +747,7 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*'],
+  matcher: ["/dashboard/:path*"],
 };
 ```
 
@@ -713,7 +826,12 @@ export const config = {
 - [Vercel 公式ドキュメント](https://vercel.com/docs)
 - [Vercel CLI リファレンス](https://vercel.com/docs/cli)
 - [Next.js on Vercel](https://vercel.com/docs/frameworks/nextjs)
-- [Edge Functions ドキュメント](https://vercel.com/docs/functions/edge-functions)
+- [Vercel Functions](https://vercel.com/docs/functions)
+- [Edge Network 概要](https://vercel.com/docs/edge-network/overview)
+- [Vercel CDN](https://vercel.com/docs/cdn)
+- [ビルドとデプロイ](https://vercel.com/docs/deployments)
+- [環境変数](https://vercel.com/docs/projects/environment-variables)
+- [Vercel Regions](https://vercel.com/docs/regions)
 - [Vercel Ship 2025 Recap](https://vercel.com/blog/vercel-ship-2025-recap)
 - [Pricing ページ](https://vercel.com/pricing)
 
