@@ -28,7 +28,7 @@ Phase 1 完了後、Next.js 16 の残りの重要機能を体系的に学習す�
 - [x] Error Handling
 - [x] Route Handlers (API Routes)
 - [x] Loading UI & Skeletons
-- [ ] Image & Font Optimization
+- [x] Image & Font Optimization
 - [ ] Metadata API (SEO)
 - [ ] Middleware
 - [ ] Route Groups & Layouts
@@ -37,7 +37,8 @@ Phase 1 完了後、Next.js 16 の残りの重要機能を体系的に学習す�
 **成果物**:
 - 1 API実装（6エンドポイント）、1 APIデモページ
 - 4 loading.tsx、13 スケルトンコンポーネント、6 ローダーコンポーネント
-- 2 ドキュメント追加
+- 2 最適化デモページ（images、fonts）、next.config.ts画像設定追加
+- 3 ドキュメント追加（route-handlers、loading-ui、optimization）
 
 ---
 
@@ -226,24 +227,24 @@ app/
 
 ---
 
-### 6. Image & Font Optimization
+### 6. Image & Font Optimization ✅
 
 **実装内容**:
 
-- `next/image`コンポーネント
-- 画像最適化設定
-- Google Fonts 最適化
-- カスタムフォント
+- `next/image`コンポーネント（基本・fill・priority・placeholder・quality）
+- 画像最適化設定（remotePatterns、formats、deviceSizes）
+- Google Fonts 最適化（7種類のフォント実装）
+- Variable Fonts（Inter、Geist）
+- 固定ウェイトフォント（Roboto、Noto Sans JP）
 
 **実装ファイル**:
 
 ```
 app/
 ├── images/
-│   ├── page.tsx                 # Imageデモ
-│   └── gallery/page.tsx         # 画像ギャラリー
+│   └── page.tsx                 # next/image 6セクションデモ
 └── fonts/
-    └── page.tsx                 # フォントデモ
+    └── page.tsx                 # Google Fonts 7種類デモ
 ```
 
 **設定ファイル**:
@@ -251,8 +252,15 @@ app/
 ```typescript
 // next.config.ts
 images: {
-  domains: ['example.com'],
-  formats: ['image/avif', 'image/webp'],
+  remotePatterns: [
+    { protocol: "https", hostname: "images.unsplash.com" },
+    { protocol: "https", hostname: "picsum.photos" },
+    { protocol: "https", hostname: "via.placeholder.com" },
+  ],
+  formats: ["image/avif", "image/webp"],
+  minimumCacheTTL: 60,
+  deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+  imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
 }
 ```
 
@@ -260,10 +268,14 @@ images: {
 
 **学習ポイント**:
 
-- 画像の自動最適化
-- レスポンシブ画像
-- フォントのサブセット化
-- パフォーマンス向上
+- next/image の様々な使い方（fill、priority、placeholder、quality）
+- レスポンシブ画像とグリッドレイアウト
+- Variable Fonts と固定ウェイトの使い分け
+- フォントのサブセット化とプリロード
+- Core Web Vitals 改善（LCP、CLS）
+- パフォーマンス最適化
+
+**実装日**: 2025-11-08
 
 ---
 
@@ -458,13 +470,13 @@ Phase 1: 基礎機能 ✅ 完了 (4/4)
 ├── ✅ Async Params
 └── ✅ View Transitions
 
-Phase 1.5: 応用機能 ⏳ 進行中 (5/10)
+Phase 1.5: 応用機能 ⏳ 進行中 (6/10)
 ├── ✅ Server Actions & Forms
 ├── ✅ Streaming & Suspense
 ├── ✅ Error Handling
 ├── ✅ Route Handlers (API Routes)
 ├── ✅ Loading UI & Skeletons
-├── ⏹️ Image & Font Optimization
+├── ✅ Image & Font Optimization
 ├── ⏹️ Metadata API
 ├── ⏹️ Middleware
 ├── ⏹️ Route Groups
@@ -500,7 +512,8 @@ Phase 3: 横展開・比較 ⏹️ 未着手
 
 **作成日**: 2025-11-08
 **Phase 1 完了日**: 2025-11-08
-**Phase 1.5 進行中**: Server Actions、Streaming、Error Handling、Route Handlers、Loading UI 実装完了 (5/10)
+**Phase 1.5 進行中**: Server Actions、Streaming、Error Handling、Route Handlers、Loading UI、Image & Font Optimization 実装完了 (6/10)
 **Route Handlers 実装日**: 2025-11-08
 **Loading UI 実装日**: 2025-11-08
-**次の目標**: Phase 1.5 - Image Optimization / Metadata API
+**Image & Font Optimization 実装日**: 2025-11-08
+**次の目標**: Phase 1.5 - Metadata API (SEO)
