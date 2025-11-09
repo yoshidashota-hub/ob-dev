@@ -13,7 +13,7 @@ Next.js 16 の Loading UI とスケルトンスクリーンの実装例とベス
 
 ## 📋 概要
 
-Loading UIは、データ取得中やページ遷移中にユーザーに待ち時間を示す重要な機能。
+Loading UI は、データ取得中やページ遷移中にユーザーに待ち時間を示す重要な機能。
 
 ### 主な特徴
 
@@ -21,7 +21,7 @@ Loading UIは、データ取得中やページ遷移中にユーザーに待ち�
 - **Suspense との統合**
 - **スケルトンスクリーン**
 - **プログレスインジケーター**
-- **UX向上**
+- **UX 向上**
 
 ---
 
@@ -77,6 +77,7 @@ export function Skeleton() {
 ```
 
 **ポイント:**
+
 - `animate-pulse` でアニメーション
 - `bg-gray-200` で薄いグレー背景
 - 幅を調整して実際のコンテンツに近い見た目に
@@ -374,9 +375,7 @@ export default function Page() {
 
 ```typescript
 // すべてのスケルトンに animate-pulse を適用
-<div className="animate-pulse">
-  {/* スケルトンコンテンツ */}
-</div>
+<div className="animate-pulse">{/* スケルトンコンテンツ */}</div>
 ```
 
 ### 4. アクセシビリティ
@@ -384,11 +383,7 @@ export default function Page() {
 ```typescript
 export function AccessibleSkeleton() {
   return (
-    <div
-      className="animate-pulse"
-      role="status"
-      aria-label="読み込み中"
-    >
+    <div className="animate-pulse" role="status" aria-label="読み込み中">
       <div className="h-4 bg-gray-200 rounded"></div>
       <span className="sr-only">コンテンツを読み込んでいます...</span>
     </div>
@@ -405,6 +400,7 @@ export function AccessibleSkeleton() {
 Next.js は自動的に `loading.tsx` を使って Instant Loading State を提供します。
 
 **利点:**
+
 - **即座のフィードバック** - ナビゲーション直後に表示
 - **ユーザー体験向上** - 待ち時間の認識を減らす
 - **自動的** - 手動実装不要

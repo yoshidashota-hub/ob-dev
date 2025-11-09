@@ -1,6 +1,15 @@
 ---
 created: 2025-11-10
-tags: [nextjs, parallel-routes, intercepting-routes, modals, routing, advanced, examples]
+tags:
+  [
+    nextjs,
+    parallel-routes,
+    intercepting-routes,
+    modals,
+    routing,
+    advanced,
+    examples,
+  ]
 status: 完了
 related:
   - "[[route-groups-examples]]"
@@ -13,7 +22,7 @@ Next.js 16 の Parallel Routes と Intercepting Routes を組み合わせた高�
 
 ## 📋 概要
 
-この実装例では、2つの強力なルーティング機能を組み合わせています。
+この実装例では、2 つの強力なルーティング機能を組み合わせています。
 
 ### Parallel Routes（並列ルート）
 
@@ -107,6 +116,7 @@ export default function PhotosLayout({
 ```
 
 **ポイント:**
+
 - `modal` は `@modal` フォルダから自動的に提供される
 - `children` は通常のページコンテンツ
 - 両方が同時にレンダリングされる
@@ -136,6 +146,7 @@ export default function PhotosPage() {
 ```
 
 **ポイント:**
+
 - Link で `/photos/photo/[id]` に遷移
 - クライアント遷移時にインターセプトされる
 - 直接 URL アクセス時はインターセプトされない
@@ -156,10 +167,7 @@ export default function PhotoModal({ params }) {
   const photo = getPhoto(id);
 
   return (
-    <div
-      className="fixed inset-0 bg-black/80"
-      onClick={() => router.back()}
-    >
+    <div className="fixed inset-0 bg-black/80" onClick={() => router.back()}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         {/* モーダルコンテンツ */}
         <button onClick={() => router.back()}>閉じる</button>
@@ -170,6 +178,7 @@ export default function PhotoModal({ params }) {
 ```
 
 **ポイント:**
+
 - `(.)photo` で同じディレクトリレベルからインターセプト
 - `"use client"` が必要（`useRouter` を使用）
 - `router.back()` でモーダルを閉じる
@@ -195,6 +204,7 @@ export default function PhotoPage({ params }) {
 ```
 
 **ポイント:**
+
 - 直接 URL アクセス時に表示
 - モーダル内でリロード時にも表示
 - より詳細な情報を表示可能
@@ -211,6 +221,7 @@ export default function Default() {
 ```
 
 **ポイント:**
+
 - モーダルが表示されていない時のフォールバック
 - Parallel Routes では各スロットに `default.tsx` が必要
 - `null` を返すことで何も表示しない
@@ -221,12 +232,12 @@ export default function Default() {
 
 ### インターセプトマーカー
 
-| パターン | 意味 | 使用例 |
-|---------|------|--------|
-| `(.)` | 同じディレクトリレベル | `/photos` から `/photos/photo/[id]` をインターセプト |
-| `(..)` | 1つ上のディレクトリ | `/photos/detail` から `/photos/photo/[id]` をインターセプト |
-| `(..)(..)` | 2つ上のディレクトリ | `/a/b/c` から `/a/x` をインターセプト |
-| `(...)` | ルート（app）から | どこからでもルート配下をインターセプト |
+| パターン   | 意味                   | 使用例                                                      |
+| ---------- | ---------------------- | ----------------------------------------------------------- |
+| `(.)`      | 同じディレクトリレベル | `/photos` から `/photos/photo/[id]` をインターセプト        |
+| `(..)`     | 1 つ上のディレクトリ   | `/photos/detail` から `/photos/photo/[id]` をインターセプト |
+| `(..)(..)` | 2 つ上のディレクトリ   | `/a/b/c` から `/a/x` をインターセプト                       |
+| `(...)`    | ルート（app）から      | どこからでもルート配下をインターセプト                      |
 
 ---
 
@@ -244,7 +255,7 @@ app/
 
 ---
 
-### パターン 2: 1つ上 `(..)`
+### パターン 2: 1 つ上 `(..)`
 
 ```
 app/
@@ -334,15 +345,12 @@ import { useRouter } from "next/navigation";
 export default function Modal() {
   const router = useRouter();
 
-  return (
-    <div onClick={() => router.back()}>
-      {/* モーダル背景 */}
-    </div>
-  );
+  return <div onClick={() => router.back()}>{/* モーダル背景 */}</div>;
 }
 ```
 
 **重要:**
+
 - `router.back()` はブラウザの「戻る」と同じ
 - 履歴スタックをポップしてギャラリーに戻る
 - URL も元に戻る
@@ -372,6 +380,7 @@ export default function Default() {
 ```
 
 **理由:**
+
 - Parallel Routes の各スロットにはフォールバックが必要
 - モーダルが表示されていない時に `null` を返す
 - これがないとエラーになる
@@ -381,11 +390,13 @@ export default function Default() {
 ### 4. Server Component vs Client Component
 
 **モーダル（Intercepting Route）:**
+
 ```typescript
 "use client"; // useRouter を使うため Client Component
 ```
 
 **専用ページ:**
+
 ```typescript
 // "use client" なし - Server Component でOK
 // データフェッチングに有利
@@ -411,9 +422,7 @@ export default function Default() {
 
 ```typescript
 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-  <div className="bg-white rounded-lg max-w-2xl w-full">
-    {/* コンテンツ */}
-  </div>
+  <div className="bg-white rounded-lg max-w-2xl w-full">{/* コンテンツ */}</div>
 </div>
 ```
 
@@ -438,7 +447,7 @@ export default function Default() {
 export default function PhotosLayout({ children, modal }) {
   console.log("Layout rendered", {
     hasChildren: !!children,
-    hasModal: !!modal
+    hasModal: !!modal,
   });
 
   return (
@@ -469,6 +478,7 @@ export default function PhotoPage({ params }) {
 ```
 
 **確認方法:**
+
 - Link クリック時 → "Modal intercepted!" が表示
 - 直接 URL → "Direct page rendered!" が表示
 
@@ -568,16 +578,9 @@ app/photos/@modal/photo/[id]/page.tsx  // インターセプトしない
 ### 5. アクセシビリティ
 
 ```typescript
-<div
-  role="dialog"
-  aria-modal="true"
-  aria-labelledby="modal-title"
->
+<div role="dialog" aria-modal="true" aria-labelledby="modal-title">
   <h2 id="modal-title">{photo.title}</h2>
-  <button
-    onClick={() => router.back()}
-    aria-label="モーダルを閉じる"
-  >
+  <button onClick={() => router.back()} aria-label="モーダルを閉じる">
     ×
   </button>
 </div>
@@ -590,10 +593,12 @@ app/photos/@modal/photo/[id]/page.tsx  // インターセプトしない
 ### 問題 1: モーダルが表示されない
 
 **原因:**
+
 - `default.tsx` がない
 - インターセプトパスが間違っている
 
 **解決策:**
+
 ```typescript
 // @modal/default.tsx を作成
 export default function Default() {
@@ -606,9 +611,11 @@ export default function Default() {
 ### 問題 2: 直接アクセスでもモーダルが表示される
 
 **原因:**
+
 - インターセプトパターンの誤用
 
 **解決策:**
+
 - Intercepting Routes は**クライアント遷移のみ**動作
 - 直接 URL アクセスでは通常のページが表示されるのが正常
 
@@ -617,9 +624,11 @@ export default function Default() {
 ### 問題 3: router.back() が動作しない
 
 **原因:**
+
 - Server Component で `useRouter` を使用
 
 **解決策:**
+
 ```typescript
 "use client"; // これを追加
 
@@ -688,6 +697,7 @@ export default function DashboardLayout({
 ```
 
 構造:
+
 ```
 app/dashboard/
 ├── @analytics/
@@ -704,14 +714,17 @@ app/dashboard/
 ### メリット
 
 ✅ **URL ベースのルーティング**
+
 - ブラウザ履歴が適切に管理される
 - 共有可能な URL
 
 ✅ **Code Splitting**
+
 - モーダルと専用ページで別々のチャンク
 - 必要なコードのみロード
 
 ✅ **Streaming**
+
 - Parallel Routes は独立してストリーミング可能
 
 ---
@@ -719,6 +732,7 @@ app/dashboard/
 ### 注意点
 
 ⚠️ **重複コンポーネント**
+
 - モーダルと専用ページで同じコンポーネントを使用する場合は共通化
 
 ```typescript

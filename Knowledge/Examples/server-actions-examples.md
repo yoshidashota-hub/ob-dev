@@ -98,7 +98,7 @@ export default function CreateForm() {
 
 ### useFormState
 
-フォームの状態とServer Actionを統合。
+フォームの状態と Server Action を統合。
 
 ```typescript
 "use client";
@@ -121,9 +121,7 @@ export default function Form() {
       )}
 
       {/* 成功メッセージ */}
-      {state.message && (
-        <p className="text-green-600">{state.message}</p>
-      )}
+      {state.message && <p className="text-green-600">{state.message}</p>}
 
       <button type="submit">送信</button>
     </form>
@@ -509,7 +507,7 @@ export default function Page() {
 
 // ✅ 良い例: 別ファイルに定義
 // app/actions/createPost.ts
-"use server";
+("use server");
 export async function createPost(formData) {
   // ...
 }
@@ -580,10 +578,10 @@ export async function updatePost(id, data) {
 ```typescript
 // ❌ 間違い: インポート後に "use server"
 import { db } from "./db";
-"use server"; // これはエラー
+("use server"); // これはエラー
 
 // ✅ 正しい: ファイルの最初に配置
-"use server";
+("use server");
 import { db } from "./db";
 ```
 
@@ -642,11 +640,11 @@ redirect("/posts"); // try-catchの外
 
 ### 主な Hooks
 
-| Hook            | 用途                 | 使用場所             |
-| --------------- | -------------------- | -------------------- |
-| useFormState    | フォーム状態管理     | フォームコンポーネント |
-| useFormStatus   | 送信中状態の検知     | form の子コンポーネント |
-| useOptimistic   | 楽観的 UI 更新       | リストコンポーネント |
+| Hook          | 用途             | 使用場所                |
+| ------------- | ---------------- | ----------------------- |
+| useFormState  | フォーム状態管理 | フォームコンポーネント  |
+| useFormStatus | 送信中状態の検知 | form の子コンポーネント |
+| useOptimistic | 楽観的 UI 更新   | リストコンポーネント    |
 
 ### 実装チェックリスト
 

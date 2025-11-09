@@ -34,17 +34,13 @@ import Image from "next/image";
 
 export default function Page() {
   return (
-    <Image
-      src="/images/photo.jpg"
-      alt="Description"
-      width={600}
-      height={400}
-    />
+    <Image src="/images/photo.jpg" alt="Description" width={600} height={400} />
   );
 }
 ```
 
 **特徴:**
+
 - 自動的に WebP/AVIF 形式に変換
 - デバイスに応じた適切なサイズ
 - Lazy Loading 自動適用
@@ -55,16 +51,12 @@ export default function Page() {
 
 ```typescript
 <div className="relative w-full h-96">
-  <Image
-    src="/images/hero.jpg"
-    alt="Hero"
-    fill
-    className="object-cover"
-  />
+  <Image src="/images/hero.jpg" alt="Hero" fill className="object-cover" />
 </div>
 ```
 
 **ポイント:**
+
 - 親要素を `relative` に設定
 - `fill` で親要素のサイズに合わせる
 - `object-cover` で aspect ratio 維持
@@ -74,16 +66,11 @@ export default function Page() {
 ### 3. Priority Loading
 
 ```typescript
-<Image
-  src="/images/hero.jpg"
-  alt="Hero"
-  width={1200}
-  height={600}
-  priority
-/>
+<Image src="/images/hero.jpg" alt="Hero" width={1200} height={600} priority />
 ```
 
 **用途:**
+
 - Above-the-fold の重要な画像
 - LCP（Largest Contentful Paint）の改善
 - ヒーロー画像やファーストビュー
@@ -104,6 +91,7 @@ export default function Page() {
 ```
 
 **効果:**
+
 - 読み込み中の UX 改善
 - レイアウトシフト防止
 - スムーズな表示
@@ -134,6 +122,7 @@ export default nextConfig;
 ```
 
 **設定項目:**
+
 - `remotePatterns`: 外部画像ドメイン許可
 - `formats`: 画像フォーマット優先順位
 - `deviceSizes`: レスポンシブサイズ
@@ -164,7 +153,8 @@ export default function Layout({ children }) {
 ```
 
 **特徴:**
-- Variable Font - 1ファイルで全ウェイト
+
+- Variable Font - 1 ファイルで全ウェイト
 - 自動サブセット化
 - セルフホスティング
 
@@ -183,6 +173,7 @@ const roboto = Roboto({
 ```
 
 **利点:**
+
 - 必要なウェイトのみダウンロード
 - ファイルサイズ最小化
 - パフォーマンス向上
@@ -203,6 +194,7 @@ const notoSansJP = Noto_Sans_JP({
 ```
 
 **最適化:**
+
 - サブセット自動化
 - 文字セット最適化
 - 高速読み込み
@@ -242,6 +234,7 @@ const inter = Inter({
 ```
 
 **利点:**
+
 - グローバルに利用可能
 - CSS で柔軟に使用
 - Tailwind との統合
@@ -253,14 +246,17 @@ const inter = Inter({
 ### Image
 
 1. **適切な width/height を指定**
+
    - レイアウトシフト防止
    - CLS（Cumulative Layout Shift）改善
 
 2. **priority は重要な画像のみ**
+
    - Above-the-fold の画像
    - ヒーロー画像
 
 3. **外部画像は remotePatterns で許可**
+
    - セキュリティ確保
    - 明示的な許可
 
@@ -272,14 +268,17 @@ const inter = Inter({
 ### Font
 
 1. **Variable Font を優先**
+
    - ファイルサイズ削減
    - 柔軟なウェイト
 
 2. **display: "swap" 推奨**
+
    - FOUT（Flash of Unstyled Text）対策
    - 即座にテキスト表示
 
 3. **サブセットを指定**
+
    - 必要な文字セットのみ
    - パフォーマンス向上
 
@@ -318,16 +317,19 @@ next16-sandbox/
 ### Core Web Vitals 改善
 
 **LCP（Largest Contentful Paint）:**
+
 - priority 付き画像
 - 画像最適化
 - 適切なサイズ指定
 
 **CLS（Cumulative Layout Shift）:**
+
 - width/height 指定
 - aspect-ratio 設定
 - font-display: swap
 
 **FID（First Input Delay）:**
+
 - フォントプリロード
 - 遅延読み込み
 

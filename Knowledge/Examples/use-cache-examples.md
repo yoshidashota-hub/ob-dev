@@ -23,7 +23,7 @@ related:
 
 ## 概要
 
-Next.js 16 のキャッシュ機能を使った3種類のキャッシュパターンの実装例。
+Next.js 16 のキャッシュ機能を使った 3 種類のキャッシュパターンの実装例。
 
 ## 実装場所
 
@@ -105,6 +105,7 @@ export default async function CachedPage() {
 ### 実装時の注意点
 
 1. **ファイルの先頭に配置**
+
    ```typescript
    "use cache"; // 必ず最初の行に
 
@@ -112,6 +113,7 @@ export default async function CachedPage() {
    ```
 
 2. **動的データとの共存**
+
    ```typescript
    "use cache";
 
@@ -136,7 +138,10 @@ interface Product {
   price: number;
 }
 
-async function fetchProduct(id: number, useCache: boolean = true): Promise<Product> {
+async function fetchProduct(
+  id: number,
+  useCache: boolean = true
+): Promise<Product> {
   const res = await fetch(`https://api.example.com/products/${id}`, {
     cache: useCache ? "force-cache" : "no-store",
     next: useCache ? { revalidate: 3600 } : undefined,
@@ -240,8 +245,9 @@ export async function UncachedProduct({ id }: { id: number }) {
 ```
 
 **パフォーマンス差**:
-- キャッシュあり: 初回のみAPI呼び出し → 以降は即座に表示
-- キャッシュなし: 毎回API呼び出し → 表示に時間がかかる
+
+- キャッシュあり: 初回のみ API 呼び出し → 以降は即座に表示
+- キャッシュなし: 毎回 API 呼び出し → 表示に時間がかかる
 
 ## 3. 関数キャッシュ（Function-level Cache）
 
@@ -274,7 +280,8 @@ export const calculateFibonacci = unstable_cache(
 
     if (n <= 1) return n;
 
-    let a = 0, b = 1;
+    let a = 0,
+      b = 1;
     for (let i = 2; i <= n; i++) {
       const temp = a + b;
       a = b;
@@ -306,7 +313,8 @@ export async function calculateFibonacci(n: number): Promise<number> {
 
   if (n <= 1) return n;
 
-  let a = 0, b = 1;
+  let a = 0,
+    b = 1;
   for (let i = 2; i <= n; i++) {
     const temp = a + b;
     a = b;
@@ -342,13 +350,13 @@ export default async function DashboardPage() {
 ### 関数キャッシュの特徴
 
 - ✅ 関数の戻り値がキャッシュされる
-- ✅ API呼び出しのキャッシュに最適
+- ✅ API 呼び出しのキャッシュに最適
 - ✅ 重い計算処理のキャッシュに最適
 - ✅ 複数の場所で再利用可能
 
 ### 関数キャッシュの使用ケース
 
-#### API呼び出しのキャッシュ
+#### API 呼び出しのキャッシュ
 
 ```typescript
 "use cache";
@@ -368,8 +376,9 @@ export async function calculateComplexMetrics(data: number[]) {
   // 時間のかかる計算
   const sum = data.reduce((a, b) => a + b, 0);
   const average = sum / data.length;
-  const variance = data.reduce((acc, val) =>
-    acc + Math.pow(val - average, 2), 0) / data.length;
+  const variance =
+    data.reduce((acc, val) => acc + Math.pow(val - average, 2), 0) /
+    data.length;
 
   return { sum, average, variance };
 }
@@ -382,8 +391,8 @@ export async function calculateComplexMetrics(data: number[]) {
 
 export async function getStatistics() {
   const [users, posts] = await Promise.all([
-    fetch("/api/users").then(r => r.json()),
-    fetch("/api/posts").then(r => r.json()),
+    fetch("/api/users").then((r) => r.json()),
+    fetch("/api/posts").then((r) => r.json()),
   ]);
 
   return {
@@ -415,7 +424,7 @@ export default async function BenchmarkPage() {
     <div>
       <p>キャッシュあり: {time1}ms</p>
       <p>キャッシュなし: {time2}ms</p>
-      <p>改善率: {((time2 - time1) / time2 * 100).toFixed(1)}%</p>
+      <p>改善率: {(((time2 - time1) / time2) * 100).toFixed(1)}%</p>
     </div>
   );
 }
@@ -423,12 +432,12 @@ export default async function BenchmarkPage() {
 
 ### 実測結果例
 
-| ケース | キャッシュなし | キャッシュあり | 改善率 |
-|--------|--------------|--------------|--------|
-| API呼び出し（1件） | 150ms | 2ms | 98.7% |
-| API呼び出し（10件） | 1200ms | 5ms | 99.6% |
-| Fibonacci(40) | 45ms | <1ms | 97.8% |
-| 統計計算 | 300ms | 3ms | 99.0% |
+| ケース                | キャッシュなし | キャッシュあり | 改善率 |
+| --------------------- | -------------- | -------------- | ------ |
+| API 呼び出し（1 件）  | 150ms          | 2ms            | 98.7%  |
+| API 呼び出し（10 件） | 1200ms         | 5ms            | 99.6%  |
+| Fibonacci(40)         | 45ms           | <1ms           | 97.8%  |
+| 統計計算              | 300ms          | 3ms            | 99.0%  |
 
 ## キャッシュの無効化
 
@@ -440,7 +449,7 @@ const nextConfig = {
   experimental: {
     staleTimes: {
       dynamic: 0, // 動的ページのキャッシュを無効化
-      static: 0,  // 静的ページのキャッシュを無効化
+      static: 0, // 静的ページのキャッシュを無効化
     },
   },
 };
@@ -525,7 +534,7 @@ export async function getCachedData(id: number) {
 }
 ```
 
-### 4. TypeScript型定義
+### 4. TypeScript 型定義
 
 ```typescript
 "use cache";
@@ -551,10 +560,10 @@ export async function getCachedUser(userId: number): Promise<User> {
 ```typescript
 // ❌ 間違い: "use cache"の位置
 import { something } from "somewhere";
-"use cache"; // これはエラー
+("use cache"); // これはエラー
 
 // ✅ 正しい: 最初の行に配置
-"use cache";
+("use cache");
 import { something } from "somewhere";
 ```
 
@@ -584,17 +593,17 @@ export default async function Page() {
 
 ### キャッシュタイプ選択ガイド
 
-| 目的 | 推奨キャッシュ | 例 |
-|------|--------------|-----|
-| ページ全体が静的 | ページキャッシュ | ブログ記事 |
-| 部分的に静的 | コンポーネントキャッシュ | 商品カード |
-| API呼び出し | 関数キャッシュ | ユーザー情報取得 |
-| 重い計算 | 関数キャッシュ | 統計計算 |
+| 目的             | 推奨キャッシュ           | 例               |
+| ---------------- | ------------------------ | ---------------- |
+| ページ全体が静的 | ページキャッシュ         | ブログ記事       |
+| 部分的に静的     | コンポーネントキャッシュ | 商品カード       |
+| API 呼び出し     | 関数キャッシュ           | ユーザー情報取得 |
+| 重い計算         | 関数キャッシュ           | 統計計算         |
 
 ### パフォーマンス向上の例
 
 - ページ読み込み時間: 1500ms → 50ms（96%改善）
-- API呼び出し回数: 50回 → 5回（90%削減）
+- API 呼び出し回数: 50 回 → 5 回（90%削減）
 - サーバー負荷: 大幅削減
 
 ---

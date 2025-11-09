@@ -52,12 +52,14 @@ app/
 ### エラー伝播の流れ
 
 1. **最も近い error.tsx でキャッチ**
+
    ```
    app/products/[id]/page.tsx → エラー発生
    → app/products/[id]/error.tsx で処理
    ```
 
 2. **親のエラーハンドラーへ伝播**
+
    ```
    error.tsx が存在しない場合
    → 親ディレクトリの error.tsx へ
@@ -114,9 +116,11 @@ export default function Error({
 ### 重要なポイント
 
 1. **"use client" ディレクティブが必須**
+
    - Error Boundary は Client Component である必要がある
 
 2. **props の型定義**
+
    ```typescript
    {
      error: Error & { digest?: string };  // エラーオブジェクト
@@ -125,7 +129,8 @@ export default function Error({
    ```
 
 3. **digest プロパティ**
-   - Next.js が生成するエラーID
+
+   - Next.js が生成するエラー ID
    - ログ追跡に使用
 
 4. **reset 関数**
@@ -183,18 +188,18 @@ export default function GlobalError({
 
 ### error.tsx との違い
 
-| 項目 | error.tsx | global-error.tsx |
-|------|-----------|------------------|
-| 対象 | 通常のページエラー | ルートレイアウトエラー含む |
-| html/body | 不要 | **必須** |
-| 発動頻度 | 高い | 低い（最後の砦） |
-| 本番環境 | 通常使用 | 重大なエラーのみ |
+| 項目      | error.tsx          | global-error.tsx           |
+| --------- | ------------------ | -------------------------- |
+| 対象      | 通常のページエラー | ルートレイアウトエラー含む |
+| html/body | 不要               | **必須**                   |
+| 発動頻度  | 高い               | 低い（最後の砦）           |
+| 本番環境  | 通常使用           | 重大なエラーのみ           |
 
 ### 使用ケース
 
 - ルートレイアウト (`app/layout.tsx`) でエラーが発生
 - error.tsx が正常に機能しない
-- React自体の初期化エラー
+- React 自体の初期化エラー
 
 ## 3. not-found.tsx - 404 ページ
 
@@ -208,7 +213,9 @@ export default function NotFound() {
     <div>
       <h1>404</h1>
       <h2>ページが見つかりません</h2>
-      <p>お探しのページは存在しないか、移動または削除された可能性があります。</p>
+      <p>
+        お探しのページは存在しないか、移動または削除された可能性があります。
+      </p>
 
       <a href="/">ホームに戻る</a>
     </div>
@@ -304,11 +311,13 @@ export default function ProductError({
 ### 利点
 
 1. **影響範囲の限定**
+
    - エラーが発生してもセグメント内に留まる
    - 他のページは正常動作
 
 2. **カスタマイズ可能**
-   - セグメントごとに異なるUI
+
+   - セグメントごとに異なる UI
    - セグメント固有のエラーメッセージ
 
 3. **部分的なリカバリー**
@@ -321,15 +330,19 @@ export default function ProductError({
 ```typescript
 "use client";
 
-export default function Error({ error, reset }: { error: Error; reset: () => void }) {
+export default function Error({
+  error,
+  reset,
+}: {
+  error: Error;
+  reset: () => void;
+}) {
   return (
     <div>
       <h2>エラーが発生しました</h2>
 
       {/* リトライボタン */}
-      <button onClick={reset}>
-        もう一度試す
-      </button>
+      <button onClick={reset}>もう一度試す</button>
     </div>
   );
 }
@@ -346,7 +359,7 @@ export default function Error({ error, reset }: { error: Error; reset: () => voi
 ```typescript
 // 一時的なネットワークエラーからの復帰
 export default async function Page() {
-  const data = await fetch('https://api.example.com/data'); // 失敗
+  const data = await fetch("https://api.example.com/data"); // 失敗
   return <div>{data}</div>;
 }
 
@@ -482,13 +495,16 @@ export default function Error({ error, reset }) {
 
 ## 8. 実践的なパターン
 
-### パターン1: データフェッチエラー
+### パターン 1: データフェッチエラー
 
 ```typescript
 // app/products/[id]/error.tsx
 "use client";
 
-export default function ProductError({ error, reset }: {
+export default function ProductError({
+  error,
+  reset,
+}: {
   error: Error;
   reset: () => void;
 }) {
@@ -524,7 +540,7 @@ export default function ProductError({ error, reset }: {
 }
 ```
 
-### パターン2: 認証エラー
+### パターン 2: 認証エラー
 
 ```typescript
 // app/dashboard/error.tsx
@@ -547,7 +563,7 @@ export default function DashboardError({ error }: { error: Error }) {
 }
 ```
 
-### パターン3: メンテナンスモード
+### パターン 3: メンテナンスモード
 
 ```typescript
 // app/error.tsx
@@ -572,7 +588,7 @@ export default function Error({ error }: { error: Error }) {
 
 ## 9. トラブルシューティング
 
-### 問題1: error.tsx が動作しない
+### 問題 1: error.tsx が動作しない
 
 **症状**: エラーが発生しても error.tsx が表示されない
 
@@ -585,13 +601,13 @@ export default function Error({ error, reset }) {
 }
 
 // ✅ 解決: "use client" を追加
-"use client";
+("use client");
 export default function Error({ error, reset }) {
   return <div>Error</div>;
 }
 ```
 
-### 問題2: global-error.tsx が必要なケース
+### 問題 2: global-error.tsx が必要なケース
 
 **症状**: ルートレイアウトでエラー発生時に白画面
 
@@ -603,8 +619,12 @@ export default function Error({ error, reset }) {
 
 export default function GlobalError({ error, reset }) {
   return (
-    <html>  {/* 必須 */}
-      <body>  {/* 必須 */}
+    <html>
+      {" "}
+      {/* 必須 */}
+      <body>
+        {" "}
+        {/* 必須 */}
         <h1>重大なエラー</h1>
         <button onClick={reset}>再起動</button>
       </body>
@@ -613,7 +633,7 @@ export default function GlobalError({ error, reset }) {
 }
 ```
 
-### 問題3: notFound() が効かない
+### 問題 3: notFound() が効かない
 
 **症状**: notFound() を呼んでも not-found.tsx が表示されない
 
@@ -629,7 +649,7 @@ app/
         └── not-found.tsx ← オプション（カスタム404）
 ```
 
-### 問題4: リダイレクトがエラーとして扱われる
+### 問題 4: リダイレクトがエラーとして扱われる
 
 **症状**: redirect() がエラーとしてキャッチされる
 
@@ -665,9 +685,7 @@ export default function TestErrorPage() {
 
   return (
     <div>
-      <button onClick={triggerError}>
-        エラーをトリガー
-      </button>
+      <button onClick={triggerError}>エラーをトリガー</button>
     </div>
   );
 }
@@ -735,7 +753,7 @@ segment/[id]/error.tsx ← 詳細エラー
 
 - ✅ 自動的な Error Boundary
 - ✅ 階層的なエラー処理
-- ✅ 簡単なリカバリー（reset関数）
+- ✅ 簡単なリカバリー（reset 関数）
 - ✅ セグメント別のカスタマイズ
 - ✅ Server Component との統合
 - ✅ 型安全性

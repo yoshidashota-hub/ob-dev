@@ -17,10 +17,10 @@ Route Groups は、URL 構造に影響を与えずにルートを論理的にグ
 
 ### 主な特徴
 
-- **URL に影響しない** - `(group)` はURL に含まれない
+- **URL に影響しない** - `(group)` は URL に含まれない
 - **レイアウトの分離** - グループごとに異なるレイアウト
 - **コードの整理** - 関連ルートをグループ化
-- **複数のルートレイアウト** - 1つのアプリで複数のレイアウト
+- **複数のルートレイアウト** - 1 つのアプリで複数のレイアウト
 - **柔軟な構成** - ネスト可能なグループ構造
 
 ---
@@ -49,6 +49,7 @@ app/
 ```
 
 **ポイント:**
+
 - `(marketing)` と `(shop)` は URL に含まれない
 - `/about` は `/(marketing)/about` ではない
 - 各グループに独自の `layout.tsx` を配置可能
@@ -78,9 +79,7 @@ export default function MarketingLayout({
       </header>
 
       {/* メインコンテンツ */}
-      <main className="flex-1">
-        {children}
-      </main>
+      <main className="flex-1">{children}</main>
 
       {/* マーケティング用フッター */}
       <footer className="bg-purple-900 text-white">
@@ -114,9 +113,7 @@ export default function ShopLayout({
       </header>
 
       {/* メインコンテンツ */}
-      <main className="flex-1">
-        {children}
-      </main>
+      <main className="flex-1">{children}</main>
 
       {/* ショップ用フッター */}
       <footer className="bg-blue-900 text-white">
@@ -168,6 +165,7 @@ export default function MarketingLayout({
 ```
 
 **レイアウトの適用順序:**
+
 ```
 app/layout.tsx
   └── app/(marketing)/layout.tsx
@@ -251,6 +249,7 @@ app/
 ```
 
 **制約:**
+
 - すべてのページに同じレイアウト
 - ページごとにレイアウトを変えるのが困難
 - コードの整理がしにくい
@@ -279,6 +278,7 @@ app/
 ```
 
 **メリット:**
+
 - グループごとに異なるレイアウト
 - URL 構造はシンプルに保てる
 - コードが整理されて保守しやすい
@@ -290,6 +290,7 @@ app/
 ### 1. URL 構造の設計
 
 **悪い例:**
+
 ```
 app/
 ├── marketing-about/     # URL: /marketing-about
@@ -297,6 +298,7 @@ app/
 ```
 
 **良い例:**
+
 ```
 app/
 └── (marketing)/
@@ -329,6 +331,7 @@ export default function MarketingLayout({
 ```
 
 **ポイント:**
+
 - ヘッダー・フッターはコンポーネント化
 - レイアウトファイルはシンプルに
 - スタイルはグループごとに統一
@@ -358,18 +361,21 @@ export default function AboutPage() {
 ### 使うべき場合
 
 ✅ **異なるレイアウトが必要**
+
 ```
 (marketing) → シンプルなレイアウト
 (app) → ダッシュボードレイアウト
 ```
 
 ✅ **論理的なグループ化**
+
 ```
 (docs) → ドキュメント関連
 (blog) → ブログ関連
 ```
 
 ✅ **コードの整理**
+
 ```
 (admin) → 管理画面機能
 (api) → API関連
@@ -380,13 +386,15 @@ export default function AboutPage() {
 ### 使わなくても良い場合
 
 ❌ **単純なネスト**
+
 ```
 app/
 └── products/
     └── [id]/page.tsx    # Route Groupsは不要
 ```
 
-❌ **URL構造を変えたい場合**
+❌ **URL 構造を変えたい場合**
+
 ```
 # Route Groupsでは URL は変わらない
 # 代わりに rewrites を使用
@@ -477,7 +485,7 @@ export default function Layout({ children }) {
 export function BaseLayout({
   header,
   children,
-  footer
+  footer,
 }: {
   header: React.ReactNode;
   children: React.ReactNode;
@@ -497,10 +505,7 @@ import { BaseLayout } from "@/components/layouts/BaseLayout";
 
 export default function MarketingLayout({ children }) {
   return (
-    <BaseLayout
-      header={<MarketingHeader />}
-      footer={<MarketingFooter />}
-    >
+    <BaseLayout header={<MarketingHeader />} footer={<MarketingFooter />}>
       {children}
     </BaseLayout>
   );
@@ -518,11 +523,7 @@ export default function MarketingLayout({ children }) {
 export default function MarketingLayout({ children }) {
   console.log("Marketing Layout Rendered");
 
-  return (
-    <div data-layout="marketing">
-      {children}
-    </div>
-  );
+  return <div data-layout="marketing">{children}</div>;
 }
 ```
 
@@ -542,7 +543,7 @@ export default function MarketingLayout({ children }) {
 1. **URL に影響しない** - `(group)` は URL パスに含まれない
 2. **レイアウトの分離** - グループごとに異なるレイアウト
 3. **コードの整理** - 関連ルートを論理的にグループ化
-4. **柔軟な構成** - 複数のレイアウトを1つのアプリで使用
+4. **柔軟な構成** - 複数のレイアウトを 1 つのアプリで使用
 5. **保守性向上** - 機能ごとにファイルを整理
 
 ---

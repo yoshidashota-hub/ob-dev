@@ -37,14 +37,16 @@ export const metadata: Metadata = {
     default: "Next.js 16 学習サンドボックス",
     template: "%s | Next.js 16 Sandbox",
   },
-  description: "Next.js 16 の新機能を学ぶための実践的なサンドボックスプロジェクト",
+  description:
+    "Next.js 16 の新機能を学ぶための実践的なサンドボックスプロジェクト",
   keywords: ["Next.js", "React", "TypeScript", "Server Actions"],
   authors: [{ name: "Next.js Learner" }],
   creator: "Next.js Learner",
   metadataBase: new URL("http://localhost:3000"),
   openGraph: {
     title: "Next.js 16 学習サンドボックス",
-    description: "Next.js 16 の新機能を学ぶための実践的なサンドボックスプロジェクト",
+    description:
+      "Next.js 16 の新機能を学ぶための実践的なサンドボックスプロジェクト",
     url: "http://localhost:3000",
     siteName: "Next.js 16 Sandbox",
     locale: "ja_JP",
@@ -53,7 +55,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Next.js 16 学習サンドボックス",
-    description: "Next.js 16 の新機能を学ぶための実践的なサンドボックスプロジェクト",
+    description:
+      "Next.js 16 の新機能を学ぶための実践的なサンドボックスプロジェクト",
     creator: "@nextjs_learner",
   },
   robots: {
@@ -71,9 +74,10 @@ export const metadata: Metadata = {
 ```
 
 **ポイント:**
-- `metadataBase` を設定することで、相対URLが自動的に絶対URLに変換される
+
+- `metadataBase` を設定することで、相対 URL が自動的に絶対 URL に変換される
 - `template` を使うことで、子ページのタイトルが自動的にフォーマットされる
-- Open Graph と Twitter Card 両方を設定することで、SNSシェアに対応
+- Open Graph と Twitter Card 両方を設定することで、SNS シェアに対応
 
 ---
 
@@ -90,6 +94,7 @@ export const metadata: Metadata = {
 ```
 
 **結果:**
+
 - タイトル: "ブログ | Next.js 16 Sandbox" (layout.tsx の template が適用)
 - description: ページ固有の説明文
 
@@ -151,8 +156,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 ```
 
 **特徴:**
+
 - 各記事ごとに異なるメタデータを生成
-- データベースやCMSからデータを取得可能
+- データベースや CMS からデータを取得可能
 - 記事固有の Open Graph 画像を設定
 
 ---
@@ -162,7 +168,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 ```typescript
 export async function generateStaticParams() {
   const posts = await getAllPosts();
-  
+
   return posts.map((post) => ({
     slug: post.slug,
   }));
@@ -170,9 +176,10 @@ export async function generateStaticParams() {
 ```
 
 **利点:**
+
 - ビルド時に全ページのメタデータを生成
 - 高速なページ表示
-- SEOに最適
+- SEO に最適
 
 ---
 
@@ -214,6 +221,7 @@ export default async function Image() {
 ```
 
 **結果:**
+
 - `/opengraph-image` で画像にアクセス可能
 - 自動的に Open Graph メタタグに追加される
 
@@ -258,9 +266,10 @@ export default async function Image({
 ```
 
 **ポイント:**
+
 - 記事ごとに異なる画像を生成
 - タイトルや著者名を動的に表示
-- SNSシェア時に記事固有の画像が表示される
+- SNS シェア時に記事固有の画像が表示される
 
 ---
 
@@ -306,17 +315,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
 ```
 
 **結果:**
+
 - `/sitemap.xml` で XML Sitemap にアクセス可能
 - 検索エンジンが効率的にクロール
 - 最終更新日や優先度を指定可能
 
 **priority の目安:**
+
 - 1.0: トップページ
 - 0.8-0.9: 主要なカテゴリページ
 - 0.6-0.7: 個別記事ページ
-- 0.5以下: その他のページ
+- 0.5 以下: その他のページ
 
 **changeFrequency の目安:**
+
 - `always`: 毎回変わるページ（ほぼ使わない）
 - `hourly`: ニュースサイトのトップ
 - `daily`: ブログトップ
@@ -343,9 +355,9 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: "*",
         allow: "/",
         disallow: [
-          "/api/",      // API エンドポイント
-          "/admin/",    // 管理画面
-          "/*?*",       // クエリパラメータ付きURL
+          "/api/", // API エンドポイント
+          "/admin/", // 管理画面
+          "/*?*", // クエリパラメータ付きURL
         ],
       },
       {
@@ -367,11 +379,13 @@ export default function robots(): MetadataRoute.Robots {
 ```
 
 **結果:**
+
 - `/robots.txt` でアクセス可能
 - クローラーの動作を制御
 - Sitemap へのリンクを含む
 
 **ポイント:**
+
 - `userAgent: "*"` は全クローラーに適用
 - `disallow` でクロール不要なパスを指定
 - `crawlDelay` でクロール速度を調整
@@ -395,51 +409,61 @@ export default function robots(): MetadataRoute.Robots {
 ```typescript
 // 本番環境では環境変数を使用
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
+  ),
 };
 ```
 
 **理由:**
-- Open Graph や Twitter Card で絶対URLが必要
-- 環境ごとに異なるURLに対応
+
+- Open Graph や Twitter Card で絶対 URL が必要
+- 環境ごとに異なる URL に対応
 
 ---
 
 ### 3. Open Graph 画像のサイズ
 
 **推奨サイズ:**
+
 - 1200 x 630 px（Facebook、Twitter 推奨）
 - 最小: 600 x 315 px
 - アスペクト比: 1.91:1
 
 **ファイルサイズ:**
-- 8MB以下（Facebook制限）
-- できるだけ軽量に（1MB以下推奨）
+
+- 8MB 以下（Facebook 制限）
+- できるだけ軽量に（1MB 以下推奨）
 
 ---
 
 ### 4. title の最適な長さ
 
 **Google:**
-- デスクトップ: 60文字程度
-- モバイル: 40文字程度
+
+- デスクトップ: 60 文字程度
+- モバイル: 40 文字程度
 
 **Twitter:**
-- 70文字程度
+
+- 70 文字程度
 
 **Facebook:**
-- 60-90文字
+
+- 60-90 文字
 
 ---
 
 ### 5. description の最適な長さ
 
 **Google:**
-- 120-156文字（デスクトップ）
-- 120文字以下（モバイル）
+
+- 120-156 文字（デスクトップ）
+- 120 文字以下（モバイル）
 
 **ポイント:**
-- 最初の120文字に重要な情報を含める
+
+- 最初の 120 文字に重要な情報を含める
 - Call to Action を含めると効果的
 
 ---
@@ -461,7 +485,7 @@ export const metadata: Metadata = {
 - [x] metadataBase が設定されている
 - [x] keywords が適切に設定されている
 - [x] 構造化データ（JSON-LD）を追加（必要に応じて）
-- [x] OG画像が設定されている
+- [x] OG 画像が設定されている
 - [x] favicon が設定されている
 
 ---
@@ -488,12 +512,12 @@ next16-sandbox/
 
 - **Sitemap**: http://localhost:3000/sitemap.xml
 - **Robots**: http://localhost:3000/robots.txt
-- **OG画像**: http://localhost:3000/opengraph-image
+- **OG 画像**: http://localhost:3000/opengraph-image
 - **ブログ**: http://localhost:3000/blog
 
 ---
 
-## 📊 SEO効果測定
+## 📊 SEO 効果測定
 
 ### Google Search Console
 
@@ -505,9 +529,9 @@ next16-sandbox/
 ### 確認ツール
 
 - **Google Rich Results Test**: 構造化データの確認
-- **Facebook Sharing Debugger**: OG画像の確認
-- **Twitter Card Validator**: Twitter Cardの確認
-- **Lighthouse**: SEOスコアの測定
+- **Facebook Sharing Debugger**: OG 画像の確認
+- **Twitter Card Validator**: Twitter Card の確認
+- **Lighthouse**: SEO スコアの測定
 
 ---
 
@@ -523,9 +547,9 @@ next16-sandbox/
 ## 🎓 学習のポイント
 
 1. **静的 vs 動的メタデータ** - 適切な使い分け
-2. **Open Graph** - SNSシェア最適化
+2. **Open Graph** - SNS シェア最適化
 3. **Sitemap/Robots** - 検索エンジン最適化
-4. **型安全性** - TypeScriptによる安全な実装
+4. **型安全性** - TypeScript による安全な実装
 5. **パフォーマンス** - 静的生成とキャッシング
 
 ---

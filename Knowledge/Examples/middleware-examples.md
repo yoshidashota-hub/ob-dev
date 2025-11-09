@@ -44,13 +44,12 @@ export function middleware(request: NextRequest) {
 
 // Middleware を実行するパスを指定
 export const config = {
-  matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico).*)",
-  ],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };
 ```
 
 **ポイント:**
+
 - `middleware()` 関数で処理を定義
 - `NextResponse.next()` でリクエストを続行
 - `matcher` で適用するパスを指定
@@ -89,6 +88,7 @@ export function middleware(request: NextRequest) {
 ```
 
 **使用例:**
+
 - `/admin` → 認証されていない場合 → `/login?redirect=/admin`
 - `/admin` → 認証済み → ページ表示
 
@@ -313,9 +313,9 @@ export function middleware(request: NextRequest) {
 ```typescript
 export const config = {
   matcher: [
-    "/admin/:path*",     // /admin 配下すべて
-    "/api/:path*",       // /api 配下すべて
-    "/((?!public).*)",   // public 以外すべて
+    "/admin/:path*", // /admin 配下すべて
+    "/api/:path*", // /api 配下すべて
+    "/((?!public).*)", // public 以外すべて
   ],
 };
 ```
@@ -346,11 +346,7 @@ export const config = {
 
 ```typescript
 export const config = {
-  matcher: [
-    "/admin/:path*",
-    "/dashboard/:path*",
-    "/profile/:path*",
-  ],
+  matcher: ["/admin/:path*", "/dashboard/:path*", "/profile/:path*"],
 };
 ```
 
@@ -388,6 +384,7 @@ export function middleware(request: NextRequest) {
 ### 2. パフォーマンス最適化
 
 **❌ 悪い例:**
+
 ```typescript
 // 重い処理を Middleware に書く
 export function middleware(request: NextRequest) {
@@ -397,6 +394,7 @@ export function middleware(request: NextRequest) {
 ```
 
 **✅ 良い例:**
+
 ```typescript
 // 軽量な処理のみ Middleware で行う
 export function middleware(request: NextRequest) {
@@ -409,6 +407,7 @@ export function middleware(request: NextRequest) {
 ```
 
 **推奨:**
+
 - Cookie/ヘッダーの確認のみ
 - データベースアクセスは避ける
 - 重い処理は Server Component で行う
@@ -420,11 +419,13 @@ export function middleware(request: NextRequest) {
 Middleware は Edge Runtime で実行されるため、一部の Node.js API が使えません。
 
 **使用不可:**
+
 - `fs` モジュール
 - データベースの直接接続
 - 一部の npm パッケージ
 
 **使用可能:**
+
 - `fetch` API
 - Cookie/ヘッダー操作
 - URL 操作
