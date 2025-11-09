@@ -632,6 +632,442 @@ Value: cname.vercel-dns.com
 - SAML SSO
 - WAF
 
+### 💾 Vercel Storage
+
+**マネージド型サーバーレスストレージサービス。**
+
+Vercel は複数のストレージソリューションを提供しており、アプリケーションのニーズに応じて選択可能。
+
+#### 1. Vercel Blob
+
+**大容量ファイルストレージ。**
+
+**用途:**
+
+- 画像、動画、PDF などの大きなファイル
+- ユーザーアップロードファイル
+- 静的アセット
+
+**特徴:**
+
+- グローバル CDN で高速配信
+- 自動的なファイル最適化
+- エッジからのアクセス
+- シンプルな SDK
+
+**使用例:**
+
+```typescript
+import { put } from '@vercel/blob';
+
+export async function POST(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const filename = searchParams.get('filename');
+
+  const blob = await put(filename, request.body, {
+    access: 'public',
+  });
+
+  return Response.json(blob);
+}
+```
+
+#### 2. Vercel KV (Redis)
+
+**高速なキー・バリューストア（Redis ベース）。**
+
+**用途:**
+
+- セッション管理
+- キャッシュ
+- リアルタイムデータ
+- レート制限
+
+**特徴:**
+
+- Redis 互換
+- グローバルレプリケーション
+- 低レイテンシ（<1ms）
+- 自動スケーリング
+
+**使用例:**
+
+```typescript
+import { kv } from '@vercel/kv';
+
+// データを保存
+await kv.set('user:123', { name: 'John', email: 'john@example.com' });
+
+// データを取得
+const user = await kv.get('user:123');
+
+// 期限付きで保存（60秒）
+await kv.setex('session:abc', 60, { userId: '123' });
+```
+
+#### 3. Vercel Postgres
+
+**マネージド PostgreSQL データベース。**
+
+**用途:**
+
+- リレーショナルデータ
+- トランザクション処理
+- 複雑なクエリ
+- 構造化データ
+
+**特徴:**
+
+- サーバーレス
+- 自動スケーリング
+- 接続プーリング
+- SQL サポート
+
+**使用例:**
+
+```typescript
+import { sql } from '@vercel/postgres';
+
+// クエリ実行
+const result = await sql`
+  SELECT * FROM users
+  WHERE email = ${email}
+`;
+
+// 複数行取得
+const users = await sql`SELECT * FROM users`;
+```
+
+**ベストプラクティス:**
+
+- **リージョンの一致**: データベースと Functions を同じリージョンに配置
+- **接続管理**: 接続プールを適切に管理
+- **KV レプリケーション**: KV のレプリカを Functions と同じリージョンに配置
+
+### 🤖 AI 機能
+
+**Vercel の AI-First Infrastructure。**
+
+#### 1. v0
+
+**AI を活用した開発アシスタント。**
+
+**機能:**
+
+- Web 検索機能
+- サイト検証
+- エラー自動修正
+- 外部ツール統合
+- 自律的なエージェント機能
+
+**使用ケース:**
+
+- プロトタイプの迅速な作成
+- UI コンポーネントの生成
+- コード提案とレビュー
+
+#### 2. AI SDK
+
+**AI アプリケーション構築用の SDK。**
+
+**特徴:**
+
+- 複数の AI プロバイダーをサポート
+- ストリーミング対応
+- AI Gateway と統合
+- プロバイダーパッケージ不要
+
+**使用例:**
+
+```typescript
+import { openai } from '@ai-sdk/openai';
+import { generateText } from 'ai';
+
+export async function POST(request: Request) {
+  const { prompt } = await request.json();
+
+  const { text } = await generateText({
+    model: openai('gpt-4-turbo'),
+    prompt,
+  });
+
+  return Response.json({ text });
+}
+```
+
+#### 3. AI Gateway
+
+**AI モデルへの統合アクセスポイント。**
+
+**機能:**
+
+- 複数の AI プロバイダーを一元管理
+- レート制限
+- キャッシング
+- コスト追跡
+- OpenAI 互換 API
+
+**プロバイダー:**
+
+- OpenAI
+- Anthropic
+- Google (Gemini)
+- Mistral
+- その他多数
+
+**使用例:**
+
+```typescript
+import { openai } from '@ai-sdk/openai';
+
+// AI Gateway を使用
+const model = openai('gpt-4', {
+  baseURL: process.env.AI_GATEWAY_URL,
+  apiKey: process.env.AI_GATEWAY_KEY,
+});
+```
+
+#### 4. Agents
+
+**タスクを自律的に実行する AI エージェント。**
+
+**構築方法:**
+
+1. LLM を呼び出す
+2. ツール（関数）を定義
+3. エージェントを作成してタスクを実行
+
+**使用例:**
+
+```typescript
+import { openai } from '@ai-sdk/openai';
+import { generateText, tool } from 'ai';
+import { z } from 'zod';
+
+const { text } = await generateText({
+  model: openai('gpt-4-turbo'),
+  tools: {
+    weather: tool({
+      description: 'Get the weather in a location',
+      parameters: z.object({
+        location: z.string().describe('The location to get the weather for'),
+      }),
+      execute: async ({ location }) => ({
+        location,
+        temperature: 72 + Math.floor(Math.random() * 21) - 10,
+      }),
+    }),
+  },
+  prompt: 'What is the weather in San Francisco?',
+});
+```
+
+### 📊 Observability（可観測性）
+
+**アプリケーションのパフォーマンスと動作を監視。**
+
+#### 1. ログ
+
+**アプリケーションログの収集と管理。**
+
+**機能:**
+
+- リアルタイムログストリーミング
+- Functions からの自動ログ収集
+- `console.log` の自動キャプチャ
+- ログフィルタリングと検索
+
+**ログの確認:**
+
+```bash
+# CLI でログを確認
+vercel logs
+
+# 特定のデプロイメントのログ
+vercel logs <deployment-url>
+```
+
+#### 2. Drains
+
+**ログとトレースを外部サービスに転送。**
+
+**対応サービス:**
+
+- Datadog
+- New Relic
+- Axiom
+- Grafana
+- カスタムエンドポイント
+
+**データタイプ:**
+
+- ログ
+- トレース
+- Speed Insights
+- Analytics データ
+
+**設定例:**
+
+```bash
+# Drain を作成
+vercel drains add <endpoint-url>
+```
+
+#### 3. OpenTelemetry (OTel)
+
+**分散トレーシングの実装。**
+
+**機能:**
+
+- Functions からのトレース送信
+- APM ベンダーとの統合
+- 自動的なログとトレースの相関
+- パフォーマンス分析
+
+**使用例:**
+
+```typescript
+import { trace } from '@opentelemetry/api';
+
+const tracer = trace.getTracer('my-app');
+
+export async function GET() {
+  return tracer.startActiveSpan('process-request', async (span) => {
+    // 処理
+    const result = await someOperation();
+    span.end();
+    return Response.json(result);
+  });
+}
+```
+
+#### 4. Monitoring
+
+**使用状況とトラフィックの可視化。**
+
+**監視項目:**
+
+- デプロイメント数
+- ビルド時間
+- 帯域幅使用量
+- Functions の実行回数
+- エラー率
+
+**Observability Plus（Pro プラン追加オプション）:**
+
+- 拡張されたログ保持期間
+- 詳細なメトリクス
+- カスタムダッシュボード
+- アラート機能
+
+### 👥 Access & Collaboration
+
+**チームでの共同作業とアクセス制御。**
+
+#### Role-Based Access Control (RBAC)
+
+**役割ベースのアクセス制御でセキュリティと柔軟性を両立。**
+
+**チームレベルのロール:**
+
+| ロール | 権限 | 使用ケース |
+|--------|------|-----------|
+| Owner | 完全な管理権限 | チームオーナー |
+| Member | プロジェクトへのアクセス | 開発者 |
+| Viewer | 読み取り専用 | ステークホルダー |
+| Contributor (Enterprise) | プロジェクト単位のアクセス | 外部協力者 |
+
+**プロジェクトレベルのロール:**
+
+- プロジェクトごとに異なる権限を設定可能
+- より細かいアクセス制御
+- Enterprise プランで利用可能
+
+**設定方法:**
+
+1. チームダッシュボードから「Members」に移動
+2. メンバーを招待
+3. ロールを選択
+4. 必要に応じてプロジェクトロールを設定
+
+#### チーム管理
+
+**効率的なコラボレーション。**
+
+**機能:**
+
+- メンバーの招待と削除
+- ロールの変更
+- プロジェクトへのアクセス管理
+- アクティビティログ（Audit Logs）
+
+**Vercel Authentication:**
+
+- プレビューと本番デプロイメントを保護
+- チームメンバーのログイン認証
+- 外部公開前のテスト環境保護
+
+#### Access Groups (Enterprise)
+
+**大規模チーム向けのアクセス管理。**
+
+**メリット:**
+
+- グループ単位でのアクセス制御
+- SAML SSO との統合
+- 一括での権限管理
+- 簡略化されたオンボーディング
+
+### ✅ Production Checklist
+
+**本番環境リリース前の確認項目。**
+
+#### パフォーマンス
+
+- [ ] Image Optimization を有効化
+- [ ] 適切なキャッシュ戦略を設定（ISR、Cache-Control）
+- [ ] Edge Functions を必要な箇所に適用
+- [ ] Core Web Vitals を確認（LCP、FID、CLS）
+- [ ] バンドルサイズを最適化
+
+#### セキュリティ
+
+- [ ] 環境変数に機密情報を格納
+- [ ] HTTPS が有効（自動）
+- [ ] CORS 設定を確認
+- [ ] CSP ヘッダーを設定
+- [ ] 認証が必要な箇所を保護
+
+#### 監視
+
+- [ ] Web Analytics を有効化
+- [ ] エラー追跡を設定
+- [ ] ログ収集を確認
+- [ ] Drains を設定（オプション）
+- [ ] アラートを設定
+
+#### ドメインとネットワーク
+
+- [ ] カスタムドメインを設定
+- [ ] DNS レコードを確認
+- [ ] SSL 証明書が発行されているか確認
+- [ ] リダイレクトルールを設定
+- [ ] リライトルールを確認
+
+#### チームとアクセス
+
+- [ ] チームメンバーのロールを確認
+- [ ] プロジェクトアクセス権を設定
+- [ ] 本番環境の保護を有効化（必要な場合）
+- [ ] Audit Logs を有効化（Enterprise）
+
+#### バックアップと復旧
+
+- [ ] ロールバック手順を確認
+- [ ] データベースのバックアップ設定
+- [ ] 重要な環境変数をバックアップ
+- [ ] ドキュメントを最新化
+
 ## 実例・サンプルコード
 
 ### 基本的な Next.js プロジェクトのデプロイ
@@ -813,27 +1249,74 @@ export const config = {
 
 ## 疑問点・次にやること
 
+### Storage
+- [ ] Vercel Blob でのファイルアップロード機能を実装
+- [ ] Vercel KV を使ったセッション管理を試す
+- [ ] Vercel Postgres と Prisma の統合を調査
+- [ ] Storage の料金モデルとコスト最適化
+
+### AI 機能
+- [ ] v0 を使った UI コンポーネント生成を試す
+- [ ] AI SDK でストリーミングレスポンスを実装
+- [ ] AI Gateway で複数プロバイダーを切り替える
+- [ ] Agents を使った自律的なタスク実行を構築
+
+### Observability
+- [ ] Drains を設定して外部 APM と連携
+- [ ] OpenTelemetry を使った分散トレーシングを実装
+- [ ] Observability Plus の機能を詳しく調査
+- [ ] カスタムダッシュボードの作成
+
+### その他
 - [ ] Rolling Releases の実践的な使い方を試す
 - [ ] Web Analytics Plus の詳細機能を確認
-- [ ] Edge Functions でのデータベース接続パターンを調査
-- [ ] Vercel Blob Storage の使用方法を学ぶ
 - [ ] Monorepo での Vercel デプロイ戦略を調査
 - [ ] Bot ID のセットアップと効果測定
-- [ ] Enterprise プランの機能を詳しく調査
+- [ ] RBAC を使ったチーム権限管理の最適化
+- [ ] Production Checklist を実プロジェクトで活用
 
 ## 関連リンク
 
+### 基本
 - [Vercel 公式ドキュメント](https://vercel.com/docs)
 - [Vercel CLI リファレンス](https://vercel.com/docs/cli)
 - [Next.js on Vercel](https://vercel.com/docs/frameworks/nextjs)
+- [Pricing ページ](https://vercel.com/pricing)
+
+### インフラとデプロイ
 - [Vercel Functions](https://vercel.com/docs/functions)
 - [Edge Network 概要](https://vercel.com/docs/edge-network/overview)
 - [Vercel CDN](https://vercel.com/docs/cdn)
 - [ビルドとデプロイ](https://vercel.com/docs/deployments)
 - [環境変数](https://vercel.com/docs/projects/environment-variables)
 - [Vercel Regions](https://vercel.com/docs/regions)
+
+### Storage
+- [Vercel Storage 概要](https://vercel.com/docs/storage)
+- [Vercel Blob](https://vercel.com/docs/storage/vercel-blob)
+- [Vercel KV (Redis)](https://vercel.com/docs/storage/vercel-kv)
+- [Vercel Postgres](https://vercel.com/docs/storage/vercel-postgres)
+
+### AI
+- [AI SDK](https://vercel.com/docs/ai-sdk)
+- [AI Gateway](https://vercel.com/docs/ai-gateway)
+- [v0 ドキュメント](https://vercel.com/docs/v0)
+- [Agents ガイド](https://vercel.com/docs/agents)
+
+### Observability
+- [Observability 概要](https://vercel.com/docs/observability)
+- [Drains](https://vercel.com/docs/drains)
+- [OpenTelemetry](https://vercel.com/docs/otel)
+- [Audit Logs](https://vercel.com/docs/audit-log)
+
+### チームとアクセス
+- [Role-Based Access Control (RBAC)](https://vercel.com/docs/rbac)
+- [チームメンバー管理](https://vercel.com/docs/rbac/managing-team-members)
+- [Access Control](https://vercel.com/docs/security/access-control)
+
+### その他
+- [Production Checklist](https://vercel.com/docs/production-checklist)
 - [Vercel Ship 2025 Recap](https://vercel.com/blog/vercel-ship-2025-recap)
-- [Pricing ページ](https://vercel.com/pricing)
 
 ## メモ
 
