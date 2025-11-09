@@ -29,7 +29,7 @@ Phase 1 完了後、Next.js 16 の残りの重要機能を体系的に学習す�
 - [x] Route Handlers (API Routes)
 - [x] Loading UI & Skeletons
 - [x] Image & Font Optimization
-- [ ] Metadata API (SEO)
+- [x] Metadata API (SEO)
 - [ ] Middleware
 - [ ] Route Groups & Layouts
 - [ ] Parallel & Intercepting Routes
@@ -38,7 +38,8 @@ Phase 1 完了後、Next.js 16 の残りの重要機能を体系的に学習す�
 - 1 API実装（6エンドポイント）、1 APIデモページ
 - 4 loading.tsx、13 スケルトンコンポーネント、6 ローダーコンポーネント
 - 2 最適化デモページ（images、fonts）、next.config.ts画像設定追加
-- 3 ドキュメント追加（route-handlers、loading-ui、optimization）
+- Metadata API（layout.tsx更新、sitemap.ts、robots.ts、opengraph-image.tsx、blog 3記事）
+- 4 ドキュメント追加（route-handlers、loading-ui、optimization、metadata-seo）
 
 ---
 
@@ -279,35 +280,54 @@ images: {
 
 ---
 
-### 7. Metadata API (SEO)
+### 7. Metadata API (SEO) ✅
 
 **実装内容**:
 
-- 静的メタデータ
-- 動的メタデータ
-- Open Graph 画像
-- Sitemap/Robots.txt
+- 静的メタデータ（layout.tsx - title template、Open Graph、Twitter Card）
+- 動的メタデータ（generateMetadata() 関数）
+- Open Graph 画像生成（ImageResponse API）
+- Sitemap.xml 自動生成
+- Robots.txt 生成
 
 **実装ファイル**:
 
 ```
 app/
-├── layout.tsx                   # ルートメタデータ
+├── layout.tsx                   # ルートメタデータ（完全なSEO設定）
+├── sitemap.ts                   # 動的Sitemap生成
+├── robots.ts                    # Robots.txt生成
+├── opengraph-image.tsx          # ルートOG画像
 ├── blog/
+│   ├── page.tsx                 # ブログ一覧
 │   └── [slug]/
-│       └── page.tsx             # 動的OG画像
-├── sitemap.ts                   # Sitemap生成
-└── robots.ts                    # Robots.txt
+│       └── page.tsx             # 動的メタデータ（3記事サンプル）
+```
+
+**設定内容**:
+
+```typescript
+// layout.tsx の主要設定
+- title template: "%s | Next.js 16 Sandbox"
+- metadataBase: localhost:3000
+- keywords, description, authors
+- Open Graph (title, description, type, locale)
+- Twitter Card (summary_large_image)
+- robots (index, follow, googleBot設定)
 ```
 
 **ノート**: `Knowledge/Examples/metadata-seo-examples.md`
 
 **学習ポイント**:
 
-- SEO 最適化
-- ソーシャルシェア対応
-- 検索エンジン対策
-- メタデータ継承
+- 静的・動的メタデータの使い分け
+- generateMetadata() で記事ごとのメタデータ生成
+- Open Graph 画像の動的生成
+- Sitemap/Robots.txt の自動生成
+- SEO最適化のベストプラクティス
+- SNSシェア時の表示最適化
+
+**実装日**: 2025-11-08
 
 ---
 
@@ -470,14 +490,14 @@ Phase 1: 基礎機能 ✅ 完了 (4/4)
 ├── ✅ Async Params
 └── ✅ View Transitions
 
-Phase 1.5: 応用機能 ⏳ 進行中 (6/10)
+Phase 1.5: 応用機能 ⏳ 進行中 (7/10)
 ├── ✅ Server Actions & Forms
 ├── ✅ Streaming & Suspense
 ├── ✅ Error Handling
 ├── ✅ Route Handlers (API Routes)
 ├── ✅ Loading UI & Skeletons
 ├── ✅ Image & Font Optimization
-├── ⏹️ Metadata API
+├── ✅ Metadata API (SEO)
 ├── ⏹️ Middleware
 ├── ⏹️ Route Groups
 └── ⏹️ Parallel Routes
@@ -512,8 +532,9 @@ Phase 3: 横展開・比較 ⏹️ 未着手
 
 **作成日**: 2025-11-08
 **Phase 1 完了日**: 2025-11-08
-**Phase 1.5 進行中**: Server Actions、Streaming、Error Handling、Route Handlers、Loading UI、Image & Font Optimization 実装完了 (6/10)
+**Phase 1.5 進行中**: Server Actions、Streaming、Error Handling、Route Handlers、Loading UI、Image & Font Optimization、Metadata API 実装完了 (7/10)
 **Route Handlers 実装日**: 2025-11-08
 **Loading UI 実装日**: 2025-11-08
 **Image & Font Optimization 実装日**: 2025-11-08
-**次の目標**: Phase 1.5 - Metadata API (SEO)
+**Metadata API 実装日**: 2025-11-08
+**次の目標**: Phase 1.5 - Middleware

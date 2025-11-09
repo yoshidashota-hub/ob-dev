@@ -217,6 +217,28 @@ export default function Home() {
               <div>✓ Lazy Loading & Priority</div>
             </div>
           </a>
+
+          {/* Metadata API (SEO) */}
+          <a
+            href="/blog"
+            className="group block p-6 bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-cyan-500"
+          >
+            <div className="flex items-center mb-4">
+              <span className="text-4xl mr-3">🔍</span>
+              <h2 className="text-2xl font-semibold text-gray-900 group-hover:text-cyan-600">
+                Metadata & SEO
+              </h2>
+            </div>
+            <p className="text-gray-600 mb-4">
+              メタデータAPI、Open Graph、Sitemap、Robots.txt
+            </p>
+            <div className="space-y-1 text-sm text-gray-500">
+              <div>✓ 静的・動的メタデータ</div>
+              <div>✓ Open Graph 画像生成</div>
+              <div>✓ Sitemap.xml 自動生成</div>
+              <div>✓ SEO 最適化</div>
+            </div>
+          </a>
         </div>
 
         {/* フッター情報 */}
@@ -243,7 +265,8 @@ export default function Home() {
                 <li>✅ Route Handlers (API Routes)</li>
                 <li>✅ Loading UI & Skeletons</li>
                 <li>✅ Image & Font Optimization</li>
-                <li>⏳ Metadata API （次回）</li>
+                <li>✅ Metadata API (SEO)</li>
+                <li>⏳ Middleware （次回）</li>
               </ul>
             </div>
           </div>
