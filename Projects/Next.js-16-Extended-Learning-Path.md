@@ -548,7 +548,7 @@ Phase 1: 基礎機能 ✅ 完了 (4/4)
 ├── ✅ Async Params
 └── ✅ View Transitions
 
-Phase 1.5: 応用機能 ⏳ 進行中 (8/10)
+Phase 1.5: 応用機能 ⏳ 進行中 (9/10)
 ├── ✅ Server Actions & Forms
 ├── ✅ Streaming & Suspense
 ├── ✅ Error Handling
@@ -557,7 +557,7 @@ Phase 1.5: 応用機能 ⏳ 進行中 (8/10)
 ├── ✅ Image & Font Optimization
 ├── ✅ Metadata API (SEO)
 ├── ✅ Middleware
-├── ⏹️ Route Groups
+├── ✅ Route Groups & Layouts
 └── ⏹️ Parallel Routes
 
 Phase 2: 理論深掘り ⏹️ 未着手
@@ -590,10 +590,11 @@ Phase 3: 横展開・比較 ⏹️ 未着手
 
 **作成日**: 2025-11-08
 **Phase 1 完了日**: 2025-11-08
-**Phase 1.5 進行中**: Server Actions、Streaming、Error Handling、Route Handlers、Loading UI、Image & Font Optimization、Metadata API、Middleware 実装完了 (8/10)
+**Phase 1.5 進行中**: Server Actions、Streaming、Error Handling、Route Handlers、Loading UI、Image & Font Optimization、Metadata API、Middleware、Route Groups 実装完了 (9/10)
 **Route Handlers 実装日**: 2025-11-08
 **Loading UI 実装日**: 2025-11-08
 **Image & Font Optimization 実装日**: 2025-11-08
 **Metadata API 実装日**: 2025-11-08
 **Middleware 実装日**: 2025-11-08
-**次の目標**: Phase 1.5 - Route Groups & Layouts
+**Route Groups 実装日**: 2025-11-08
+**次の目標**: Phase 1.5 - Parallel & Intercepting Routes
