@@ -30,7 +30,7 @@ Phase 1 完了後、Next.js 16 の残りの重要機能を体系的に学習す�
 - [x] Loading UI & Skeletons
 - [x] Image & Font Optimization
 - [x] Metadata API (SEO)
-- [ ] Middleware
+- [x] Middleware
 - [ ] Route Groups & Layouts
 - [ ] Parallel & Intercepting Routes
 
@@ -39,7 +39,8 @@ Phase 1 完了後、Next.js 16 の残りの重要機能を体系的に学習す�
 - 4 loading.tsx、13 スケルトンコンポーネント、6 ローダーコンポーネント
 - 2 最適化デモページ（images、fonts）、next.config.ts画像設定追加
 - Metadata API（layout.tsx更新、sitemap.ts、robots.ts、opengraph-image.tsx、blog 3記事）
-- 4 ドキュメント追加（route-handlers、loading-ui、optimization、metadata-seo）
+- Middleware（middleware.ts、login、admin、middleware-demo ページ）
+- 5 ドキュメント追加（route-handlers、loading-ui、optimization、metadata-seo、middleware）
 
 ---
 
@@ -331,32 +332,61 @@ app/
 
 ---
 
-### 8. Middleware
+### 8. Middleware ✅
 
 **実装内容**:
 
-- 認証チェック
-- リダイレクト処理
-- ヘッダー追加
-- A/B テスト
+- 認証チェック（/admin パス保護）
+- 条件付きリダイレクト（未認証時のログインページへの誘導）
+- カスタムヘッダー追加（セキュリティヘッダー、カスタムヘッダー）
+- A/B テスト実装（Cookie ベースのバリエーション分岐）
+- Edge Runtime での高速処理
 
 **実装ファイル**:
 
 ```
-middleware.ts                    # ルートミドルウェア
+middleware.ts                    # ルート Middleware（認証、A/B、ヘッダー）
 app/
-└── admin/
-    └── middleware.ts            # 管理画面ミドルウェア
+├── login/
+│   └── page.tsx                 # ログインページ
+├── admin/
+│   └── page.tsx                 # 認証が必要なページ
+└── middleware-demo/
+    └── page.tsx                 # A/B テスト・ヘッダーデモ
+```
+
+**機能詳細**:
+
+```typescript
+// middleware.ts の主要機能
+1. 認証チェック
+   - /admin パスへのアクセスを検知
+   - Cookie の auth-token を確認
+   - 未認証の場合 /login にリダイレクト
+
+2. A/B テスト
+   - /middleware-demo パスで有効
+   - ランダムにバリエーション（A or B）を割り当て
+   - Cookie に 7日間保存
+
+3. セキュリティヘッダー
+   - x-frame-options: DENY
+   - x-content-type-options: nosniff
+   - referrer-policy: origin-when-cross-origin
 ```
 
 **ノート**: `Knowledge/Examples/middleware-examples.md`
 
 **学習ポイント**:
 
-- Edge Runtime
-- リクエストインターセプト
-- 認証フロー
-- パフォーマンス考慮
+- Edge Runtime での軽量・高速処理
+- リクエストインターセプトとレスポンス操作
+- Cookie/ヘッダーベースの認証フロー
+- 条件付きリダイレクトパターン
+- A/B テストの実装方法
+- Matcher によるパス制御
+
+**実装日**: 2025-11-08
 
 ---
 
@@ -490,7 +520,7 @@ Phase 1: 基礎機能 ✅ 完了 (4/4)
 ├── ✅ Async Params
 └── ✅ View Transitions
 
-Phase 1.5: 応用機能 ⏳ 進行中 (7/10)
+Phase 1.5: 応用機能 ⏳ 進行中 (8/10)
 ├── ✅ Server Actions & Forms
 ├── ✅ Streaming & Suspense
 ├── ✅ Error Handling
@@ -498,7 +528,7 @@ Phase 1.5: 応用機能 ⏳ 進行中 (7/10)
 ├── ✅ Loading UI & Skeletons
 ├── ✅ Image & Font Optimization
 ├── ✅ Metadata API (SEO)
-├── ⏹️ Middleware
+├── ✅ Middleware
 ├── ⏹️ Route Groups
 └── ⏹️ Parallel Routes
 

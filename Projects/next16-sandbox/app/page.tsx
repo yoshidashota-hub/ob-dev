@@ -239,6 +239,28 @@ export default function Home() {
               <div>✓ SEO 最適化</div>
             </div>
           </a>
+
+          {/* Middleware */}
+          <a
+            href="/middleware-demo"
+            className="group block p-6 bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-yellow-500"
+          >
+            <div className="flex items-center mb-4">
+              <span className="text-4xl mr-3">🛡️</span>
+              <h2 className="text-2xl font-semibold text-gray-900 group-hover:text-yellow-600">
+                Middleware
+              </h2>
+            </div>
+            <p className="text-gray-600 mb-4">
+              認証チェック、リダイレクト、ヘッダー追加、A/Bテスト
+            </p>
+            <div className="space-y-1 text-sm text-gray-500">
+              <div>✓ 認証・認可チェック</div>
+              <div>✓ 条件付きリダイレクト</div>
+              <div>✓ カスタムヘッダー追加</div>
+              <div>✓ A/B テスト実装</div>
+            </div>
+          </a>
         </div>
 
         {/* フッター情報 */}
@@ -266,7 +288,8 @@ export default function Home() {
                 <li>✅ Loading UI & Skeletons</li>
                 <li>✅ Image & Font Optimization</li>
                 <li>✅ Metadata API (SEO)</li>
-                <li>⏳ Middleware （次回）</li>
+                <li>✅ Middleware</li>
+                <li>⏳ Route Groups （次回）</li>
               </ul>
             </div>
           </div>
