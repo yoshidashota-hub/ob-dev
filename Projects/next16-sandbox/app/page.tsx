@@ -195,6 +195,28 @@ export default function Home() {
               <div>✓ CORS & Error Handling</div>
             </div>
           </a>
+
+          {/* Image & Font Optimization */}
+          <a
+            href="/images"
+            className="group block p-6 bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-amber-500"
+          >
+            <div className="flex items-center mb-4">
+              <span className="text-4xl mr-3">🎨</span>
+              <h2 className="text-2xl font-semibold text-gray-900 group-hover:text-amber-600">
+                Image & Font
+              </h2>
+            </div>
+            <p className="text-gray-600 mb-4">
+              next/image、フォント最適化、WebP/AVIF変換
+            </p>
+            <div className="space-y-1 text-sm text-gray-500">
+              <div>✓ next/image コンポーネント</div>
+              <div>✓ Google Fonts 最適化</div>
+              <div>✓ Variable Fonts</div>
+              <div>✓ Lazy Loading & Priority</div>
+            </div>
+          </a>
         </div>
 
         {/* フッター情報 */}
@@ -220,7 +242,8 @@ export default function Home() {
                 <li>✅ Error Handling</li>
                 <li>✅ Route Handlers (API Routes)</li>
                 <li>✅ Loading UI & Skeletons</li>
-                <li>⏳ Image & Font Optimization （次回）</li>
+                <li>✅ Image & Font Optimization</li>
+                <li>⏳ Metadata API （次回）</li>
               </ul>
             </div>
           </div>
