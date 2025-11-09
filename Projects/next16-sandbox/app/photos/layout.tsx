@@ -1,11 +1,11 @@
 /**
- * Photo Gallery Layout with Parallel Routes
+ * Photos Layout with Parallel Routes
  *
  * Parallel Routes を使用して、メインコンテンツとモーダルを同時にレンダリング
  * @modal スロットがモーダル表示を担当
  */
 
-export default function GalleryLayout({
+export default function PhotosLayout({
   children,
   modal,
 }: {
@@ -13,7 +13,7 @@ export default function GalleryLayout({
   modal: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div>
       {/* メインコンテンツ（children） */}
       {children}
 
