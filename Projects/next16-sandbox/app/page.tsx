@@ -261,6 +261,28 @@ export default function Home() {
               <div>✓ A/B テスト実装</div>
             </div>
           </a>
+
+          {/* Route Groups */}
+          <a
+            href="/about"
+            className="group block p-6 bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-rose-500"
+          >
+            <div className="flex items-center mb-4">
+              <span className="text-4xl mr-3">📂</span>
+              <h2 className="text-2xl font-semibold text-gray-900 group-hover:text-rose-600">
+                Route Groups
+              </h2>
+            </div>
+            <p className="text-gray-600 mb-4">
+              複数レイアウト、ルートグループ化、コード整理
+            </p>
+            <div className="space-y-1 text-sm text-gray-500">
+              <div>✓ URLに影響しないグループ化</div>
+              <div>✓ 複数の独立したレイアウト</div>
+              <div>✓ マーケティング・ショップページ</div>
+              <div>✓ 論理的なコード整理</div>
+            </div>
+          </a>
         </div>
 
         {/* フッター情報 */}
@@ -289,7 +311,8 @@ export default function Home() {
                 <li>✅ Image & Font Optimization</li>
                 <li>✅ Metadata API (SEO)</li>
                 <li>✅ Middleware</li>
-                <li>⏳ Route Groups （次回）</li>
+                <li>✅ Route Groups & Layouts</li>
+                <li>⏳ Parallel Routes （次回）</li>
               </ul>
             </div>
           </div>
