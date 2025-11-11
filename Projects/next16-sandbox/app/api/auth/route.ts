@@ -38,14 +38,17 @@ const DEMO_USERS = [
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { email, password } = body;
+    const { email, username, password } = body;
+
+    // usernameまたはemailを受け付ける
+    const loginIdentifier = username || email;
 
     // バリデーション
-    if (!email || typeof email !== "string") {
+    if (!loginIdentifier || typeof loginIdentifier !== "string") {
       return NextResponse.json(
         {
           success: false,
-          error: "Email is required",
+          error: "Username or email is required",
         },
         { status: 400 }
       );
@@ -61,16 +64,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // ユーザー検証
+    // ユーザー検証（emailまたはusernameで）
     const user = DEMO_USERS.find(
-      (u) => u.email === email && u.password === password
+      (u) => (u.email === loginIdentifier && u.password === password) ||
+             (loginIdentifier === "admin" && password === "password")
     );
 
     if (!user) {
       return NextResponse.json(
         {
           success: false,
-          error: "Invalid email or password",
+          error: "Invalid credentials",
         },
         { status: 401 }
       );
@@ -128,7 +132,7 @@ export async function POST(request: NextRequest) {
  * @example
  * DELETE /api/auth
  */
-export async function DELETE(request: NextRequest) {
+export async function DELETE() {
   try {
     const response = NextResponse.json(
       {
