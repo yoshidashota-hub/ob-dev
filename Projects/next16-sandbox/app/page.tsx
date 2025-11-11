@@ -1,355 +1,256 @@
-/**
- * Next.js 16 学習サンドボックス
- *
- * Phase 1.5 の実装例へのナビゲーション
- */
+import Link from "next/link";
 
 export default function Home() {
+  const features = [
+    {
+      category: "Routing & Navigation",
+      items: [
+        {
+          name: "Async Params",
+          href: "/dashboard",
+          icon: "🔄",
+          description: "非同期パラメータと動的ルーティング",
+          color: "indigo",
+        },
+        {
+          name: "Route Groups",
+          href: "/about",
+          icon: "📂",
+          description: "複数レイアウトとルートグループ化",
+          color: "rose",
+        },
+        {
+          name: "Parallel Routes",
+          href: "/photos",
+          icon: "🔀",
+          description: "並列ルートとインターセプト",
+          color: "emerald",
+        },
+        {
+          name: "Middleware",
+          href: "/middleware-demo",
+          icon: "🛡️",
+          description: "認証、リダイレクト、A/Bテスト",
+          color: "yellow",
+        },
+      ],
+    },
+    {
+      category: "Data Fetching",
+      items: [
+        {
+          name: "Server Actions",
+          href: "/forms",
+          icon: "📝",
+          description: "フォーム処理とOptimistic UI",
+          color: "blue",
+        },
+        {
+          name: "Route Handlers",
+          href: "/api-demo",
+          icon: "🚀",
+          description: "RESTful APIエンドポイント",
+          color: "teal",
+        },
+        {
+          name: "Streaming",
+          href: "/streaming",
+          icon: "🌊",
+          description: "Suspenseと段階的レンダリング",
+          color: "green",
+        },
+        {
+          name: "Cache",
+          href: "/cache-demo",
+          icon: "⚡",
+          description: "キャッシング戦略と最適化",
+          color: "purple",
+        },
+      ],
+    },
+    {
+      category: "Optimization",
+      items: [
+        {
+          name: "Image & Font",
+          href: "/images",
+          icon: "🎨",
+          description: "next/imageとフォント最適化",
+          color: "amber",
+        },
+        {
+          name: "Metadata & SEO",
+          href: "/blog",
+          icon: "🔍",
+          description: "メタデータAPIとSEO対策",
+          color: "cyan",
+        },
+        {
+          name: "View Transitions",
+          href: "/gallery",
+          icon: "✨",
+          description: "ページ遷移アニメーション",
+          color: "pink",
+        },
+      ],
+    },
+    {
+      category: "Error Handling",
+      items: [
+        {
+          name: "Error Boundaries",
+          href: "/error-demo",
+          icon: "⚠️",
+          description: "エラーバウンダリーと404ページ",
+          color: "red",
+        },
+      ],
+    },
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-12 px-4">
-      <div className="max-w-6xl mx-auto">
-        {/* ヘッダー */}
-        <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold text-gray-900 mb-4">
-            Next.js 16 学習サンドボックス
-          </h1>
-          <p className="text-xl text-gray-600">
-            Phase 1.5: 実践応用（拡張）の実装例
-          </p>
-        </div>
-
-        {/* デモカード */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Server Actions & Forms */}
-          <a
+    <div className="space-y-12">
+      {/* Hero Section */}
+      <div className="text-center py-12 bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl px-6">
+        <h1 className="text-5xl font-bold text-gray-900 mb-4">
+          Welcome to Next.js 16 Sandbox
+        </h1>
+        <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+          Next.js 16の新機能を体験できる実践的な学習プラットフォーム
+        </p>
+        <div className="flex justify-center gap-4 flex-wrap">
+          <Link
             href="/forms"
-            className="group block p-6 bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-blue-500"
+            className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
           >
-            <div className="flex items-center mb-4">
-              <span className="text-4xl mr-3">📝</span>
-              <h2 className="text-2xl font-semibold text-gray-900 group-hover:text-blue-600">
-                Server Actions
-              </h2>
-            </div>
-            <p className="text-gray-600 mb-4">
-              フォーム処理、CRUD操作、Optimistic UIの実装例
-            </p>
-            <div className="space-y-1 text-sm text-gray-500">
-              <div>✓ useFormState</div>
-              <div>✓ useFormStatus</div>
-              <div>✓ useOptimistic</div>
-              <div>✓ Progressive Enhancement</div>
-            </div>
-          </a>
-
-          {/* Streaming & Suspense */}
+            Get Started
+          </Link>
           <a
-            href="/streaming"
-            className="group block p-6 bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-green-500"
+            href="https://nextjs.org/docs"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-6 py-3 bg-white text-gray-900 rounded-lg font-semibold border-2 border-gray-200 hover:border-gray-300 transition-colors"
           >
-            <div className="flex items-center mb-4">
-              <span className="text-4xl mr-3">🌊</span>
-              <h2 className="text-2xl font-semibold text-gray-900 group-hover:text-green-600">
-                Streaming
-              </h2>
-            </div>
-            <p className="text-gray-600 mb-4">
-              Suspense、段階的レンダリング、並列データフェッチング
-            </p>
-            <div className="space-y-1 text-sm text-gray-500">
-              <div>✓ Suspense Boundaries</div>
-              <div>✓ Loading Skeletons</div>
-              <div>✓ Parallel Fetching</div>
-              <div>✓ Streaming SSR</div>
-            </div>
-          </a>
-
-          {/* Cache Components */}
-          <a
-            href="/cache-demo"
-            className="group block p-6 bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-purple-500"
-          >
-            <div className="flex items-center mb-4">
-              <span className="text-4xl mr-3">⚡</span>
-              <h2 className="text-2xl font-semibold text-gray-900 group-hover:text-purple-600">
-                Cache
-              </h2>
-            </div>
-            <p className="text-gray-600 mb-4">
-              unstable_cache、fetch キャッシング、パフォーマンス最適化
-            </p>
-            <div className="space-y-1 text-sm text-gray-500">
-              <div>✓ unstable_cache</div>
-              <div>✓ Force Cache</div>
-              <div>✓ Revalidation</div>
-              <div>✓ Cache Tags</div>
-            </div>
-          </a>
-
-          {/* Turbopack */}
-          <a
-            href="/turbopack"
-            className="group block p-6 bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-orange-500"
-          >
-            <div className="flex items-center mb-4">
-              <span className="text-4xl mr-3">⚙️</span>
-              <h2 className="text-2xl font-semibold text-gray-900 group-hover:text-orange-600">
-                Turbopack
-              </h2>
-            </div>
-            <p className="text-gray-600 mb-4">
-              Next.js 16 のデフォルトバンドラー、高速開発体験
-            </p>
-            <div className="space-y-1 text-sm text-gray-500">
-              <div>✓ Fast Refresh</div>
-              <div>✓ HMR</div>
-              <div>✓ Build Performance</div>
-              <div>✓ Dev Experience</div>
-            </div>
-          </a>
-
-          {/* View Transitions */}
-          <a
-            href="/gallery"
-            className="group block p-6 bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-pink-500"
-          >
-            <div className="flex items-center mb-4">
-              <span className="text-4xl mr-3">✨</span>
-              <h2 className="text-2xl font-semibold text-gray-900 group-hover:text-pink-600">
-                View Transitions
-              </h2>
-            </div>
-            <p className="text-gray-600 mb-4">
-              ページ遷移アニメーション、スムーズなUX
-            </p>
-            <div className="space-y-1 text-sm text-gray-500">
-              <div>✓ Page Transitions</div>
-              <div>✓ Shared Elements</div>
-              <div>✓ Smooth Navigation</div>
-              <div>✓ Modern UX</div>
-            </div>
-          </a>
-
-          {/* Async Params */}
-          <a
-            href="/dashboard"
-            className="group block p-6 bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-indigo-500"
-          >
-            <div className="flex items-center mb-4">
-              <span className="text-4xl mr-3">🔄</span>
-              <h2 className="text-2xl font-semibold text-gray-900 group-hover:text-indigo-600">
-                Async Params
-              </h2>
-            </div>
-            <p className="text-gray-600 mb-4">
-              非同期パラメータ、動的ルーティング
-            </p>
-            <div className="space-y-1 text-sm text-gray-500">
-              <div>✓ Dynamic Routes</div>
-              <div>✓ Async params/searchParams</div>
-              <div>✓ Type Safety</div>
-              <div>✓ Migration Pattern</div>
-            </div>
-          </a>
-
-          {/* Error Handling */}
-          <a
-            href="/error-demo"
-            className="group block p-6 bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-red-500"
-          >
-            <div className="flex items-center mb-4">
-              <span className="text-4xl mr-3">⚠️</span>
-              <h2 className="text-2xl font-semibold text-gray-900 group-hover:text-red-600">
-                Error Handling
-              </h2>
-            </div>
-            <p className="text-gray-600 mb-4">
-              エラーバウンダリー、404ページ、エラーリカバリー
-            </p>
-            <div className="space-y-1 text-sm text-gray-500">
-              <div>✓ error.tsx</div>
-              <div>✓ global-error.tsx</div>
-              <div>✓ not-found.tsx</div>
-              <div>✓ Segment-specific Errors</div>
-            </div>
-          </a>
-
-          {/* Route Handlers (API Routes) */}
-          <a
-            href="/api-demo"
-            className="group block p-6 bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-teal-500"
-          >
-            <div className="flex items-center mb-4">
-              <span className="text-4xl mr-3">🚀</span>
-              <h2 className="text-2xl font-semibold text-gray-900 group-hover:text-teal-600">
-                Route Handlers
-              </h2>
-            </div>
-            <p className="text-gray-600 mb-4">
-              RESTful API、GET/POST/PUT/DELETE、認証サンプル
-            </p>
-            <div className="space-y-1 text-sm text-gray-500">
-              <div>✓ /api/posts (GET, POST)</div>
-              <div>✓ /api/posts/[id] (GET, PUT, DELETE)</div>
-              <div>✓ /api/auth (POST, DELETE)</div>
-              <div>✓ CORS & Error Handling</div>
-            </div>
-          </a>
-
-          {/* Image & Font Optimization */}
-          <a
-            href="/images"
-            className="group block p-6 bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-amber-500"
-          >
-            <div className="flex items-center mb-4">
-              <span className="text-4xl mr-3">🎨</span>
-              <h2 className="text-2xl font-semibold text-gray-900 group-hover:text-amber-600">
-                Image & Font
-              </h2>
-            </div>
-            <p className="text-gray-600 mb-4">
-              next/image、フォント最適化、WebP/AVIF変換
-            </p>
-            <div className="space-y-1 text-sm text-gray-500">
-              <div>✓ next/image コンポーネント</div>
-              <div>✓ Google Fonts 最適化</div>
-              <div>✓ Variable Fonts</div>
-              <div>✓ Lazy Loading & Priority</div>
-            </div>
-          </a>
-
-          {/* Metadata API (SEO) */}
-          <a
-            href="/blog"
-            className="group block p-6 bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-cyan-500"
-          >
-            <div className="flex items-center mb-4">
-              <span className="text-4xl mr-3">🔍</span>
-              <h2 className="text-2xl font-semibold text-gray-900 group-hover:text-cyan-600">
-                Metadata & SEO
-              </h2>
-            </div>
-            <p className="text-gray-600 mb-4">
-              メタデータAPI、Open Graph、Sitemap、Robots.txt
-            </p>
-            <div className="space-y-1 text-sm text-gray-500">
-              <div>✓ 静的・動的メタデータ</div>
-              <div>✓ Open Graph 画像生成</div>
-              <div>✓ Sitemap.xml 自動生成</div>
-              <div>✓ SEO 最適化</div>
-            </div>
-          </a>
-
-          {/* Middleware */}
-          <a
-            href="/middleware-demo"
-            className="group block p-6 bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-yellow-500"
-          >
-            <div className="flex items-center mb-4">
-              <span className="text-4xl mr-3">🛡️</span>
-              <h2 className="text-2xl font-semibold text-gray-900 group-hover:text-yellow-600">
-                Middleware
-              </h2>
-            </div>
-            <p className="text-gray-600 mb-4">
-              認証チェック、リダイレクト、ヘッダー追加、A/Bテスト
-            </p>
-            <div className="space-y-1 text-sm text-gray-500">
-              <div>✓ 認証・認可チェック</div>
-              <div>✓ 条件付きリダイレクト</div>
-              <div>✓ カスタムヘッダー追加</div>
-              <div>✓ A/B テスト実装</div>
-            </div>
-          </a>
-
-          {/* Route Groups */}
-          <a
-            href="/about"
-            className="group block p-6 bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-rose-500"
-          >
-            <div className="flex items-center mb-4">
-              <span className="text-4xl mr-3">📂</span>
-              <h2 className="text-2xl font-semibold text-gray-900 group-hover:text-rose-600">
-                Route Groups
-              </h2>
-            </div>
-            <p className="text-gray-600 mb-4">
-              複数レイアウト、ルートグループ化、コード整理
-            </p>
-            <div className="space-y-1 text-sm text-gray-500">
-              <div>✓ URLに影響しないグループ化</div>
-              <div>✓ 複数の独立したレイアウト</div>
-              <div>✓ マーケティング・ショップページ</div>
-              <div>✓ 論理的なコード整理</div>
-            </div>
-          </a>
-
-          {/* Parallel & Intercepting Routes */}
-          <a
-            href="/photos"
-            className="group block p-6 bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-emerald-500"
-          >
-            <div className="flex items-center mb-4">
-              <span className="text-4xl mr-3">🔀</span>
-              <h2 className="text-2xl font-semibold text-gray-900 group-hover:text-emerald-600">
-                Parallel Routes
-              </h2>
-            </div>
-            <p className="text-gray-600 mb-4">
-              並列ルート、インターセプトルート、モーダルパターン
-            </p>
-            <div className="space-y-1 text-sm text-gray-500">
-              <div>✓ Parallel Routes (@modal)</div>
-              <div>✓ Intercepting Routes (.)</div>
-              <div>✓ モーダル実装パターン</div>
-              <div>✓ URLベースモーダル</div>
-            </div>
+            View Docs →
           </a>
         </div>
+      </div>
 
-        {/* フッター情報 */}
-        <div className="mt-12 p-6 bg-white rounded-lg shadow-md">
-          <h3 className="text-xl font-semibold text-gray-900 mb-4">
-            📚 実装済み機能
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600">
-            <div>
-              <h4 className="font-semibold text-gray-900 mb-2">Phase 1: 実践基礎</h4>
-              <ul className="space-y-1">
-                <li>✅ Turbopack （デフォルト有効）</li>
-                <li>✅ Cache Components → unstable_cache</li>
-                <li>✅ Async params/searchParams</li>
-                <li>✅ View Transitions</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-gray-900 mb-2">Phase 1.5: 実践応用</h4>
-              <ul className="space-y-1">
-                <li>✅ Server Actions & Forms</li>
-                <li>✅ Streaming & Suspense</li>
-                <li>✅ Error Handling</li>
-                <li>✅ Route Handlers (API Routes)</li>
-                <li>✅ Loading UI & Skeletons</li>
-                <li>✅ Image & Font Optimization</li>
-                <li>✅ Metadata API (SEO)</li>
-                <li>✅ Middleware</li>
-                <li>✅ Route Groups & Layouts</li>
-                <li>✅ Parallel & Intercepting Routes</li>
-              </ul>
-            </div>
+      {/* Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="bg-white rounded-lg p-6 border border-gray-200">
+          <div className="text-3xl font-bold text-blue-600 mb-2">13+</div>
+          <div className="text-sm text-gray-600">Demo Features</div>
+        </div>
+        <div className="bg-white rounded-lg p-6 border border-gray-200">
+          <div className="text-3xl font-bold text-green-600 mb-2">100%</div>
+          <div className="text-sm text-gray-600">TypeScript</div>
+        </div>
+        <div className="bg-white rounded-lg p-6 border border-gray-200">
+          <div className="text-3xl font-bold text-purple-600 mb-2">16.0</div>
+          <div className="text-sm text-gray-600">Next.js Version</div>
+        </div>
+        <div className="bg-white rounded-lg p-6 border border-gray-200">
+          <div className="text-3xl font-bold text-orange-600 mb-2">19.2</div>
+          <div className="text-sm text-gray-600">React Version</div>
+        </div>
+      </div>
+
+      {/* Features by Category */}
+      {features.map((category) => (
+        <div key={category.category}>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            {category.category}
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {category.items.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`group block p-6 bg-white rounded-xl border-2 border-gray-200 hover:border-${item.color}-500 hover:shadow-lg transition-all duration-300`}
+              >
+                <div className="flex items-start">
+                  <span className="text-4xl mr-4">{item.icon}</span>
+                  <div className="flex-1">
+                    <h3
+                      className={`text-xl font-semibold text-gray-900 mb-2 group-hover:text-${item.color}-600 transition-colors`}
+                    >
+                      {item.name}
+                    </h3>
+                    <p className="text-sm text-gray-600">{item.description}</p>
+                  </div>
+                </div>
+                <div className="mt-4 flex items-center text-sm font-medium text-gray-400 group-hover:text-gray-600">
+                  View Demo
+                  <svg
+                    className="ml-1 w-4 h-4 transform group-hover:translate-x-1 transition-transform"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
+      ))}
 
-        {/* 技術スタック */}
-        <div className="mt-6 text-center text-sm text-gray-500">
-          <p>Next.js 16.0.1 • React 19.2.0 • TypeScript 5 • Tailwind CSS 3</p>
-          <p className="mt-2">
-            📖 ドキュメント:{" "}
-            <code className="bg-gray-100 px-2 py-1 rounded text-xs">
-              Knowledge/Examples/
-            </code>
-          </p>
+      {/* Tech Stack */}
+      <div className="bg-white rounded-xl p-8 border border-gray-200">
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">
+          Built with Modern Stack
+        </h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="text-center">
+            <div className="w-16 h-16 bg-black rounded-lg mx-auto mb-3 flex items-center justify-center text-white font-bold text-xl">
+              N
+            </div>
+            <div className="font-semibold text-gray-900">Next.js 16</div>
+            <div className="text-sm text-gray-600">React Framework</div>
+          </div>
+          <div className="text-center">
+            <div className="w-16 h-16 bg-blue-500 rounded-lg mx-auto mb-3 flex items-center justify-center text-white font-bold text-xl">
+              R
+            </div>
+            <div className="font-semibold text-gray-900">React 19</div>
+            <div className="text-sm text-gray-600">UI Library</div>
+          </div>
+          <div className="text-center">
+            <div className="w-16 h-16 bg-blue-600 rounded-lg mx-auto mb-3 flex items-center justify-center text-white font-bold text-xl">
+              TS
+            </div>
+            <div className="font-semibold text-gray-900">TypeScript 5</div>
+            <div className="text-sm text-gray-600">Type Safety</div>
+          </div>
+          <div className="text-center">
+            <div className="w-16 h-16 bg-cyan-500 rounded-lg mx-auto mb-3 flex items-center justify-center text-white font-bold text-xl">
+              T
+            </div>
+            <div className="font-semibold text-gray-900">Tailwind CSS</div>
+            <div className="text-sm text-gray-600">Styling</div>
+          </div>
         </div>
+      </div>
+
+      {/* CTA */}
+      <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-8 text-center text-white">
+        <h2 className="text-3xl font-bold mb-4">Ready to Learn?</h2>
+        <p className="text-lg mb-6 opacity-90">
+          左のサイドバーから気になる機能を選んで、今すぐ体験してみましょう
+        </p>
+        <Link
+          href="/forms"
+          className="inline-block px-8 py-3 bg-white text-blue-600 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+        >
+          Start Exploring
+        </Link>
       </div>
     </div>
   );
