@@ -1,15 +1,17 @@
 /**
- * Next.js Middleware
+ * Next.js Proxy (Next.js 16+)
  *
  * リクエストが完了する前に実行されるコード
  * 認証チェック、リダイレクト、ヘッダー追加、A/Bテストなどに使用
+ *
+ * Note: middleware.ts から proxy.ts に移行（Next.js 16+）
  */
 
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-// Middleware 関数
-export function middleware(request: NextRequest) {
+// Proxy 関数（旧 middleware 関数）
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // 1. 認証チェック（/admin パス）
@@ -59,13 +61,13 @@ export function middleware(request: NextRequest) {
   response.headers.set("referrer-policy", "origin-when-cross-origin");
 
   // カスタムヘッダー
-  response.headers.set("x-custom-header", "Next.js 16 Middleware");
+  response.headers.set("x-custom-header", "Next.js 16 Proxy");
   response.headers.set("x-request-path", pathname);
 
   return response;
 }
 
-// Middleware を実行するパスを指定
+// Proxy を実行するパスを指定
 export const config = {
   matcher: [
     /*
