@@ -15,7 +15,11 @@
     "serena": {
       "type": "stdio",
       "command": "uvx",
-      "args": ["serena"],
+      "args": [
+        "--from",
+        "git+https://github.com/oraios/serena",
+        "serena-mcp-server"
+      ],
       "env": {}
     }
   }
