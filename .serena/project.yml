@@ -1,0 +1,90 @@
+name: ob-dev
+description: Obsidian開発学習リポジトリ - 学習ノート、実践プロジェクト、日次メモを管理
+language: typescript
+
+structure:
+  - path: Learning/
+    description: 学習ノートを管理するディレクトリ
+    children:
+      - path: In-Progress/
+        description: 進行中の学習トピック
+      - path: Completed/
+        description: 完了した学習トピック
+
+  - path: Projects/
+    description: 実践プロジェクトを格納するディレクトリ
+    children:
+      - path: next16-sandbox/
+        description: Next.js 16 サンドボックス
+      - path: nestjs-notes/
+        description: NestJS版メモアプリ（CRUD学習用）
+      - path: hono-notes/
+        description: Hono版メモアプリ（CRUD学習用）
+
+  - path: Daily/
+    description: 日次メモ（YYYY-MM-DD.md形式）
+
+  - path: Templates/
+    description: テンプレートファイル
+
+conventions:
+  learning_notes:
+    format: markdown
+    frontmatter:
+      - created: YYYY-MM-DD
+      - tags: array
+      - status: in-progress | completed
+      - topic: string
+      - source: url
+    sections:
+      - 概要
+      - 主な特徴
+      - 基本セットアップ
+      - コード例
+      - 学習リソース
+      - 次のステップ
+
+  framework_learning:
+    project_type: シンプルなメモアプリ
+    focus: CRUDの基本操作
+    features:
+      - Create: メモの作成
+      - Read: メモ一覧・個別表示
+      - Update: メモの編集
+      - Delete: メモの削除
+
+  feature_learning:
+    separate_projects: true
+    examples:
+      - 認証システム: auth-playground/
+      - リアルタイム通信: realtime-demo/
+      - パフォーマンス最適化: performance-lab/
+
+  commit_messages:
+    format: conventional
+    include_claude_attribution: true
+    template: |
+      <type>: <summary>
+
+      <body>
+
+      🤖 Generated with Claude Code
+
+      Co-Authored-By: Claude <noreply@anthropic.com>
+
+  code_style:
+    typescript:
+      strict: true
+      interfaces_over_types: preferred
+      async_await: required
+    react:
+      server_components: default
+      client_components: when_needed
+
+tools:
+  - name: Claude Code
+    config: CLAUDE.md
+  - name: Obsidian
+    vault: root directory
+  - name: Git
+    main_branch: main
