@@ -15,7 +15,7 @@
     "serena": {
       "type": "stdio",
       "command": "uvx",
-      "args": ["serena-mcp"],
+      "args": ["serena"],
       "env": {}
     }
   }
