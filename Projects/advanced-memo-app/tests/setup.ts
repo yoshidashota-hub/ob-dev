@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom';
+import { beforeAll, afterAll } from 'vitest';
 
 // グローバルなテストセットアップ
 beforeAll(() => {
