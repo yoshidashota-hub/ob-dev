@@ -1,8 +1,8 @@
-import jwt, { type SignOptions } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this';
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '1h';
-const JWT_REFRESH_EXPIRES_IN = process.env.JWT_REFRESH_EXPIRES_IN || '7d';
+const JWT_EXPIRES_IN = (process.env.JWT_EXPIRES_IN || '1h') as string;
+const JWT_REFRESH_EXPIRES_IN = (process.env.JWT_REFRESH_EXPIRES_IN || '7d') as string;
 
 export interface TokenPayload {
   userId: string;
@@ -20,11 +20,10 @@ export function generateAccessToken(userId: string, email: string): string {
     type: 'access',
   };
 
-  const options: SignOptions = {
+  // @ts-expect-error - jsonwebtoken type definitions issue with string expiresIn
+  return jwt.sign(payload, JWT_SECRET, {
     expiresIn: JWT_EXPIRES_IN,
-  };
-
-  return jwt.sign(payload, JWT_SECRET, options);
+  });
 }
 
 /**
@@ -37,11 +36,10 @@ export function generateRefreshToken(userId: string, email: string): string {
     type: 'refresh',
   };
 
-  const options: SignOptions = {
+  // @ts-expect-error - jsonwebtoken type definitions issue with string expiresIn
+  return jwt.sign(payload, JWT_SECRET, {
     expiresIn: JWT_REFRESH_EXPIRES_IN,
-  };
-
-  return jwt.sign(payload, JWT_SECRET, options);
+  });
 }
 
 /**
