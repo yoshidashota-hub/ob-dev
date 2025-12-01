@@ -35,10 +35,11 @@ Phase 1 完了後、Next.js 16 の残りの重要機能を体系的に学習す�
 - [x] Parallel & Intercepting Routes
 
 **成果物**:
-- 1 API実装（6エンドポイント）、1 APIデモページ
+
+- 1 API 実装（6 エンドポイント）、1 API デモページ
 - 4 loading.tsx、13 スケルトンコンポーネント、6 ローダーコンポーネント
-- 2 最適化デモページ（images、fonts）、next.config.ts画像設定追加
-- Metadata API（layout.tsx更新、sitemap.ts、robots.ts、opengraph-image.tsx、blog 3記事）
+- 2 最適化デモページ（images、fonts）、next.config.ts 画像設定追加
+- Metadata API（layout.tsx 更新、sitemap.ts、robots.ts、opengraph-image.tsx、blog 3 記事）
 - Middleware（middleware.ts、login、admin、middleware-demo ページ）
 - Route Groups（(marketing)、(shop) レイアウト、about、contact、cart ページ）
 - Parallel & Intercepting Routes（photos グリッド、モーダル、専用ページ、@modal スロット）
@@ -156,7 +157,7 @@ app/
 **実装内容**:
 
 - `loading.tsx`の実装
-- スケルトンスクリーン（13種類）
+- スケルトンスクリーン（13 種類）
 - プログレスバー
 - ローディングインジケーター
 
@@ -185,7 +186,7 @@ app/
 - Suspense Fallback
 - スケルトンデザイン（実際のコンテンツに近い見た目）
 - 複数のローディングパターン
-- UX向上とパフォーマンス指標
+- UX 向上とパフォーマンス指標
 
 **実装日**: 2025-11-08
 
@@ -237,7 +238,7 @@ app/
 
 - `next/image`コンポーネント（基本・fill・priority・placeholder・quality）
 - 画像最適化設定（remotePatterns、formats、deviceSizes）
-- Google Fonts 最適化（7種類のフォント実装）
+- Google Fonts 最適化（7 種類のフォント実装）
 - Variable Fonts（Inter、Geist）
 - 固定ウェイトフォント（Roboto、Noto Sans JP）
 
@@ -327,8 +328,8 @@ app/
 - generateMetadata() で記事ごとのメタデータ生成
 - Open Graph 画像の動的生成
 - Sitemap/Robots.txt の自動生成
-- SEO最適化のベストプラクティス
-- SNSシェア時の表示最適化
+- SEO 最適化のベストプラクティス
+- SNS シェア時の表示最適化
 
 **実装日**: 2025-11-08
 

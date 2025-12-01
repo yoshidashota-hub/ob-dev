@@ -75,13 +75,13 @@ Week 2: 高度な機能の実装
 ### 実装優先度
 
 | フェーズ | 優先度 | 難易度 | 所要時間 | 依存関係 |
-|---------|--------|--------|----------|----------|
-| Phase 1 | 必須   | ★☆☆☆☆ | 30分     | なし     |
-| Phase 2 | 必須   | ★★☆☆☆ | 1-2時間  | なし     |
-| Phase 3 | 必須   | ★★★☆☆ | 2-3時間  | なし     |
-| Phase 4 | 推奨   | ★★★★☆ | 3-4時間  | なし     |
-| Phase 5 | 推奨   | ★★★★☆ | 2-3時間  | なし     |
-| Phase 6 | 推奨   | ★★★★★ | 4-5時間  | Phase 3  |
+| -------- | ------ | ------ | -------- | -------- |
+| Phase 1  | 必須   | ★☆☆☆☆  | 30 分    | なし     |
+| Phase 2  | 必須   | ★★☆☆☆  | 1-2 時間 | なし     |
+| Phase 3  | 必須   | ★★★☆☆  | 2-3 時間 | なし     |
+| Phase 4  | 推奨   | ★★★★☆  | 3-4 時間 | なし     |
+| Phase 5  | 推奨   | ★★★★☆  | 2-3 時間 | なし     |
+| Phase 6  | 推奨   | ★★★★★  | 4-5 時間 | Phase 3  |
 
 ---
 
@@ -105,8 +105,8 @@ npm install @vercel/analytics @vercel/speed-insights
 **ファイル**: `app/layout.tsx`
 
 ```typescript
-import { Analytics } from '@vercel/analytics/react';
-import { SpeedInsights } from '@vercel/speed-insights/next';
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export default function RootLayout({
   children,
@@ -130,7 +130,7 @@ export default function RootLayout({
 **ファイル**: `app/analytics-demo/page.tsx`
 
 ```typescript
-import Link from 'next/link';
+import Link from "next/link";
 
 export default function AnalyticsDemo() {
   return (
@@ -248,6 +248,7 @@ BLOB_READ_WRITE_TOKEN="vercel_blob_xxxx"
 ```
 
 **取得方法**:
+
 1. Vercel ダッシュボード
 2. Storage → Blob
 3. "Create Store" をクリック
@@ -258,42 +259,39 @@ BLOB_READ_WRITE_TOKEN="vercel_blob_xxxx"
 **ファイル**: `app/api/upload/route.ts`
 
 ```typescript
-import { put } from '@vercel/blob';
-import { NextRequest, NextResponse } from 'next/server';
+import { put } from "@vercel/blob";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
-    const file = formData.get('file') as File;
+    const file = formData.get("file") as File;
 
     if (!file) {
-      return NextResponse.json(
-        { error: 'File is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "File is required" }, { status: 400 });
     }
 
     // ファイルサイズチェック（10MB まで）
     const maxSize = 10 * 1024 * 1024; // 10MB
     if (file.size > maxSize) {
       return NextResponse.json(
-        { error: 'File size must be less than 10MB' },
+        { error: "File size must be less than 10MB" },
         { status: 400 }
       );
     }
 
     // ファイルタイプチェック
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
     if (!allowedTypes.includes(file.type)) {
       return NextResponse.json(
-        { error: 'Only image files are allowed' },
+        { error: "Only image files are allowed" },
         { status: 400 }
       );
     }
 
     // Blob にアップロード
     const blob = await put(file.name, file, {
-      access: 'public',
+      access: "public",
       addRandomSuffix: true,
     });
 
@@ -307,11 +305,8 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Upload error:', error);
-    return NextResponse.json(
-      { error: 'Upload failed' },
-      { status: 500 }
-    );
+    console.error("Upload error:", error);
+    return NextResponse.json({ error: "Upload failed" }, { status: 500 });
   }
 }
 ```
@@ -321,8 +316,8 @@ export async function POST(request: NextRequest) {
 **ファイル**: `app/api/upload/list/route.ts`
 
 ```typescript
-import { list } from '@vercel/blob';
-import { NextResponse } from 'next/server';
+import { list } from "@vercel/blob";
+import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
@@ -330,7 +325,7 @@ export async function GET() {
 
     return NextResponse.json({
       success: true,
-      data: blobs.map(blob => ({
+      data: blobs.map((blob) => ({
         url: blob.url,
         pathname: blob.pathname,
         size: blob.size,
@@ -338,9 +333,9 @@ export async function GET() {
       })),
     });
   } catch (error) {
-    console.error('List error:', error);
+    console.error("List error:", error);
     return NextResponse.json(
-      { error: 'Failed to list files' },
+      { error: "Failed to list files" },
       { status: 500 }
     );
   }
@@ -352,10 +347,10 @@ export async function GET() {
 **ファイル**: `app/upload/page.tsx`
 
 ```typescript
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Image from 'next/image';
+import { useState } from "react";
+import Image from "next/image";
 
 interface UploadedFile {
   url: string;
@@ -394,10 +389,10 @@ export default function UploadPage() {
 
     try {
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append("file", file);
 
-      const response = await fetch('/api/upload', {
-        method: 'POST',
+      const response = await fetch("/api/upload", {
+        method: "POST",
         body: formData,
       });
 
@@ -408,10 +403,10 @@ export default function UploadPage() {
         setFile(null);
         setPreview(null);
       } else {
-        setError(result.error || 'Upload failed');
+        setError(result.error || "Upload failed");
       }
     } catch (err) {
-      setError('Upload failed');
+      setError("Upload failed");
     } finally {
       setUploading(false);
     }
@@ -466,7 +461,7 @@ export default function UploadPage() {
             className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg
               hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
           >
-            {uploading ? 'Uploading...' : 'Upload'}
+            {uploading ? "Uploading..." : "Upload"}
           </button>
         </div>
 
@@ -487,7 +482,7 @@ export default function UploadPage() {
               </div>
               <div className="space-y-2 text-sm">
                 <p>
-                  <span className="font-medium">URL:</span>{' '}
+                  <span className="font-medium">URL:</span>{" "}
                   <a
                     href={uploadedFile.url}
                     target="_blank"
@@ -498,11 +493,11 @@ export default function UploadPage() {
                   </a>
                 </p>
                 <p>
-                  <span className="font-medium">Size:</span>{' '}
+                  <span className="font-medium">Size:</span>{" "}
                   {(uploadedFile.size / 1024).toFixed(2)} KB
                 </p>
                 <p>
-                  <span className="font-medium">Uploaded:</span>{' '}
+                  <span className="font-medium">Uploaded:</span>{" "}
                   {new Date(uploadedFile.uploadedAt).toLocaleString()}
                 </p>
               </div>
@@ -581,7 +576,7 @@ KV_REST_API_READ_ONLY_TOKEN="xxxx"
 **ファイル**: `lib/kv.ts`
 
 ```typescript
-import { kv } from '@vercel/kv';
+import { kv } from "@vercel/kv";
 
 // セッション管理
 export async function setSession(userId: string, sessionData: any) {
@@ -636,18 +631,18 @@ export async function checkRateLimit(
 **ファイル**: `app/api/auth/route.ts`（更新）
 
 ```typescript
-import { NextRequest, NextResponse } from 'next/server';
-import { setSession, deleteSession } from '@/lib/kv';
-import { checkRateLimit } from '@/lib/kv';
+import { NextRequest, NextResponse } from "next/server";
+import { setSession, deleteSession } from "@/lib/kv";
+import { checkRateLimit } from "@/lib/kv";
 
 const DEMO_USERS = [
   {
-    id: '1',
-    email: 'user@example.com',
-    password: 'password123',
-    name: '山田太郎',
+    id: "1",
+    email: "user@example.com",
+    password: "password123",
+    name: "山田太郎",
   },
-  { id: '2', email: 'admin@example.com', password: 'admin123', name: '管理者' },
+  { id: "2", email: "admin@example.com", password: "admin123", name: "管理者" },
 ];
 
 export async function POST(request: NextRequest) {
@@ -669,16 +664,16 @@ export async function POST(request: NextRequest) {
     }
 
     // バリデーション
-    if (!loginIdentifier || typeof loginIdentifier !== 'string') {
+    if (!loginIdentifier || typeof loginIdentifier !== "string") {
       return NextResponse.json(
-        { success: false, error: 'Username or email is required' },
+        { success: false, error: "Username or email is required" },
         { status: 400 }
       );
     }
 
-    if (!password || typeof password !== 'string') {
+    if (!password || typeof password !== "string") {
       return NextResponse.json(
-        { success: false, error: 'Password is required' },
+        { success: false, error: "Password is required" },
         { status: 400 }
       );
     }
@@ -687,12 +682,12 @@ export async function POST(request: NextRequest) {
     const user = DEMO_USERS.find(
       (u) =>
         (u.email === loginIdentifier && u.password === password) ||
-        (loginIdentifier === 'admin' && password === 'password')
+        (loginIdentifier === "admin" && password === "password")
     );
 
     if (!user) {
       return NextResponse.json(
-        { success: false, error: 'Invalid credentials' },
+        { success: false, error: "Invalid credentials" },
         { status: 401 }
       );
     }
@@ -714,24 +709,24 @@ export async function POST(request: NextRequest) {
             name: user.name,
           },
         },
-        message: 'Login successful',
+        message: "Login successful",
       },
       { status: 200 }
     );
 
     // Cookie にセッション ID をセット
-    response.cookies.set('session-id', sessionId, {
+    response.cookies.set("session-id", sessionId, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
       maxAge: 60 * 60 * 24 * 7, // 7日間
     });
 
     return response;
   } catch (error) {
-    console.error('Error during authentication:', error);
+    console.error("Error during authentication:", error);
     return NextResponse.json(
-      { success: false, error: 'Authentication failed' },
+      { success: false, error: "Authentication failed" },
       { status: 500 }
     );
   }
@@ -739,24 +734,24 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    const sessionId = request.cookies.get('session-id')?.value;
+    const sessionId = request.cookies.get("session-id")?.value;
 
     if (sessionId) {
       await deleteSession(sessionId);
     }
 
     const response = NextResponse.json(
-      { success: true, message: 'Logout successful' },
+      { success: true, message: "Logout successful" },
       { status: 200 }
     );
 
-    response.cookies.delete('session-id');
+    response.cookies.delete("session-id");
 
     return response;
   } catch (error) {
-    console.error('Error during logout:', error);
+    console.error("Error during logout:", error);
     return NextResponse.json(
-      { success: false, error: 'Logout failed' },
+      { success: false, error: "Logout failed" },
       { status: 500 }
     );
   }
@@ -768,28 +763,28 @@ export async function DELETE(request: NextRequest) {
 **ファイル**: `app/kv-demo/page.tsx`
 
 ```typescript
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 
 export default function KVDemo() {
-  const [key, setKey] = useState('');
-  const [value, setValue] = useState('');
+  const [key, setKey] = useState("");
+  const [value, setValue] = useState("");
   const [result, setResult] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
   const handleSet = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/kv', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'set', key, value }),
+      const response = await fetch("/api/kv", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "set", key, value }),
       });
       const data = await response.json();
       setResult(data);
     } catch (error) {
-      setResult({ error: 'Failed to set value' });
+      setResult({ error: "Failed to set value" });
     } finally {
       setLoading(false);
     }
@@ -802,7 +797,7 @@ export default function KVDemo() {
       const data = await response.json();
       setResult(data);
     } catch (error) {
-      setResult({ error: 'Failed to get value' });
+      setResult({ error: "Failed to get value" });
     } finally {
       setLoading(false);
     }
@@ -954,17 +949,17 @@ ANTHROPIC_API_KEY="sk-ant-xxxx"
 **ファイル**: `app/api/chat/route.ts`
 
 ```typescript
-import { anthropic } from '@ai-sdk/anthropic';
-import { streamText } from 'ai';
+import { anthropic } from "@ai-sdk/anthropic";
+import { streamText } from "ai";
 
-export const runtime = 'edge';
+export const runtime = "edge";
 
 export async function POST(req: Request) {
   const { messages } = await req.json();
 
   const result = await streamText({
-    model: anthropic('claude-3-5-sonnet-20241022'),
-    system: 'You are a helpful assistant for a Next.js 16 sandbox application.',
+    model: anthropic("claude-3-5-sonnet-20241022"),
+    system: "You are a helpful assistant for a Next.js 16 sandbox application.",
     messages,
   });
 
@@ -977,9 +972,9 @@ export async function POST(req: Request) {
 **ファイル**: `app/ai-chat/page.tsx`
 
 ```typescript
-'use client';
+"use client";
 
-import { useChat } from 'ai/react';
+import { useChat } from "ai/react";
 
 export default function ChatPage() {
   const { messages, input, handleInputChange, handleSubmit, isLoading } =
@@ -1005,14 +1000,14 @@ export default function ChatPage() {
             <div
               key={message.id}
               className={`flex ${
-                message.role === 'user' ? 'justify-end' : 'justify-start'
+                message.role === "user" ? "justify-end" : "justify-start"
               }`}
             >
               <div
                 className={`max-w-[80%] rounded-lg p-4 ${
-                  message.role === 'user'
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-900'
+                  message.role === "user"
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-100 text-gray-900"
                 }`}
               >
                 <p className="whitespace-pre-wrap">{message.content}</p>
@@ -1104,6 +1099,7 @@ npm install @vercel/edge-config
 #### 5.2 Edge Config の作成
 
 Vercel ダッシュボードで:
+
 1. Edge Config → Create
 2. 名前: `next16-sandbox-config`
 3. 初期値を設定
@@ -1121,13 +1117,13 @@ EDGE_CONFIG="https://edge-config.vercel.com/xxxx"
 **ファイル**: `lib/edge-config.ts`
 
 ```typescript
-import { get, getAll } from '@vercel/edge-config';
+import { get, getAll } from "@vercel/edge-config";
 
 export async function getFeatureFlag(key: string): Promise<boolean> {
   try {
     return (await get(key)) ?? false;
   } catch (error) {
-    console.error('Failed to get feature flag:', error);
+    console.error("Failed to get feature flag:", error);
     return false;
   }
 }
@@ -1136,7 +1132,7 @@ export async function getAllFeatureFlags() {
   try {
     return await getAll();
   } catch (error) {
-    console.error('Failed to get all feature flags:', error);
+    console.error("Failed to get all feature flags:", error);
     return {};
   }
 }
@@ -1147,7 +1143,7 @@ export async function getAllFeatureFlags() {
 **ファイル**: `app/feature-flags/page.tsx`
 
 ```typescript
-import { getAllFeatureFlags } from '@/lib/edge-config';
+import { getAllFeatureFlags } from "@/lib/edge-config";
 
 export default async function FeatureFlagsPage() {
   const flags = await getAllFeatureFlags();
@@ -1169,11 +1165,11 @@ export default async function FeatureFlagsPage() {
               <span
                 className={`px-3 py-1 rounded-full text-sm ${
                   value
-                    ? 'bg-green-100 text-green-800'
-                    : 'bg-red-100 text-red-800'
+                    ? "bg-green-100 text-green-800"
+                    : "bg-red-100 text-red-800"
                 }`}
               >
-                {value ? 'Enabled' : 'Disabled'}
+                {value ? "Enabled" : "Disabled"}
               </span>
             </div>
           ))}
@@ -1277,7 +1273,7 @@ npx prisma generate
 **ファイル**: `lib/prisma.ts`
 
 ```typescript
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from "@prisma/client";
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
@@ -1286,10 +1282,10 @@ const globalForPrisma = globalThis as unknown as {
 export const prisma =
   globalForPrisma.prisma ??
   new PrismaClient({
-    log: ['query', 'error', 'warn'],
+    log: ["query", "error", "warn"],
   });
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 ```
 
 #### 6.6 ユーザー登録 API
@@ -1297,9 +1293,9 @@ if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 **ファイル**: `app/api/users/route.ts`
 
 ```typescript
-import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import bcrypt from 'bcrypt';
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import bcrypt from "bcrypt";
 
 export async function POST(request: NextRequest) {
   try {
@@ -1309,7 +1305,7 @@ export async function POST(request: NextRequest) {
     // バリデーション
     if (!email || !name || !password) {
       return NextResponse.json(
-        { error: 'All fields are required' },
+        { error: "All fields are required" },
         { status: 400 }
       );
     }
@@ -1321,7 +1317,7 @@ export async function POST(request: NextRequest) {
 
     if (existingUser) {
       return NextResponse.json(
-        { error: 'Email already exists' },
+        { error: "Email already exists" },
         { status: 400 }
       );
     }
@@ -1349,9 +1345,9 @@ export async function POST(request: NextRequest) {
       data: user,
     });
   } catch (error) {
-    console.error('User creation error:', error);
+    console.error("User creation error:", error);
     return NextResponse.json(
-      { error: 'Failed to create user' },
+      { error: "Failed to create user" },
       { status: 500 }
     );
   }
@@ -1376,9 +1372,9 @@ export async function GET() {
       data: users,
     });
   } catch (error) {
-    console.error('Failed to fetch users:', error);
+    console.error("Failed to fetch users:", error);
     return NextResponse.json(
-      { error: 'Failed to fetch users' },
+      { error: "Failed to fetch users" },
       { status: 500 }
     );
   }
@@ -1454,7 +1450,7 @@ echo $BLOB_READ_WRITE_TOKEN
 vercel env ls
 ```
 
-### KV接続エラー
+### KV 接続エラー
 
 ```bash
 # KV ストアが作成されているか確認
@@ -1508,5 +1504,5 @@ next16-sandbox/
 
 ---
 
-**最終更新**: 2025年11月
+**最終更新**: 2025 年 11 月
 **ステータス**: 計画中
