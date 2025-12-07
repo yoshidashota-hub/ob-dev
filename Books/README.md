@@ -22,7 +22,21 @@ Learning ディレクトリでの学習を体系的にまとめた、本のよ�
 
 ### 作業中
 
-現在、作業中の Book はありません。
+#### [TypeScript 完全ガイド](./TypeScript-Complete-Guide/README.md)
+
+TypeScript の基礎から応用まで、実践的なコード例とともに体系的に学べるガイドです。
+
+- **推定学習時間**: 約 40 時間
+- **ステータス**: 🚧 作業中
+- **トピック**: 型システム、ジェネリクス、高度な型操作、実践的な使い方
+
+#### [Next.js 完全ガイド](./Next.js-Complete-Guide/README.md)
+
+Next.js 15 の App Router を使った最新のフルスタック開発ガイドです。
+
+- **推定学習時間**: 約 55 時間
+- **ステータス**: 🚧 作業中
+- **トピック**: App Router、Server Components、Server Actions、データフェッチング、デプロイ
 
 ## 🚀 新しい Book の作成方法
 
