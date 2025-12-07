@@ -12,6 +12,9 @@ ob-dev/
 │   │   ├── Vercel.md    # Vercel完全ガイド
 │   │   └── Claude.md    # Claude完全ガイド
 │   └── Completed/       # 完了した学習
+├── Books/              # 体系的な学習ガイド集
+│   ├── _template/      # Book作成用テンプレート
+│   └── README.md       # Booksの使い方
 ├── Projects/            # 実践プロジェクト
 │   └── next16-sandbox/  # Next.js 16 サンドボックス
 ├── Daily/              # 日次メモ
@@ -96,7 +99,16 @@ npm run build
 # 3. 完了したら Learning/Completed/ に移動
 ```
 
-### 2. プロジェクトで新機能を実装
+### 2. 学習内容を体系化して Book にまとめる
+
+```bash
+# 1. Books/ ディレクトリに新しい Book を作成
+# 2. _template/ のテンプレートを使用
+# 3. 章立てして体系的にまとめる
+# 詳細: Books/README.md を参照
+```
+
+### 3. プロジェクトで新機能を実装
 
 ```bash
 # 1. Projects/next16-sandbox に移動
@@ -105,7 +117,7 @@ npm run build
 # 4. コミット
 ```
 
-### 3. 日次メモの作成
+### 4. 日次メモの作成
 
 ```bash
 # Daily/ ディレクトリに日付でファイルを作成
@@ -188,7 +200,17 @@ Projects/
 
 ## 📚 主要ドキュメント
 
-### 詳細なガイド
+### 体系的な学習ガイド（Books）
+
+- **Books 使い方ガイド**: `Books/README.md`
+  - Books の目的と Learning との違い
+  - 新しい Book の作成方法
+  - ベストプラクティス
+  - テンプレートの使い方
+
+詳細は [Books/README.md](Books/README.md) を参照してください。
+
+### 学習ノート（Learning）
 
 - **Vercel**: `Learning/In-Progress/Vercel.md`
 
@@ -430,6 +452,6 @@ git commit -m "Update files"
 
 ---
 
-**最終更新**: 2025 年 11 月
+**最終更新**: 2025 年 12 月
 
 **メンテナンス**: このファイルは定期的に更新してください
