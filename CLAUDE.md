@@ -177,9 +177,9 @@ Projects/
 
 **例**:
 
-- 認証システム → `Projects/auth-playground/`
-- リアルタイム通信 → `Projects/realtime-demo/`
-- パフォーマンス最適化 → `Projects/performance-lab/`
+- 認証システム → `Projects/Backend/auth-playground/`
+- リアルタイム通信 → `Projects/Backend/realtime-demo/`
+- パフォーマンス最適化 → `Projects/Frontend/performance-lab/`
 
 これにより、フレームワークの基礎学習と高度な機能学習を明確に分離できる。
 
@@ -235,26 +235,26 @@ Projects/
 
 ### 学習ノート（Learning）
 
-- **Vercel**: `Learning/In-Progress/Vercel.md`
+- **Frontend**: `Learning/Frontend/`
+  - Next.js 16, TanStack, React 等
 
-  - Storage (Blob, KV, Postgres)
-  - AI 機能 (v0, AI SDK, Gateway, Agents)
-  - Observability (Logs, Drains, OpenTelemetry)
-  - Production Checklist
+- **Backend**: `Learning/Backend/`
+  - NestJS, Hono, OpenAPI, SDD 等
 
-- **Claude**: `Learning/In-Progress/Claude.md`
-  - モデルの種類と選び方
-  - Claude Code CLI の使い方
-  - API の使用方法
-  - Prompt Engineering
-  - ベストプラクティス
+- **Architecture**: `Learning/Architecture/`
+  - Clean Architecture, DDD, マイクロサービス等
+
+- **DevOps**: `Learning/DevOps/`
+  - Vercel 等
+
+- **AI**: `Learning/AI/`
+  - Claude, AI駆動開発
 
 ### プロジェクト
 
-- **Next.js 16 Sandbox**: `Projects/next16-sandbox/`
+- **Next.js 16 Sandbox**: `Projects/Frontend/next16-sandbox/`
   - Next.js 16 の新機能デモ
   - Server Actions, Streaming, Cache など
-  - 統一された UI デザイン
 
 ## 🐛 トラブルシューティング
 
@@ -286,7 +286,7 @@ git diff --staged
 
 ```bash
 # node_modules を再インストール
-cd Projects/next16-sandbox
+cd Projects/Frontend/next16-sandbox
 rm -rf node_modules
 npm install
 
@@ -337,8 +337,8 @@ git diff | grep -i "api_key\|password\|secret\|token"
 
 ### このリポジトリの詳細ガイド
 
-- Vercel 完全ガイド: `Learning/In-Progress/Vercel.md`
-- Claude 完全ガイド: `Learning/In-Progress/Claude.md`
+- Vercel 完全ガイド: `Learning/DevOps/Vercel.md`
+- Claude 完全ガイド: `Learning/AI/Claude.md`
 
 ## 🚦 クイックスタート
 
@@ -365,7 +365,7 @@ git diff | grep -i "api_key\|password\|secret\|token"
 4. **Next.js プロジェクトをセットアップ**
 
    ```bash
-   cd Projects/next16-sandbox
+   cd Projects/Frontend/next16-sandbox
    npm install
    npm run dev
    ```
@@ -452,7 +452,7 @@ git commit -m "Update files"
 ### 週次
 
 - [ ] 学習ノートを整理
-- [ ] 完了したトピックを Completed/ に移動
+- [ ] 各カテゴリのファイルを適切に分類
 - [ ] プロジェクトの依存関係を更新
 
 ### 月次
@@ -475,6 +475,6 @@ git commit -m "Update files"
 
 ---
 
-**最終更新**: 2025 年 12 月
+**最終更新**: 2026 年 1 月
 
 **メンテナンス**: このファイルは定期的に更新してください
