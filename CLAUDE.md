@@ -236,19 +236,23 @@ Projects/
 ### 学習ノート（Learning）
 
 - **Frontend**: `Learning/Frontend/`
+
   - Next.js 16, TanStack, React 等
 
 - **Backend**: `Learning/Backend/`
+
   - NestJS, Hono, OpenAPI, SDD 等
 
 - **Architecture**: `Learning/Architecture/`
+
   - Clean Architecture, DDD, マイクロサービス等
 
 - **DevOps**: `Learning/DevOps/`
+
   - Vercel 等
 
 - **AI**: `Learning/AI/`
-  - Claude, AI駆動開発
+  - Claude, AI 駆動開発
 
 ### プロジェクト
 
