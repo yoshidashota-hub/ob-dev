@@ -6,19 +6,38 @@
 
 ```
 ob-dev/
-├── .obsidian/           # Obsidian設定（.gitignoreで管理）
-├── Learning/            # 学習ノート
-│   ├── In-Progress/     # 進行中の学習
-│   │   ├── Vercel.md    # Vercel完全ガイド
-│   │   └── Claude.md    # Claude完全ガイド
-│   └── Completed/       # 完了した学習
-├── Books/              # 体系的な学習ガイド集
-│   ├── _template/      # Book作成用テンプレート
-│   └── README.md       # Booksの使い方
-├── Projects/            # 実践プロジェクト
-│   └── next16-sandbox/  # Next.js 16 サンドボックス
-├── Daily/              # 日次メモ
-└── Templates/          # テンプレート
+├── .obsidian/              # Obsidian設定（.gitignoreで管理）
+│
+├── Learning/               # 📚 学習ノート
+│   ├── Frontend/           # Next.js, React, TanStack 等
+│   ├── Backend/            # NestJS, Hono, OpenAPI 等
+│   ├── Architecture/       # Clean Architecture, DDD, システム設計
+│   ├── DevOps/             # Vercel, CI/CD
+│   └── AI/                 # Claude, AI駆動開発
+│
+├── Books/                  # 📖 体系的な学習ガイド
+│   ├── Frontend/           # Next.js, TypeScript ガイド
+│   ├── Backend/
+│   ├── Architecture/
+│   ├── DevOps/
+│   ├── AI/
+│   └── _template/          # Book作成用テンプレート
+│
+├── Projects/               # 🛠 実践プロジェクト
+│   ├── Frontend/           # next16-sandbox, advanced-memo-app
+│   ├── Backend/
+│   ├── Architecture/
+│   ├── DevOps/
+│   └── AI/
+│
+├── Knowledge/              # 💡 ナレッジベース（サンプル集）
+│   ├── Frontend/           # Next.js サンプル
+│   ├── Backend/
+│   ├── Architecture/
+│   ├── DevOps/             # Vercel サンプル
+│   └── AI/                 # AI SDK サンプル
+│
+└── Templates/              # 📝 テンプレート
 ```
 
 ## 🚀 Claude Code セットアップ
@@ -53,7 +72,7 @@ claude
 
 ```bash
 # ファイルを読む
-Read: Learning/In-Progress/Vercel.md
+Read: Learning/DevOps/Vercel.md
 
 # ファイルを検索
 Glob: **/*.md
