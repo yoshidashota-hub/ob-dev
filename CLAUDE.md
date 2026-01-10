@@ -163,9 +163,12 @@ npm run build
 
 ```
 Projects/
-├── nestjs-notes/        # NestJS版メモアプリ
-├── hono-notes/          # Hono版メモアプリ
-└── next16-sandbox/      # Next.js 16 サンドボックス（既存）
+├── Frontend/
+│   └── next16-sandbox/      # Next.js 16 サンドボックス
+├── Backend/
+│   ├── nestjs-notes/        # NestJS版メモアプリ
+│   └── hono-notes/          # Hono版メモアプリ
+└── ...
 ```
 
 ### 機能・概念の学習
