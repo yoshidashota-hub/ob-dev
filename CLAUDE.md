@@ -99,7 +99,7 @@ gh pr create
 
 ```bash
 # Next.js プロジェクトに移動
-cd Projects/next16-sandbox
+cd Projects/Frontend/next16-sandbox
 
 # 開発サーバー起動
 npm run dev
@@ -113,9 +113,9 @@ npm run build
 ### 1. 新しい学習トピックを追加
 
 ```bash
-# 1. Learning/In-Progress/ に新しいファイルを作成
+# 1. Learning/<Category>/ に新しいファイルを作成
+#    例: Learning/Frontend/React-Query.md
 # 2. Claude に学習内容をまとめるよう依頼
-# 3. 完了したら Learning/Completed/ に移動
 ```
 
 ### 2. 学習内容を体系化して Book にまとめる
@@ -130,7 +130,8 @@ npm run build
 ### 3. プロジェクトで新機能を実装
 
 ```bash
-# 1. Projects/next16-sandbox に移動
+# 1. Projects/<Category>/<project> に移動
+#    例: Projects/Frontend/next16-sandbox
 # 2. 機能を実装
 # 3. テストとビルドを確認
 # 4. コミット
