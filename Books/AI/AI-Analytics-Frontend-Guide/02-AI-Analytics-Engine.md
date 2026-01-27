@@ -45,10 +45,12 @@ export const executeSQLTool = tool({
   execute: async ({ sql, description }) => {
     try {
       // 危険なクエリをブロック
-      if (sql.toLowerCase().includes("drop") ||
-          sql.toLowerCase().includes("delete") ||
-          sql.toLowerCase().includes("update") ||
-          sql.toLowerCase().includes("insert")) {
+      if (
+        sql.toLowerCase().includes("drop") ||
+        sql.toLowerCase().includes("delete") ||
+        sql.toLowerCase().includes("update") ||
+        sql.toLowerCase().includes("insert")
+      ) {
         return { error: "このクエリは実行できません" };
       }
 
@@ -66,7 +68,8 @@ export const executeSQLTool = tool({
 
 // KPI 取得ツール
 export const getKPIsTool = tool({
-  description: "日別のKPI（セッション数、ユーザー数、購入数、売上）を取得します",
+  description:
+    "日別のKPI（セッション数、ユーザー数、購入数、売上）を取得します",
   parameters: z.object({
     days: z.number().min(1).max(365).describe("取得する日数"),
   }),
@@ -241,20 +244,25 @@ import { getKPIs, getTopProducts } from "@/lib/analytics/queries";
 
 const insightSchema = z.object({
   summary: z.string().describe("分析の要約（2-3文）"),
-  keyFindings: z.array(
-    z.object({
-      title: z.string(),
-      value: z.string(),
-      trend: z.enum(["up", "down", "stable"]),
-      importance: z.enum(["high", "medium", "low"]),
-    })
-  ).describe("主要な発見事項"),
+  keyFindings: z
+    .array(
+      z.object({
+        title: z.string(),
+        value: z.string(),
+        trend: z.enum(["up", "down", "stable"]),
+        importance: z.enum(["high", "medium", "low"]),
+      }),
+    )
+    .describe("主要な発見事項"),
   recommendations: z.array(z.string()).describe("推奨アクション"),
-  chartData: z.object({
-    type: z.enum(["line", "bar", "pie"]),
-    title: z.string(),
-    data: z.array(z.record(z.unknown())),
-  }).optional().describe("可視化用データ"),
+  chartData: z
+    .object({
+      type: z.enum(["line", "bar", "pie"]),
+      title: z.string(),
+      data: z.array(z.record(z.unknown())),
+    })
+    .optional()
+    .describe("可視化用データ"),
 });
 
 export async function POST(req: Request) {
@@ -295,19 +303,13 @@ ${JSON.stringify(topProducts, null, 2)}
 import { useChat } from "ai/react";
 
 export function useAIAnalysis() {
-  const {
-    messages,
-    input,
-    handleInputChange,
-    handleSubmit,
-    isLoading,
-    error,
-  } = useChat({
-    api: "/api/ai/analyze",
-    onFinish: (message) => {
-      console.log("Analysis complete:", message);
-    },
-  });
+  const { messages, input, handleInputChange, handleSubmit, isLoading, error } =
+    useChat({
+      api: "/api/ai/analyze",
+      onFinish: (message) => {
+        console.log("Analysis complete:", message);
+      },
+    });
 
   return {
     messages,

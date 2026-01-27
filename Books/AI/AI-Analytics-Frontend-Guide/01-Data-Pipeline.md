@@ -130,7 +130,7 @@ export async function POST(req: Request) {
     console.error("Event ingestion error:", error);
     return NextResponse.json(
       { error: "Failed to ingest events" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -231,7 +231,7 @@ export async function getTopProducts(days: number = 7, limit: number = 10) {
 export async function getTimeSeries(
   metric: "revenue" | "users" | "sessions",
   days: number = 30,
-  granularity: "hour" | "day" | "week" = "day"
+  granularity: "hour" | "day" | "week" = "day",
 ) {
   const dateFormat =
     granularity === "hour"
@@ -286,7 +286,7 @@ export async function GET(req: Request) {
     console.error("KPI fetch error:", error);
     return NextResponse.json(
       { error: "Failed to fetch KPIs" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -313,7 +313,7 @@ export async function GET(req: Request) {
     console.error("Timeseries fetch error:", error);
     return NextResponse.json(
       { error: "Failed to fetch timeseries" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -350,13 +350,13 @@ export function useKPIs(days: number = 7) {
 export function useTimeSeries(
   metric: "revenue" | "users" | "sessions",
   days: number = 30,
-  granularity: "hour" | "day" | "week" = "day"
+  granularity: "hour" | "day" | "week" = "day",
 ) {
   return useQuery({
     queryKey: ["timeseries", metric, days, granularity],
     queryFn: async () => {
       const res = await fetch(
-        `/api/analytics/timeseries?metric=${metric}&days=${days}&granularity=${granularity}`
+        `/api/analytics/timeseries?metric=${metric}&days=${days}&granularity=${granularity}`,
       );
       if (!res.ok) throw new Error("Failed to fetch timeseries");
       const { data } = await res.json();
@@ -371,7 +371,7 @@ export function useTopProducts(days: number = 7, limit: number = 10) {
     queryKey: ["topProducts", days, limit],
     queryFn: async () => {
       const res = await fetch(
-        `/api/analytics/top-products?days=${days}&limit=${limit}`
+        `/api/analytics/top-products?days=${days}&limit=${limit}`,
       );
       if (!res.ok) throw new Error("Failed to fetch top products");
       const { data } = await res.json();

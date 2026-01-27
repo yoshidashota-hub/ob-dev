@@ -38,15 +38,17 @@ import { z } from "zod";
 export const dailyReportSchema = z.object({
   date: z.string(),
   summary: z.string().describe("1-2文での要約"),
-  highlights: z.array(
-    z.object({
-      type: z.enum(["positive", "negative", "neutral"]),
-      title: z.string(),
-      description: z.string(),
-      metric: z.string(),
-      value: z.string(),
-    })
-  ).max(5),
+  highlights: z
+    .array(
+      z.object({
+        type: z.enum(["positive", "negative", "neutral"]),
+        title: z.string(),
+        description: z.string(),
+        metric: z.string(),
+        value: z.string(),
+      }),
+    )
+    .max(5),
   concerns: z.array(z.string()).describe("注意が必要な点"),
   opportunities: z.array(z.string()).describe("改善の機会"),
 });
@@ -66,20 +68,20 @@ export const weeklyReportSchema = z.object({
       change: z.number(),
       trend: z.enum(["up", "down", "stable"]),
       analysis: z.string(),
-    })
+    }),
   ),
   topPerformers: z.array(
     z.object({
       category: z.string(),
       items: z.array(z.string()),
-    })
+    }),
   ),
   areasOfConcern: z.array(
     z.object({
       issue: z.string(),
       impact: z.enum(["high", "medium", "low"]),
       recommendation: z.string(),
-    })
+    }),
   ),
   nextWeekFocus: z.array(z.string()),
 });
@@ -157,7 +159,11 @@ ${JSON.stringify(topProducts, null, 2)}
 import { generateObject } from "ai";
 import { openai } from "@ai-sdk/openai";
 import { weeklyReportSchema } from "./insight-schemas";
-import { getKPIs, getTopProducts, getTimeSeries } from "@/lib/analytics/queries";
+import {
+  getKPIs,
+  getTopProducts,
+  getTimeSeries,
+} from "@/lib/analytics/queries";
 
 export async function generateWeeklyReport() {
   // データ取得
@@ -208,7 +214,7 @@ import { getTimeSeries } from "@/lib/analytics/queries";
 
 export async function analyzeTrend(
   metric: "revenue" | "users" | "sessions",
-  days: number = 30
+  days: number = 30,
 ) {
   const timeSeries = await getTimeSeries(metric, days, "day");
 
@@ -250,7 +256,7 @@ export async function GET(req: Request) {
     console.error("Report generation error:", error);
     return NextResponse.json(
       { error: "レポート生成に失敗しました" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -269,7 +275,7 @@ export async function GET() {
     console.error("Report generation error:", error);
     return NextResponse.json(
       { error: "レポート生成に失敗しました" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

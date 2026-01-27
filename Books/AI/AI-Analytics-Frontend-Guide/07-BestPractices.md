@@ -121,7 +121,7 @@ export class AIError extends Error {
   constructor(
     message: string,
     public code: string,
-    public retryable: boolean = false
+    public retryable: boolean = false,
   ) {
     super(message);
   }
@@ -129,7 +129,7 @@ export class AIError extends Error {
 
 export async function withAIErrorHandling<T>(
   operation: () => Promise<T>,
-  fallback?: T
+  fallback?: T,
 ): Promise<T> {
   try {
     return await operation();
@@ -171,7 +171,7 @@ const queryCache = new LRUCache<string, any>({
 export async function cachedQuery<T>(
   key: string,
   queryFn: () => Promise<T>,
-  ttl?: number
+  ttl?: number,
 ): Promise<T> {
   const cached = queryCache.get(key);
   if (cached) return cached as T;
@@ -197,9 +197,7 @@ const MAX_DAILY_COST = 10; // $10
 let dailyCost = 0;
 let lastReset = Date.now();
 
-export async function executeWithCostGuard(
-  query: string
-): Promise<any[]> {
+export async function executeWithCostGuard(query: string): Promise<any[]> {
   // 日次リセット
   if (Date.now() - lastReset > 24 * 60 * 60 * 1000) {
     dailyCost = 0;
@@ -213,13 +211,15 @@ export async function executeWithCostGuard(
   });
 
   const bytesProcessed = parseInt(
-    dryRunJob.metadata.statistics.totalBytesProcessed
+    dryRunJob.metadata.statistics.totalBytesProcessed,
   );
   const estimatedCost = (bytesProcessed / 1e12) * 5;
 
   // コストチェック
   if (bytesProcessed > MAX_BYTES_PER_QUERY) {
-    throw new Error(`クエリが大きすぎます: ${(bytesProcessed / 1e9).toFixed(2)}GB`);
+    throw new Error(
+      `クエリが大きすぎます: ${(bytesProcessed / 1e9).toFixed(2)}GB`,
+    );
   }
 
   if (dailyCost + estimatedCost > MAX_DAILY_COST) {
@@ -390,10 +390,12 @@ interface AnalyticsEvent {
 }
 
 export function logAnalyticsEvent(event: AnalyticsEvent): void {
-  console.log(JSON.stringify({
-    timestamp: new Date().toISOString(),
-    ...event,
-  }));
+  console.log(
+    JSON.stringify({
+      timestamp: new Date().toISOString(),
+      ...event,
+    }),
+  );
 
   // 本番環境では外部サービスに送信
   if (process.env.NODE_ENV === "production") {
@@ -404,7 +406,7 @@ export function logAnalyticsEvent(event: AnalyticsEvent): void {
 // 使用例
 export async function withMonitoring<T>(
   type: AnalyticsEvent["type"],
-  operation: () => Promise<T>
+  operation: () => Promise<T>,
 ): Promise<T> {
   const start = Date.now();
   try {

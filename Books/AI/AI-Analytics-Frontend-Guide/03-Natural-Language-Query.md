@@ -146,7 +146,7 @@ export async function executeNaturalLanguageQuery(question: string) {
   });
 
   const bytesProcessed = parseInt(
-    dryRunJob.metadata.statistics.totalBytesProcessed
+    dryRunJob.metadata.statistics.totalBytesProcessed,
   );
   const estimatedCost = (bytesProcessed / 1e12) * 5; // $5/TB
 
@@ -186,7 +186,7 @@ export async function POST(req: Request) {
     if (!question) {
       return NextResponse.json(
         { error: "質問を入力してください" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -212,7 +212,7 @@ export async function POST(req: Request) {
     console.error("Query error:", error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "クエリ実行エラー" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -380,7 +380,7 @@ const suggestionsSchema = z.object({
       category: z
         .enum(["sales", "users", "products", "trends"])
         .describe("クエリカテゴリ"),
-    })
+    }),
   ),
 });
 

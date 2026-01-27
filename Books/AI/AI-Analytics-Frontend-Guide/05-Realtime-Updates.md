@@ -36,9 +36,7 @@ export async function GET() {
   const stream = new ReadableStream({
     async start(controller) {
       const sendEvent = (data: any) => {
-        controller.enqueue(
-          encoder.encode(`data: ${JSON.stringify(data)}\n\n`)
-        );
+        controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
       };
 
       // 初回データ送信
@@ -132,7 +130,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export function usePollingKPIs(
   days: number = 1,
-  refetchInterval: number = 30000
+  refetchInterval: number = 30000,
 ) {
   return useQuery({
     queryKey: ["kpis", "realtime", days],
@@ -259,7 +257,7 @@ interface Anomaly {
 
 export function detectAnomalies(
   current: KPIData,
-  historical: KPIData[]
+  historical: KPIData[],
 ): Anomaly[] {
   const anomalies: Anomaly[] = [];
 
@@ -269,7 +267,7 @@ export function detectAnomalies(
     const values = historical.map((d) => d[metric] as number);
     const mean = values.reduce((a, b) => a + b, 0) / values.length;
     const stdDev = Math.sqrt(
-      values.reduce((sum, v) => sum + Math.pow(v - mean, 2), 0) / values.length
+      values.reduce((sum, v) => sum + Math.pow(v - mean, 2), 0) / values.length,
     );
 
     const currentValue = current[metric] as number;
