@@ -71,11 +71,13 @@ export async function syncProduct(productId: string): Promise<void> {
 
   if (!product) {
     // 削除された場合
-    await client.delete({
-      index: "products",
-      id: productId,
-      refresh: true,
-    }).catch(() => {}); // 存在しない場合は無視
+    await client
+      .delete({
+        index: "products",
+        id: productId,
+        refresh: true,
+      })
+      .catch(() => {}); // 存在しない場合は無視
     return;
   }
 
@@ -143,9 +145,7 @@ prisma.$use(async (params, next) => {
       params.action === "delete"
     ) {
       const productId =
-        params.action === "delete"
-          ? params.args.where.id
-          : result.id;
+        params.action === "delete" ? params.args.where.id : result.id;
 
       // 非同期で同期（レスポンスをブロックしない）
       syncProduct(productId).catch(console.error);
@@ -272,14 +272,7 @@ main().catch(console.error);
 
 ```yaml
 # vercel.json
-{
-  "crons": [
-    {
-      "path": "/api/cron/sync-products",
-      "schedule": "0 */6 * * *"
-    }
-  ]
-}
+{ "crons": [{ "path": "/api/cron/sync-products", "schedule": "0 */6 * * *" }] }
 ```
 
 ```typescript

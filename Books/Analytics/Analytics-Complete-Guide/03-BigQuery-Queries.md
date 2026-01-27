@@ -345,7 +345,7 @@ export async function GET(req: Request) {
     console.error("BigQuery error:", error);
     return NextResponse.json(
       { error: "Failed to fetch analytics" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

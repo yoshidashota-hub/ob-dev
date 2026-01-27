@@ -230,7 +230,7 @@ export async function processEvents(message: PubSubMessage): Promise<void> {
 ```typescript
 async function insertWithRetry(
   rows: EventRow[],
-  maxRetries = 3
+  maxRetries = 3,
 ): Promise<void> {
   for (let attempt = 0; attempt < maxRetries; attempt++) {
     try {
@@ -242,9 +242,7 @@ async function insertWithRetry(
     } catch (error: any) {
       if (error.name === "PartialFailureError") {
         // 一部の行だけ失敗
-        const failedRows = error.errors.map(
-          (e: any) => rows[e.row]
-        );
+        const failedRows = error.errors.map((e: any) => rows[e.row]);
         console.error("Partial failure:", error.errors);
 
         // 失敗した行だけ再試行
@@ -266,10 +264,7 @@ async function insertWithRetry(
 
 ```typescript
 // 失敗したイベントを別テーブルに保存
-async function handleFailedEvent(
-  event: EventRow,
-  error: Error
-): Promise<void> {
+async function handleFailedEvent(event: EventRow, error: Error): Promise<void> {
   await bigquery
     .dataset("analytics")
     .table("failed_events")
@@ -367,8 +362,8 @@ async function insertParallel(rows: EventRow[]): Promise<void> {
 
   await Promise.all(
     batches.map((batch) =>
-      bigquery.dataset("analytics").table("events").insert(batch)
-    )
+      bigquery.dataset("analytics").table("events").insert(batch),
+    ),
   );
 }
 ```

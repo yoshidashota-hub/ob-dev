@@ -165,7 +165,10 @@ src/
 ```typescript
 import { BigQuery } from "@google-cloud/bigquery";
 
-async function safeQuery<T>(query: string, params?: Record<string, any>): Promise<T[]> {
+async function safeQuery<T>(
+  query: string,
+  params?: Record<string, any>,
+): Promise<T[]> {
   try {
     const [rows] = await bigquery.query({ query, params });
     return rows as T[];

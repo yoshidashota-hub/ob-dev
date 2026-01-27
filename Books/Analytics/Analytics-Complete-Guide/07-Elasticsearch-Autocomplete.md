@@ -243,11 +243,7 @@ async function searchAsYouType(query: string) {
         multi_match: {
           query,
           type: "bool_prefix",
-          fields: [
-            "name",
-            "name._2gram",
-            "name._3gram",
-          ],
+          fields: ["name", "name._2gram", "name._3gram"],
         },
       },
       size: 10,
@@ -399,7 +395,7 @@ export async function GET(req: Request) {
         text: option.text,
         id: option._source?.id,
         category: option._source?.category,
-      })
+      }),
     );
 
     return NextResponse.json({ suggestions });

@@ -114,18 +114,14 @@ const result = await client.search({
     query: {
       bool: {
         // すべて満たす（AND）
-        must: [
-          { match: { name: "スマートフォン" } },
-        ],
+        must: [{ match: { name: "スマートフォン" } }],
         // いずれかを満たす（OR）
         should: [
           { term: { category: "electronics" } },
           { term: { category: "mobile" } },
         ],
         // 除外する（NOT）
-        must_not: [
-          { term: { status: "discontinued" } },
-        ],
+        must_not: [{ term: { status: "discontinued" } }],
         // フィルター（スコアに影響しない）
         filter: [
           { range: { price: { gte: 1000, lte: 100000 } } },
@@ -148,9 +144,7 @@ const result = await client.search({
   body: {
     query: {
       bool: {
-        must: [
-          { match: { name: query } },
-        ],
+        must: [{ match: { name: query } }],
         filter: [
           { term: { category: "electronics" } },
           { range: { price: { lte: maxPrice } } },
@@ -427,10 +421,10 @@ export async function GET(req: Request) {
       params.sort === "price_asc"
         ? [{ price: "asc" }]
         : params.sort === "price_desc"
-        ? [{ price: "desc" }]
-        : params.sort === "newest"
-        ? [{ created_at: "desc" }]
-        : [{ _score: "desc" }];
+          ? [{ price: "desc" }]
+          : params.sort === "newest"
+            ? [{ created_at: "desc" }]
+            : [{ _score: "desc" }];
 
     const result = await client.search({
       index: "products",

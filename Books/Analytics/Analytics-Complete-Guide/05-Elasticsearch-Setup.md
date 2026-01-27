@@ -168,12 +168,12 @@ async function createIndex() {
 const mappings = {
   properties: {
     // 文字列
-    name: { type: "text" },           // 全文検索用
-    status: { type: "keyword" },      // 完全一致用
+    name: { type: "text" }, // 全文検索用
+    status: { type: "keyword" }, // 完全一致用
 
     // 数値
-    price: { type: "integer" },       // 整数
-    rating: { type: "float" },        // 小数
+    price: { type: "integer" }, // 整数
+    rating: { type: "float" }, // 小数
 
     // 真偽値
     is_active: { type: "boolean" },
@@ -358,10 +358,7 @@ export async function GET(req: Request) {
     });
   } catch (error) {
     console.error("Search error:", error);
-    return NextResponse.json(
-      { error: "Search failed" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Search failed" }, { status: 500 });
   }
 }
 ```

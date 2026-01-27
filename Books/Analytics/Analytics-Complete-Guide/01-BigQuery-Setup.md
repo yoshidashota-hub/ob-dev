@@ -227,16 +227,19 @@ async function streamInsert(event: Event) {
   const datasetId = "analytics";
   const tableId = "events";
 
-  await bigquery.dataset(datasetId).table(tableId).insert([
-    {
-      id: event.id,
-      event_name: event.name,
-      user_id: event.userId,
-      properties: JSON.stringify(event.properties),
-      timestamp: new Date().toISOString(),
-      created_at: new Date().toISOString(),
-    },
-  ]);
+  await bigquery
+    .dataset(datasetId)
+    .table(tableId)
+    .insert([
+      {
+        id: event.id,
+        event_name: event.name,
+        user_id: event.userId,
+        properties: JSON.stringify(event.properties),
+        timestamp: new Date().toISOString(),
+        created_at: new Date().toISOString(),
+      },
+    ]);
 }
 ```
 
@@ -271,7 +274,7 @@ export async function POST(req: Request) {
     console.error("BigQuery insert error:", error);
     return NextResponse.json(
       { error: "Failed to insert event" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -283,7 +286,7 @@ export async function POST(req: Request) {
 // lib/analytics.ts
 export async function trackEvent(
   eventName: string,
-  properties?: Record<string, unknown>
+  properties?: Record<string, unknown>,
 ) {
   try {
     await fetch("/api/events", {
