@@ -102,114 +102,129 @@ MONGODB_URI=mongodb+srv://myuser:password@cluster0.xxxxx.mongodb.net/mydb?retryW
 
 ```typescript
 // 基本検索
-const results = await db.collection('products').aggregate([
-  {
-    $search: {
-      index: 'default', // インデックス名
-      text: {
-        query: 'iPhone',
-        path: ['title', 'description'],
+const results = await db
+  .collection("products")
+  .aggregate([
+    {
+      $search: {
+        index: "default", // インデックス名
+        text: {
+          query: "iPhone",
+          path: ["title", "description"],
+        },
       },
     },
-  },
-  { $limit: 10 },
-]).toArray();
+    { $limit: 10 },
+  ])
+  .toArray();
 
 // 複合検索
-const results = await db.collection('products').aggregate([
-  {
-    $search: {
-      index: 'default',
-      compound: {
-        must: [
-          {
-            text: {
-              query: 'スマートフォン',
-              path: 'category',
+const results = await db
+  .collection("products")
+  .aggregate([
+    {
+      $search: {
+        index: "default",
+        compound: {
+          must: [
+            {
+              text: {
+                query: "スマートフォン",
+                path: "category",
+              },
             },
-          },
-        ],
-        should: [
-          {
-            text: {
-              query: 'iPhone',
-              path: 'title',
-              score: { boost: { value: 2 } },
+          ],
+          should: [
+            {
+              text: {
+                query: "iPhone",
+                path: "title",
+                score: { boost: { value: 2 } },
+              },
             },
-          },
-        ],
-        filter: [
-          {
-            range: {
-              path: 'price',
-              gte: 50000,
-              lte: 150000,
+          ],
+          filter: [
+            {
+              range: {
+                path: "price",
+                gte: 50000,
+                lte: 150000,
+              },
             },
-          },
-        ],
+          ],
+        },
       },
     },
-  },
-]).toArray();
+  ])
+  .toArray();
 
 // オートコンプリート
-const suggestions = await db.collection('products').aggregate([
-  {
-    $search: {
-      index: 'autocomplete',
-      autocomplete: {
-        query: 'iPho',
-        path: 'title',
-        fuzzy: { maxEdits: 1 },
+const suggestions = await db
+  .collection("products")
+  .aggregate([
+    {
+      $search: {
+        index: "autocomplete",
+        autocomplete: {
+          query: "iPho",
+          path: "title",
+          fuzzy: { maxEdits: 1 },
+        },
       },
     },
-  },
-  { $limit: 5 },
-  { $project: { title: 1, _id: 0 } },
-]).toArray();
+    { $limit: 5 },
+    { $project: { title: 1, _id: 0 } },
+  ])
+  .toArray();
 
 // スコア取得
-const results = await db.collection('products').aggregate([
-  {
-    $search: {
-      text: { query: 'iPhone', path: 'title' },
+const results = await db
+  .collection("products")
+  .aggregate([
+    {
+      $search: {
+        text: { query: "iPhone", path: "title" },
+      },
     },
-  },
-  {
-    $project: {
-      title: 1,
-      score: { $meta: 'searchScore' },
+    {
+      $project: {
+        title: 1,
+        score: { $meta: "searchScore" },
+      },
     },
-  },
-]).toArray();
+  ])
+  .toArray();
 ```
 
 ### ファセット検索
 
 ```typescript
-const facetResults = await db.collection('products').aggregate([
-  {
-    $searchMeta: {
-      index: 'default',
-      facet: {
-        operator: {
-          text: { query: 'phone', path: 'description' },
-        },
-        facets: {
-          categoryFacet: {
-            type: 'string',
-            path: 'category',
+const facetResults = await db
+  .collection("products")
+  .aggregate([
+    {
+      $searchMeta: {
+        index: "default",
+        facet: {
+          operator: {
+            text: { query: "phone", path: "description" },
           },
-          priceFacet: {
-            type: 'number',
-            path: 'price',
-            boundaries: [0, 50000, 100000, 200000],
+          facets: {
+            categoryFacet: {
+              type: "string",
+              path: "category",
+            },
+            priceFacet: {
+              type: "number",
+              path: "price",
+              boundaries: [0, 50000, 100000, 200000],
+            },
           },
         },
       },
     },
-  },
-]).toArray();
+  ])
+  .toArray();
 ```
 
 ## Atlas Vector Search
@@ -236,38 +251,41 @@ const facetResults = await db.collection('products').aggregate([
 
 ```typescript
 // OpenAI Embedding を使用
-import OpenAI from 'openai';
+import OpenAI from "openai";
 
 const openai = new OpenAI();
 
 async function searchSimilar(query: string) {
   // クエリをベクトル化
   const embedding = await openai.embeddings.create({
-    model: 'text-embedding-ada-002',
+    model: "text-embedding-ada-002",
     input: query,
   });
 
   const queryVector = embedding.data[0].embedding;
 
   // ベクトル検索
-  const results = await db.collection('documents').aggregate([
-    {
-      $vectorSearch: {
-        index: 'vector_index',
-        path: 'embedding',
-        queryVector,
-        numCandidates: 100,
-        limit: 10,
+  const results = await db
+    .collection("documents")
+    .aggregate([
+      {
+        $vectorSearch: {
+          index: "vector_index",
+          path: "embedding",
+          queryVector,
+          numCandidates: 100,
+          limit: 10,
+        },
       },
-    },
-    {
-      $project: {
-        title: 1,
-        content: 1,
-        score: { $meta: 'vectorSearchScore' },
+      {
+        $project: {
+          title: 1,
+          content: 1,
+          score: { $meta: "vectorSearchScore" },
+        },
       },
-    },
-  ]).toArray();
+    ])
+    .toArray();
 
   return results;
 }
@@ -286,21 +304,21 @@ REST API でデータベースにアクセス。
 ### 使用例
 
 ```typescript
-const DATA_API_URL = 'https://data.mongodb-api.com/app/xxx/endpoint/data/v1';
+const DATA_API_URL = "https://data.mongodb-api.com/app/xxx/endpoint/data/v1";
 const API_KEY = process.env.MONGODB_DATA_API_KEY!;
 
 // Find
 async function findDocuments(filter: object) {
   const response = await fetch(`${DATA_API_URL}/action/find`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
-      'api-key': API_KEY,
+      "Content-Type": "application/json",
+      "api-key": API_KEY,
     },
     body: JSON.stringify({
-      dataSource: 'Cluster0',
-      database: 'mydb',
-      collection: 'users',
+      dataSource: "Cluster0",
+      database: "mydb",
+      collection: "users",
       filter,
     }),
   });
@@ -311,15 +329,15 @@ async function findDocuments(filter: object) {
 // Insert
 async function insertDocument(document: object) {
   const response = await fetch(`${DATA_API_URL}/action/insertOne`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
-      'api-key': API_KEY,
+      "Content-Type": "application/json",
+      "api-key": API_KEY,
     },
     body: JSON.stringify({
-      dataSource: 'Cluster0',
-      database: 'mydb',
-      collection: 'users',
+      dataSource: "Cluster0",
+      database: "mydb",
+      collection: "users",
       document,
     }),
   });
@@ -337,14 +355,14 @@ async function insertDocument(document: object) {
 exports = async function (payload) {
   const { userId, action } = payload.body;
 
-  const mongodb = context.services.get('mongodb-atlas');
-  const users = mongodb.db('mydb').collection('users');
+  const mongodb = context.services.get("mongodb-atlas");
+  const users = mongodb.db("mydb").collection("users");
 
-  if (action === 'getProfile') {
+  if (action === "getProfile") {
     return await users.findOne({ _id: userId });
   }
 
-  return { error: 'Unknown action' };
+  return { error: "Unknown action" };
 };
 ```
 
@@ -355,16 +373,16 @@ exports = async function (payload) {
 exports = async function (changeEvent) {
   const { operationType, fullDocument } = changeEvent;
 
-  if (operationType === 'insert') {
+  if (operationType === "insert") {
     // 新規ユーザー作成時にウェルカムメール送信
-    await context.functions.execute('sendWelcomeEmail', fullDocument.email);
+    await context.functions.execute("sendWelcomeEmail", fullDocument.email);
   }
 };
 
 // Scheduled Trigger (Cron)
 exports = async function () {
-  const mongodb = context.services.get('mongodb-atlas');
-  const sessions = mongodb.db('mydb').collection('sessions');
+  const mongodb = context.services.get("mongodb-atlas");
+  const sessions = mongodb.db("mydb").collection("sessions");
 
   // 24時間以上経過したセッションを削除
   const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000);

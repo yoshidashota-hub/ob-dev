@@ -33,7 +33,9 @@ db.collection.aggregate([
 
 ```javascript
 // find() と同じ構文
-db.orders.aggregate([{ $match: { status: 'completed', amount: { $gte: 1000 } } }]);
+db.orders.aggregate([
+  { $match: { status: "completed", amount: { $gte: 1000 } } },
+]);
 
 // パイプラインの最初に置くとインデックスを活用できる
 ```
@@ -100,17 +102,17 @@ db.orders.aggregate([
 ### アキュムレータ
 
 ```javascript
-$sum      // 合計
-$avg      // 平均
-$min      // 最小値
-$max      // 最大値
-$first    // グループの最初
-$last     // グループの最後
-$push     // 配列に追加
-$addToSet // 重複なく配列に追加
-$count    // カウント
-$stdDevPop   // 標準偏差（母集団）
-$stdDevSamp  // 標準偏差（サンプル）
+$sum; // 合計
+$avg; // 平均
+$min; // 最小値
+$max; // 最大値
+$first; // グループの最初
+$last; // グループの最後
+$push; // 配列に追加
+$addToSet; // 重複なく配列に追加
+$count; // カウント
+$stdDevPop; // 標準偏差（母集団）
+$stdDevSamp; // 標準偏差（サンプル）
 ```
 
 ### $project（射影・変換）
@@ -131,8 +133,8 @@ db.users.aggregate([
 db.users.aggregate([
   {
     $project: {
-      userName: '$name',
-      userEmail: '$email',
+      userName: "$name",
+      userEmail: "$email",
     },
   },
 ]);
@@ -141,10 +143,10 @@ db.users.aggregate([
 db.orders.aggregate([
   {
     $project: {
-      orderId: '$_id',
-      subtotal: '$amount',
-      tax: { $multiply: ['$amount', 0.1] },
-      total: { $multiply: ['$amount', 1.1] },
+      orderId: "$_id",
+      subtotal: "$amount",
+      tax: { $multiply: ["$amount", 0.1] },
+      total: { $multiply: ["$amount", 1.1] },
     },
   },
 ]);
@@ -157,11 +159,11 @@ db.users.aggregate([
       ageGroup: {
         $switch: {
           branches: [
-            { case: { $lt: ['$age', 20] }, then: '10代' },
-            { case: { $lt: ['$age', 30] }, then: '20代' },
-            { case: { $lt: ['$age', 40] }, then: '30代' },
+            { case: { $lt: ["$age", 20] }, then: "10代" },
+            { case: { $lt: ["$age", 30] }, then: "20代" },
+            { case: { $lt: ["$age", 40] }, then: "30代" },
           ],
-          default: '40代以上',
+          default: "40代以上",
         },
       },
     },
@@ -173,7 +175,7 @@ db.users.aggregate([
 
 ```javascript
 db.orders.aggregate([
-  { $match: { status: 'completed' } },
+  { $match: { status: "completed" } },
   { $sort: { createdAt: -1 } }, // -1: 降順, 1: 昇順
 ]);
 
@@ -189,7 +191,7 @@ const page = 2;
 const limit = 10;
 
 db.orders.aggregate([
-  { $match: { status: 'completed' } },
+  { $match: { status: "completed" } },
   { $sort: { createdAt: -1 } },
   { $skip: (page - 1) * limit },
   { $limit: limit },
@@ -201,7 +203,7 @@ db.orders.aggregate([
 ```javascript
 // 注文の items 配列を展開
 db.orders.aggregate([
-  { $unwind: '$items' },
+  { $unwind: "$items" },
   // { _id: 1, items: { product: "A", qty: 2 } }
   // { _id: 1, items: { product: "B", qty: 1 } }
 ]);
@@ -210,7 +212,7 @@ db.orders.aggregate([
 db.orders.aggregate([
   {
     $unwind: {
-      path: '$items',
+      path: "$items",
       preserveNullAndEmptyArrays: true,
     },
   },
@@ -224,28 +226,28 @@ db.orders.aggregate([
 db.orders.aggregate([
   {
     $lookup: {
-      from: 'users',           // 結合先コレクション
-      localField: 'userId',    // orders のフィールド
-      foreignField: '_id',     // users のフィールド
-      as: 'user'               // 結果を格納するフィールド
-    }
+      from: "users", // 結合先コレクション
+      localField: "userId", // orders のフィールド
+      foreignField: "_id", // users のフィールド
+      as: "user", // 結果を格納するフィールド
+    },
   },
-  { $unwind: '$user' }         // 配列を展開
+  { $unwind: "$user" }, // 配列を展開
 ]);
 
 // パイプライン付き（より柔軟）
 db.orders.aggregate([
   {
     $lookup: {
-      from: 'users',
-      let: { userId: '$userId' },
+      from: "users",
+      let: { userId: "$userId" },
       pipeline: [
-        { $match: { $expr: { $eq: ['$_id', '$$userId'] } } },
-        { $project: { name: 1, email: 1 } }
+        { $match: { $expr: { $eq: ["$_id", "$$userId"] } } },
+        { $project: { name: 1, email: 1 } },
       ],
-      as: 'user'
-    }
-  }
+      as: "user",
+    },
+  },
 ]);
 ```
 
@@ -256,7 +258,7 @@ db.orders.aggregate([
 db.orders.aggregate([
   {
     $addFields: {
-      totalWithTax: { $multiply: ['$amount', 1.1] },
+      totalWithTax: { $multiply: ["$amount", 1.1] },
       processed: true,
     },
   },
@@ -267,10 +269,10 @@ db.orders.aggregate([
 
 ```javascript
 // $set は $addFields のエイリアス
-db.orders.aggregate([{ $set: { status: 'processed' } }]);
+db.orders.aggregate([{ $set: { status: "processed" } }]);
 
 // $unset でフィールド削除
-db.orders.aggregate([{ $unset: ['internalField', 'tempData'] }]);
+db.orders.aggregate([{ $unset: ["internalField", "tempData"] }]);
 ```
 
 ### $facet（複数パイプライン）
@@ -281,19 +283,19 @@ db.products.aggregate([
   {
     $facet: {
       // カテゴリ別カウント
-      byCategory: [{ $group: { _id: '$category', count: { $sum: 1 } } }],
+      byCategory: [{ $group: { _id: "$category", count: { $sum: 1 } } }],
       // 価格帯別
       byPriceRange: [
         {
           $bucket: {
-            groupBy: '$price',
+            groupBy: "$price",
             boundaries: [0, 1000, 5000, 10000, Infinity],
             output: { count: { $sum: 1 } },
           },
         },
       ],
       // 総数
-      totalCount: [{ $count: 'total' }],
+      totalCount: [{ $count: "total" }],
     },
   },
 ]);
@@ -306,12 +308,12 @@ db.products.aggregate([
 db.products.aggregate([
   {
     $bucket: {
-      groupBy: '$price',
+      groupBy: "$price",
       boundaries: [0, 1000, 5000, 10000],
-      default: 'その他',
+      default: "その他",
       output: {
         count: { $sum: 1 },
-        products: { $push: '$name' },
+        products: { $push: "$name" },
       },
     },
   },
@@ -321,7 +323,7 @@ db.products.aggregate([
 db.products.aggregate([
   {
     $bucketAuto: {
-      groupBy: '$price',
+      groupBy: "$price",
       buckets: 5, // 5つのバケットに分割
     },
   },
@@ -333,15 +335,15 @@ db.products.aggregate([
 ### 算術演算
 
 ```javascript
-$add      // 加算
-$subtract // 減算
-$multiply // 乗算
-$divide   // 除算
-$mod      // 剰余
-$abs      // 絶対値
-$ceil     // 切り上げ
-$floor    // 切り捨て
-$round    // 四捨五入
+$add; // 加算
+$subtract; // 減算
+$multiply; // 乗算
+$divide; // 除算
+$mod; // 剰余
+$abs; // 絶対値
+$ceil; // 切り上げ
+$floor; // 切り捨て
+$round; // 四捨五入
 ```
 
 ### 文字列演算
@@ -420,42 +422,45 @@ $round    // 四捨五入
 
 ```typescript
 async function getSalesReport(startDate: Date, endDate: Date) {
-  return db.collection('orders').aggregate([
-    {
-      $match: {
-        status: 'completed',
-        createdAt: { $gte: startDate, $lt: endDate },
-      },
-    },
-    {
-      $group: {
-        _id: {
-          year: { $year: '$createdAt' },
-          month: { $month: '$createdAt' },
-          day: { $dayOfMonth: '$createdAt' },
+  return db
+    .collection("orders")
+    .aggregate([
+      {
+        $match: {
+          status: "completed",
+          createdAt: { $gte: startDate, $lt: endDate },
         },
-        totalSales: { $sum: '$amount' },
-        orderCount: { $sum: 1 },
-        avgOrderValue: { $avg: '$amount' },
       },
-    },
-    { $sort: { '_id.year': 1, '_id.month': 1, '_id.day': 1 } },
-    {
-      $project: {
-        _id: 0,
-        date: {
-          $dateFromParts: {
-            year: '$_id.year',
-            month: '$_id.month',
-            day: '$_id.day',
+      {
+        $group: {
+          _id: {
+            year: { $year: "$createdAt" },
+            month: { $month: "$createdAt" },
+            day: { $dayOfMonth: "$createdAt" },
           },
+          totalSales: { $sum: "$amount" },
+          orderCount: { $sum: 1 },
+          avgOrderValue: { $avg: "$amount" },
         },
-        totalSales: 1,
-        orderCount: 1,
-        avgOrderValue: { $round: ['$avgOrderValue', 0] },
       },
-    },
-  ]).toArray();
+      { $sort: { "_id.year": 1, "_id.month": 1, "_id.day": 1 } },
+      {
+        $project: {
+          _id: 0,
+          date: {
+            $dateFromParts: {
+              year: "$_id.year",
+              month: "$_id.month",
+              day: "$_id.day",
+            },
+          },
+          totalSales: 1,
+          orderCount: 1,
+          avgOrderValue: { $round: ["$avgOrderValue", 0] },
+        },
+      },
+    ])
+    .toArray();
 }
 ```
 
@@ -463,34 +468,39 @@ async function getSalesReport(startDate: Date, endDate: Date) {
 
 ```typescript
 async function getTopProducts(limit: number) {
-  return db.collection('orders').aggregate([
-    { $unwind: '$items' },
-    {
-      $group: {
-        _id: '$items.productId',
-        totalQuantity: { $sum: '$items.quantity' },
-        totalRevenue: { $sum: { $multiply: ['$items.price', '$items.quantity'] } },
+  return db
+    .collection("orders")
+    .aggregate([
+      { $unwind: "$items" },
+      {
+        $group: {
+          _id: "$items.productId",
+          totalQuantity: { $sum: "$items.quantity" },
+          totalRevenue: {
+            $sum: { $multiply: ["$items.price", "$items.quantity"] },
+          },
+        },
       },
-    },
-    { $sort: { totalRevenue: -1 } },
-    { $limit: limit },
-    {
-      $lookup: {
-        from: 'products',
-        localField: '_id',
-        foreignField: '_id',
-        as: 'product',
+      { $sort: { totalRevenue: -1 } },
+      { $limit: limit },
+      {
+        $lookup: {
+          from: "products",
+          localField: "_id",
+          foreignField: "_id",
+          as: "product",
+        },
       },
-    },
-    { $unwind: '$product' },
-    {
-      $project: {
-        productName: '$product.name',
-        totalQuantity: 1,
-        totalRevenue: 1,
+      { $unwind: "$product" },
+      {
+        $project: {
+          productName: "$product.name",
+          totalQuantity: 1,
+          totalRevenue: 1,
+        },
       },
-    },
-  ]).toArray();
+    ])
+    .toArray();
 }
 ```
 
@@ -498,42 +508,45 @@ async function getTopProducts(limit: number) {
 
 ```typescript
 async function getDashboardStats() {
-  const [result] = await db.collection('orders').aggregate([
-    {
-      $facet: {
-        // 今日の売上
-        todaySales: [
-          {
-            $match: {
-              createdAt: { $gte: new Date(new Date().setHours(0, 0, 0, 0)) },
-            },
-          },
-          { $group: { _id: null, total: { $sum: '$amount' } } },
-        ],
-        // ステータス別カウント
-        byStatus: [
-          { $group: { _id: '$status', count: { $sum: 1 } } },
-        ],
-        // 直近7日間の推移
-        last7Days: [
-          {
-            $match: {
-              createdAt: {
-                $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+  const [result] = await db
+    .collection("orders")
+    .aggregate([
+      {
+        $facet: {
+          // 今日の売上
+          todaySales: [
+            {
+              $match: {
+                createdAt: { $gte: new Date(new Date().setHours(0, 0, 0, 0)) },
               },
             },
-          },
-          {
-            $group: {
-              _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
-              total: { $sum: '$amount' },
+            { $group: { _id: null, total: { $sum: "$amount" } } },
+          ],
+          // ステータス別カウント
+          byStatus: [{ $group: { _id: "$status", count: { $sum: 1 } } }],
+          // 直近7日間の推移
+          last7Days: [
+            {
+              $match: {
+                createdAt: {
+                  $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+                },
+              },
             },
-          },
-          { $sort: { _id: 1 } },
-        ],
+            {
+              $group: {
+                _id: {
+                  $dateToString: { format: "%Y-%m-%d", date: "$createdAt" },
+                },
+                total: { $sum: "$amount" },
+              },
+            },
+            { $sort: { _id: 1 } },
+          ],
+        },
       },
-    },
-  ]).toArray();
+    ])
+    .toArray();
 
   return result;
 }

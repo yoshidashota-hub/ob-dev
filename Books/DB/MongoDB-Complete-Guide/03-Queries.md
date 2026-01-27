@@ -4,25 +4,25 @@
 
 ```javascript
 // 演算子一覧
-$eq   // 等しい（=）
-$ne   // 等しくない（!=）
-$gt   // より大きい（>）
-$gte  // 以上（>=）
-$lt   // より小さい（<）
-$lte  // 以下（<=）
-$in   // いずれかに一致
-$nin  // いずれにも一致しない
+$eq; // 等しい（=）
+$ne; // 等しくない（!=）
+$gt; // より大きい（>）
+$gte; // 以上（>=）
+$lt; // より小さい（<）
+$lte; // 以下（<=）
+$in; // いずれかに一致
+$nin; // いずれにも一致しない
 ```
 
 ### 使用例
 
 ```javascript
 // 等しい
-db.users.find({ status: 'active' }); // 暗黙的な $eq
-db.users.find({ status: { $eq: 'active' } }); // 明示的
+db.users.find({ status: "active" }); // 暗黙的な $eq
+db.users.find({ status: { $eq: "active" } }); // 明示的
 
 // 等しくない
-db.users.find({ status: { $ne: 'deleted' } });
+db.users.find({ status: { $ne: "deleted" } });
 
 // 範囲
 db.users.find({ age: { $gt: 20 } }); // 20より大きい
@@ -31,33 +31,33 @@ db.users.find({ age: { $gte: 20, $lte: 30 } }); // 20以上30以下
 // 日付の範囲
 db.orders.find({
   createdAt: {
-    $gte: ISODate('2024-01-01'),
-    $lt: ISODate('2024-02-01'),
+    $gte: ISODate("2024-01-01"),
+    $lt: ISODate("2024-02-01"),
   },
 });
 
 // いずれかに一致
-db.users.find({ status: { $in: ['active', 'pending'] } });
+db.users.find({ status: { $in: ["active", "pending"] } });
 
 // いずれにも一致しない
-db.users.find({ role: { $nin: ['admin', 'moderator'] } });
+db.users.find({ role: { $nin: ["admin", "moderator"] } });
 ```
 
 ## 論理演算子
 
 ```javascript
 // 演算子一覧
-$and  // すべてに一致
-$or   // いずれかに一致
-$not  // 否定
-$nor  // いずれにも一致しない
+$and; // すべてに一致
+$or; // いずれかに一致
+$not; // 否定
+$nor; // いずれにも一致しない
 ```
 
 ### 使用例
 
 ```javascript
 // AND（暗黙的）
-db.users.find({ status: 'active', age: { $gte: 18 } });
+db.users.find({ status: "active", age: { $gte: 18 } });
 
 // AND（明示的 - 同じフィールドに複数条件）
 db.users.find({
@@ -66,12 +66,12 @@ db.users.find({
 
 // OR
 db.users.find({
-  $or: [{ status: 'active' }, { role: 'admin' }],
+  $or: [{ status: "active" }, { role: "admin" }],
 });
 
 // 複合条件
 db.users.find({
-  status: 'active',
+  status: "active",
   $or: [{ age: { $lt: 20 } }, { age: { $gt: 60 } }],
 });
 
@@ -82,7 +82,7 @@ db.users.find({
 
 // NOR（いずれにも一致しない）
 db.users.find({
-  $nor: [{ status: 'deleted' }, { status: 'banned' }],
+  $nor: [{ status: "deleted" }, { status: "banned" }],
 });
 ```
 
@@ -90,8 +90,8 @@ db.users.find({
 
 ```javascript
 // 演算子一覧
-$exists  // フィールドの存在
-$type    // 型の確認
+$exists; // フィールドの存在
+$type; // 型の確認
 ```
 
 ### 使用例
@@ -104,30 +104,30 @@ db.users.find({ email: { $exists: true } });
 db.users.find({ deletedAt: { $exists: false } });
 
 // 型の確認
-db.users.find({ age: { $type: 'number' } });
-db.users.find({ tags: { $type: 'array' } });
+db.users.find({ age: { $type: "number" } });
+db.users.find({ tags: { $type: "array" } });
 
 // 複数の型
-db.users.find({ value: { $type: ['string', 'number'] } });
+db.users.find({ value: { $type: ["string", "number"] } });
 ```
 
 ## 配列演算子
 
 ```javascript
 // 演算子一覧
-$all       // すべての要素を含む
-$elemMatch // 条件に一致する要素が存在
-$size      // 配列のサイズ
+$all; // すべての要素を含む
+$elemMatch; // 条件に一致する要素が存在
+$size; // 配列のサイズ
 ```
 
 ### 使用例
 
 ```javascript
 // 配列に値が含まれる
-db.users.find({ tags: 'developer' }); // tags に 'developer' を含む
+db.users.find({ tags: "developer" }); // tags に 'developer' を含む
 
 // すべての値を含む
-db.users.find({ tags: { $all: ['developer', 'nodejs'] } });
+db.users.find({ tags: { $all: ["developer", "nodejs"] } });
 
 // 配列のサイズ
 db.users.find({ tags: { $size: 3 } }); // 要素が3つ
@@ -136,7 +136,7 @@ db.users.find({ tags: { $size: 3 } }); // 要素が3つ
 db.orders.find({
   items: {
     $elemMatch: {
-      product: 'iPhone',
+      product: "iPhone",
       quantity: { $gte: 2 },
     },
   },
@@ -144,8 +144,8 @@ db.orders.find({
 
 // $elemMatch なしの場合（AND が全要素に分散）
 db.orders.find({
-  'items.product': 'iPhone',
-  'items.quantity': { $gte: 2 },
+  "items.product": "iPhone",
+  "items.quantity": { $gte: 2 },
 }); // 別々の要素でも一致してしまう
 ```
 
@@ -153,12 +153,12 @@ db.orders.find({
 
 ```javascript
 // 演算子一覧
-$regex      // 正規表現
-$expr       // 集計式を使用
-$text       // テキスト検索
-$where      // JavaScript 式（非推奨）
-$mod        // 剰余
-$jsonSchema // JSON Schema でバリデーション
+$regex; // 正規表現
+$expr; // 集計式を使用
+$text; // テキスト検索
+$where; // JavaScript 式（非推奨）
+$mod; // 剰余
+$jsonSchema; // JSON Schema でバリデーション
 ```
 
 ### 正規表現
@@ -166,7 +166,7 @@ $jsonSchema // JSON Schema でバリデーション
 ```javascript
 // 基本
 db.users.find({ name: { $regex: /田中/ } });
-db.users.find({ name: { $regex: '田中' } });
+db.users.find({ name: { $regex: "田中" } });
 
 // オプション付き（i: 大文字小文字無視）
 db.users.find({
@@ -178,7 +178,7 @@ db.users.find({ name: { $regex: /^田中/ } });
 
 // 複雑なパターン
 db.products.find({
-  name: { $regex: /^iPhone \d+( Pro)?$/, $options: 'i' },
+  name: { $regex: /^iPhone \d+( Pro)?$/, $options: "i" },
 });
 ```
 
@@ -187,13 +187,13 @@ db.products.find({
 ```javascript
 // フィールド同士を比較
 db.inventory.find({
-  $expr: { $gt: ['$quantity', '$minStock'] },
+  $expr: { $gt: ["$quantity", "$minStock"] },
 });
 
 // 計算結果で比較
 db.orders.find({
   $expr: {
-    $lt: [{ $subtract: ['$total', '$discount'] }, 1000],
+    $lt: [{ $subtract: ["$total", "$discount"] }, 1000],
   },
 });
 ```
@@ -202,39 +202,36 @@ db.orders.find({
 
 ```javascript
 // テキストインデックスが必要
-db.articles.createIndex({ title: 'text', content: 'text' });
+db.articles.createIndex({ title: "text", content: "text" });
 
 // 検索
-db.articles.find({ $text: { $search: 'mongodb database' } });
+db.articles.find({ $text: { $search: "mongodb database" } });
 
 // フレーズ検索
 db.articles.find({ $text: { $search: '"mongodb database"' } });
 
 // 除外
-db.articles.find({ $text: { $search: 'mongodb -mysql' } });
+db.articles.find({ $text: { $search: "mongodb -mysql" } });
 
 // スコアでソート
 db.articles
-  .find(
-    { $text: { $search: 'mongodb' } },
-    { score: { $meta: 'textScore' } }
-  )
-  .sort({ score: { $meta: 'textScore' } });
+  .find({ $text: { $search: "mongodb" } }, { score: { $meta: "textScore" } })
+  .sort({ score: { $meta: "textScore" } });
 ```
 
 ## ネストしたドキュメントのクエリ
 
 ```javascript
 // ドット記法
-db.users.find({ 'address.city': '東京' });
-db.users.find({ 'address.zip': { $regex: /^100/ } });
+db.users.find({ "address.city": "東京" });
+db.users.find({ "address.zip": { $regex: /^100/ } });
 
 // 複数レベル
-db.users.find({ 'profile.settings.notifications.email': true });
+db.users.find({ "profile.settings.notifications.email": true });
 
 // 完全一致（順序も含めて完全一致）
 db.users.find({
-  address: { city: '東京', zip: '100-0001' },
+  address: { city: "東京", zip: "100-0001" },
 });
 ```
 
@@ -275,7 +272,7 @@ db.users.find({ "orders.0.product": "iPhone" }); // 最初の注文
 // オフセットベース
 async function getUsers(page: number, limit: number) {
   return db
-    .collection('users')
+    .collection("users")
     .find({})
     .sort({ createdAt: -1 })
     .skip((page - 1) * limit)
@@ -286,7 +283,7 @@ async function getUsers(page: number, limit: number) {
 // カーソルベース（大量データ向け）
 async function getUsersAfter(cursor: string, limit: number) {
   return db
-    .collection('users')
+    .collection("users")
     .find({ _id: { $gt: new ObjectId(cursor) } })
     .sort({ _id: 1 })
     .limit(limit)
@@ -321,7 +318,7 @@ async function searchUsers(query: string, filters: Filters) {
     filter.tags = { $all: filters.tags };
   }
 
-  return db.collection<User>('users').find(filter).toArray();
+  return db.collection<User>("users").find(filter).toArray();
 }
 ```
 
@@ -334,19 +331,16 @@ const activeFilter = { deletedAt: { $exists: false } };
 // 通常のクエリ
 async function getActiveUsers() {
   return db
-    .collection('users')
-    .find({ ...activeFilter, status: 'active' })
+    .collection("users")
+    .find({ ...activeFilter, status: "active" })
     .toArray();
 }
 
 // ソフトデリート実行
 async function softDelete(id: string) {
   return db
-    .collection('users')
-    .updateOne(
-      { _id: new ObjectId(id) },
-      { $set: { deletedAt: new Date() } }
-    );
+    .collection("users")
+    .updateOne({ _id: new ObjectId(id) }, { $set: { deletedAt: new Date() } });
 }
 ```
 
@@ -355,9 +349,9 @@ async function softDelete(id: string) {
 ```typescript
 async function getUserStats() {
   const [total, active, inactive] = await Promise.all([
-    db.collection('users').countDocuments(),
-    db.collection('users').countDocuments({ status: 'active' }),
-    db.collection('users').countDocuments({ status: 'inactive' }),
+    db.collection("users").countDocuments(),
+    db.collection("users").countDocuments({ status: "active" }),
+    db.collection("users").countDocuments({ status: "inactive" }),
   ]);
 
   return { total, active, inactive };

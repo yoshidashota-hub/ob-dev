@@ -40,9 +40,9 @@ db.users.insertOne({
 
 ```typescript
 // Node.js
-const result = await db.collection('users').insertOne({
-  name: '田中太郎',
-  email: 'tanaka@example.com',
+const result = await db.collection("users").insertOne({
+  name: "田中太郎",
+  email: "tanaka@example.com",
   age: 30,
   createdAt: new Date(),
 });
@@ -73,7 +73,7 @@ db.users.insertMany([
 
 ```typescript
 // Node.js - 順序を維持しないバルク挿入（高速）
-const result = await db.collection('users').insertMany(documents, {
+const result = await db.collection("users").insertMany(documents, {
   ordered: false, // エラーがあっても続行
 });
 ```
@@ -84,10 +84,10 @@ const result = await db.collection('users').insertMany(documents, {
 
 ```javascript
 // 1件取得
-db.users.findOne({ email: 'tanaka@example.com' });
+db.users.findOne({ email: "tanaka@example.com" });
 
 // _id で検索
-db.users.findOne({ _id: ObjectId('507f1f77bcf86cd799439011') });
+db.users.findOne({ _id: ObjectId("507f1f77bcf86cd799439011") });
 
 // 条件なし（最初の1件）
 db.users.findOne();
@@ -95,11 +95,9 @@ db.users.findOne();
 
 ```typescript
 // Node.js
-import { ObjectId } from 'mongodb';
+import { ObjectId } from "mongodb";
 
-const user = await db
-  .collection('users')
-  .findOne({ _id: new ObjectId(id) });
+const user = await db.collection("users").findOne({ _id: new ObjectId(id) });
 ```
 
 ### find
@@ -118,12 +116,12 @@ db.users.find({ age: { $gte: 30 } }).toArray();
 ```typescript
 // Node.js
 const users = await db
-  .collection('users')
+  .collection("users")
   .find({ age: { $gte: 30 } })
   .toArray();
 
 // カーソルで処理
-const cursor = db.collection('users').find({});
+const cursor = db.collection("users").find({});
 for await (const doc of cursor) {
   console.log(doc);
 }
@@ -145,7 +143,7 @@ db.users.find({}, { projection: { password: 0 } });
 ```typescript
 // Node.js
 const users = await db
-  .collection('users')
+  .collection("users")
   .find({})
   .project({ name: 1, email: 1, _id: 0 })
   .toArray();
@@ -174,7 +172,7 @@ const page = 3;
 const limit = 10;
 
 const users = await db
-  .collection('users')
+  .collection("users")
   .find({})
   .sort({ createdAt: -1 })
   .skip((page - 1) * limit)
@@ -201,15 +199,15 @@ db.users.estimatedDocumentCount();
 
 ```javascript
 // 主要な更新演算子
-$set      // フィールドを設定
-$unset    // フィールドを削除
-$inc      // 数値を増減
-$push     // 配列に追加
-$pull     // 配列から削除
-$addToSet // 配列に重複なく追加
-$rename   // フィールド名を変更
-$min      // 小さい場合のみ更新
-$max      // 大きい場合のみ更新
+$set; // フィールドを設定
+$unset; // フィールドを削除
+$inc; // 数値を増減
+$push; // 配列に追加
+$pull; // 配列から削除
+$addToSet; // 配列に重複なく追加
+$rename; // フィールド名を変更
+$min; // 小さい場合のみ更新
+$max; // 大きい場合のみ更新
 ```
 
 ### updateOne
@@ -234,12 +232,12 @@ db.users.updateOne(
 
 ```typescript
 // Node.js
-const result = await db.collection('users').updateOne(
+const result = await db.collection("users").updateOne(
   { _id: new ObjectId(id) },
   {
     $set: { name: newName },
     $currentDate: { updatedAt: true },
-  }
+  },
 );
 ```
 
@@ -248,8 +246,8 @@ const result = await db.collection('users').updateOne(
 ```javascript
 // 複数件更新
 db.users.updateMany(
-  { status: 'inactive' },
-  { $set: { status: 'archived', archivedAt: new Date() } }
+  { status: "inactive" },
+  { $set: { status: "archived", archivedAt: new Date() } },
 );
 ```
 
@@ -257,24 +255,24 @@ db.users.updateMany(
 
 ```javascript
 // 配列に追加
-db.users.updateOne({ _id: userId }, { $push: { tags: 'newTag' } });
+db.users.updateOne({ _id: userId }, { $push: { tags: "newTag" } });
 
 // 複数追加
 db.users.updateOne(
   { _id: userId },
-  { $push: { tags: { $each: ['tag1', 'tag2'] } } }
+  { $push: { tags: { $each: ["tag1", "tag2"] } } },
 );
 
 // 重複なく追加
-db.users.updateOne({ _id: userId }, { $addToSet: { tags: 'uniqueTag' } });
+db.users.updateOne({ _id: userId }, { $addToSet: { tags: "uniqueTag" } });
 
 // 配列から削除
-db.users.updateOne({ _id: userId }, { $pull: { tags: 'oldTag' } });
+db.users.updateOne({ _id: userId }, { $pull: { tags: "oldTag" } });
 
 // 配列要素を更新
 db.users.updateOne(
-  { _id: userId, 'addresses.type': 'home' },
-  { $set: { 'addresses.$.city': '大阪' } }
+  { _id: userId, "addresses.type": "home" },
+  { $set: { "addresses.$.city": "大阪" } },
 );
 ```
 
@@ -283,12 +281,12 @@ db.users.updateOne(
 ```javascript
 // 存在しなければ挿入、存在すれば更新
 db.users.updateOne(
-  { email: 'new@example.com' },
+  { email: "new@example.com" },
   {
-    $set: { name: '新規ユーザー' },
+    $set: { name: "新規ユーザー" },
     $setOnInsert: { createdAt: new Date() }, // 挿入時のみ
   },
-  { upsert: true }
+  { upsert: true },
 );
 ```
 
@@ -297,13 +295,13 @@ db.users.updateOne(
 ```javascript
 // ドキュメント全体を置換（_id 以外）
 db.users.replaceOne(
-  { email: 'tanaka@example.com' },
+  { email: "tanaka@example.com" },
   {
-    name: '田中太郎',
-    email: 'tanaka@example.com',
-    profile: { bio: '新しいプロフィール' },
+    name: "田中太郎",
+    email: "tanaka@example.com",
+    profile: { bio: "新しいプロフィール" },
     // createdAt は消える！
-  }
+  },
 );
 ```
 
@@ -312,19 +310,21 @@ db.users.replaceOne(
 ```javascript
 // 更新前または更新後のドキュメントを返す
 const result = db.users.findOneAndUpdate(
-  { email: 'tanaka@example.com' },
+  { email: "tanaka@example.com" },
   { $inc: { points: 10 } },
-  { returnDocument: 'after' } // 'before' | 'after'
+  { returnDocument: "after" }, // 'before' | 'after'
 );
 ```
 
 ```typescript
 // Node.js
-const result = await db.collection('users').findOneAndUpdate(
-  { _id: new ObjectId(id) },
-  { $set: { status: 'active' } },
-  { returnDocument: 'after' }
-);
+const result = await db
+  .collection("users")
+  .findOneAndUpdate(
+    { _id: new ObjectId(id) },
+    { $set: { status: "active" } },
+    { returnDocument: "after" },
+  );
 
 console.log(result); // 更新後のドキュメント
 ```
@@ -348,7 +348,7 @@ db.users.deleteOne({ email: 'tanaka@example.com' });
 
 ```javascript
 // 複数件削除
-db.users.deleteMany({ status: 'deleted' });
+db.users.deleteMany({ status: "deleted" });
 
 // 全件削除（危険！）
 db.users.deleteMany({});
@@ -358,7 +358,7 @@ db.users.deleteMany({});
 
 ```javascript
 // 削除されたドキュメントを返す
-const deleted = db.users.findOneAndDelete({ email: 'tanaka@example.com' });
+const deleted = db.users.findOneAndDelete({ email: "tanaka@example.com" });
 ```
 
 ## Bulk Operations
@@ -368,23 +368,23 @@ const deleted = db.users.findOneAndDelete({ email: 'tanaka@example.com' });
 const bulkOps = [
   {
     insertOne: {
-      document: { name: '新規1', email: 'new1@example.com' },
+      document: { name: "新規1", email: "new1@example.com" },
     },
   },
   {
     updateOne: {
-      filter: { email: 'update@example.com' },
-      update: { $set: { status: 'active' } },
+      filter: { email: "update@example.com" },
+      update: { $set: { status: "active" } },
     },
   },
   {
     deleteOne: {
-      filter: { email: 'delete@example.com' },
+      filter: { email: "delete@example.com" },
     },
   },
 ];
 
-const result = await db.collection('users').bulkWrite(bulkOps, {
+const result = await db.collection("users").bulkWrite(bulkOps, {
   ordered: false, // 並列実行
 });
 
@@ -397,10 +397,10 @@ console.log(result.deletedCount);
 
 ```typescript
 // types/user.ts
-import { ObjectId } from 'mongodb';
+import { ObjectId } from "mongodb";
 
 interface Address {
-  type: 'home' | 'work';
+  type: "home" | "work";
   city: string;
   zip: string;
 }
@@ -418,25 +418,25 @@ interface User {
 
 // 使用例
 const db = await getDb();
-const users = db.collection<User>('users');
+const users = db.collection<User>("users");
 
 // 型安全な操作
-const user = await users.findOne({ email: 'test@example.com' });
+const user = await users.findOne({ email: "test@example.com" });
 // user は User | null 型
 ```
 
 ## エラーハンドリング
 
 ```typescript
-import { MongoError, MongoServerError } from 'mongodb';
+import { MongoError, MongoServerError } from "mongodb";
 
 try {
-  await db.collection('users').insertOne({ email: 'duplicate@example.com' });
+  await db.collection("users").insertOne({ email: "duplicate@example.com" });
 } catch (error) {
   if (error instanceof MongoServerError) {
     if (error.code === 11000) {
       // 重複キーエラー
-      console.error('Email already exists');
+      console.error("Email already exists");
     }
   }
   throw error;

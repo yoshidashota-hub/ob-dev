@@ -34,12 +34,12 @@ npm install mongoose
 
 ```typescript
 // lib/mongoose.ts
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const MONGODB_URI = process.env.MONGODB_URI!;
 
 if (!MONGODB_URI) {
-  throw new Error('MONGODB_URI が設定されていません');
+  throw new Error("MONGODB_URI が設定されていません");
 }
 
 let cached = global.mongoose;
@@ -72,7 +72,7 @@ export default dbConnect;
 
 ```typescript
 // types/global.d.ts
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 declare global {
   var mongoose: {
@@ -88,14 +88,14 @@ declare global {
 
 ```typescript
 // models/User.ts
-import mongoose, { Schema, Document, Model } from 'mongoose';
+import mongoose, { Schema, Document, Model } from "mongoose";
 
 // ドキュメントの型
 interface IUser extends Document {
   name: string;
   email: string;
   age?: number;
-  status: 'active' | 'inactive';
+  status: "active" | "inactive";
   tags: string[];
   profile?: {
     bio: string;
@@ -110,27 +110,27 @@ const userSchema = new Schema<IUser>(
   {
     name: {
       type: String,
-      required: [true, '名前は必須です'],
+      required: [true, "名前は必須です"],
       trim: true,
-      minlength: [2, '名前は2文字以上です'],
-      maxlength: [50, '名前は50文字以内です'],
+      minlength: [2, "名前は2文字以上です"],
+      maxlength: [50, "名前は50文字以内です"],
     },
     email: {
       type: String,
       required: true,
       unique: true,
       lowercase: true,
-      match: [/^\S+@\S+\.\S+$/, '有効なメールアドレスを入力してください'],
+      match: [/^\S+@\S+\.\S+$/, "有効なメールアドレスを入力してください"],
     },
     age: {
       type: Number,
-      min: [0, '年齢は0以上です'],
-      max: [150, '年齢は150以下です'],
+      min: [0, "年齢は0以上です"],
+      max: [150, "年齢は150以下です"],
     },
     status: {
       type: String,
-      enum: ['active', 'inactive'],
-      default: 'active',
+      enum: ["active", "inactive"],
+      default: "active",
     },
     tags: [{ type: String, trim: true }],
     profile: {
@@ -140,12 +140,12 @@ const userSchema = new Schema<IUser>(
   },
   {
     timestamps: true, // createdAt, updatedAt を自動管理
-  }
+  },
 );
 
 // モデル作成（ホットリロード対策）
 const User: Model<IUser> =
-  mongoose.models.User || mongoose.model<IUser>('User', userSchema);
+  mongoose.models.User || mongoose.model<IUser>("User", userSchema);
 
 export default User;
 ```
@@ -184,24 +184,24 @@ export default User;
 const productSchema = new Schema({
   name: {
     type: String,
-    required: [true, '商品名は必須です'],
-    minlength: [3, '商品名は3文字以上です'],
-    maxlength: [100, '商品名は100文字以内です'],
+    required: [true, "商品名は必須です"],
+    minlength: [3, "商品名は3文字以上です"],
+    maxlength: [100, "商品名は100文字以内です"],
   },
   price: {
     type: Number,
     required: true,
-    min: [0, '価格は0以上です'],
+    min: [0, "価格は0以上です"],
     validate: {
       validator: (v: number) => v % 1 === 0,
-      message: '価格は整数である必要があります',
+      message: "価格は整数である必要があります",
     },
   },
   sku: {
     type: String,
     required: true,
     unique: true,
-    match: [/^[A-Z]{3}-\d{4}$/, 'SKU形式: AAA-0000'],
+    match: [/^[A-Z]{3}-\d{4}$/, "SKU形式: AAA-0000"],
   },
   email: {
     type: String,
@@ -210,7 +210,7 @@ const productSchema = new Schema({
         const count = await mongoose.models.Product.countDocuments({ email });
         return count === 0;
       },
-      message: 'このメールは既に使用されています',
+      message: "このメールは既に使用されています",
     },
   },
 });
@@ -223,21 +223,21 @@ const productSchema = new Schema({
 ```typescript
 // 単一作成
 const user = new User({
-  name: '田中太郎',
-  email: 'tanaka@example.com',
+  name: "田中太郎",
+  email: "tanaka@example.com",
 });
 await user.save();
 
 // または
 const user = await User.create({
-  name: '田中太郎',
-  email: 'tanaka@example.com',
+  name: "田中太郎",
+  email: "tanaka@example.com",
 });
 
 // 複数作成
 const users = await User.insertMany([
-  { name: '山田', email: 'yamada@example.com' },
-  { name: '鈴木', email: 'suzuki@example.com' },
+  { name: "山田", email: "yamada@example.com" },
+  { name: "鈴木", email: "suzuki@example.com" },
 ]);
 ```
 
@@ -248,21 +248,18 @@ const users = await User.insertMany([
 const users = await User.find();
 
 // 条件付き
-const activeUsers = await User.find({ status: 'active' });
+const activeUsers = await User.find({ status: "active" });
 
 // 1件取得
 const user = await User.findById(id);
-const user = await User.findOne({ email: 'tanaka@example.com' });
+const user = await User.findOne({ email: "tanaka@example.com" });
 
 // プロジェクション
-const users = await User.find({}, 'name email'); // 含める
-const users = await User.find({}, '-password');  // 除外
+const users = await User.find({}, "name email"); // 含める
+const users = await User.find({}, "-password"); // 除外
 
 // ソート・ページネーション
-const users = await User.find()
-  .sort({ createdAt: -1 })
-  .skip(20)
-  .limit(10);
+const users = await User.find().sort({ createdAt: -1 }).skip(20).limit(10);
 
 // lean()（プレーンオブジェクトを返す、高速）
 const users = await User.find().lean();
@@ -274,21 +271,21 @@ const users = await User.find().lean();
 // 1件更新
 await User.findByIdAndUpdate(
   id,
-  { name: '新しい名前' },
-  { new: true, runValidators: true }
+  { name: "新しい名前" },
+  { new: true, runValidators: true },
 );
 
 await User.updateOne(
-  { email: 'tanaka@example.com' },
-  { $set: { status: 'inactive' } }
+  { email: "tanaka@example.com" },
+  { $set: { status: "inactive" } },
 );
 
 // 複数更新
-await User.updateMany({ status: 'inactive' }, { $set: { status: 'archived' } });
+await User.updateMany({ status: "inactive" }, { $set: { status: "archived" } });
 
 // ドキュメント経由
 const user = await User.findById(id);
-user.name = '新しい名前';
+user.name = "新しい名前";
 await user.save(); // バリデーション実行
 ```
 
@@ -297,10 +294,10 @@ await user.save(); // バリデーション実行
 ```typescript
 // 1件削除
 await User.findByIdAndDelete(id);
-await User.deleteOne({ email: 'tanaka@example.com' });
+await User.deleteOne({ email: "tanaka@example.com" });
 
 // 複数削除
-await User.deleteMany({ status: 'deleted' });
+await User.deleteMany({ status: "deleted" });
 ```
 
 ## インデックス
@@ -315,12 +312,12 @@ const userSchema = new Schema({
 userSchema.index({ status: 1, createdAt: -1 });
 
 // テキストインデックス
-userSchema.index({ name: 'text', bio: 'text' });
+userSchema.index({ name: "text", bio: "text" });
 
 // 部分インデックス
 userSchema.index(
   { email: 1 },
-  { partialFilterExpression: { status: 'active' } }
+  { partialFilterExpression: { status: "active" } },
 );
 
 // TTL インデックス
@@ -345,14 +342,14 @@ userSchema.methods.getFullName = function (): string {
 };
 
 userSchema.methods.comparePassword = async function (
-  password: string
+  password: string,
 ): Promise<boolean> {
   return bcrypt.compare(password, this.password);
 };
 
 // 使用
 const user = await User.findById(id);
-const isMatch = await user.comparePassword('password123');
+const isMatch = await user.comparePassword("password123");
 ```
 
 ### スタティックメソッド
@@ -368,32 +365,32 @@ userSchema.statics.findByEmail = function (email: string) {
 };
 
 userSchema.statics.findActive = function () {
-  return this.find({ status: 'active' });
+  return this.find({ status: "active" });
 };
 
-const User = mongoose.model<IUser, IUserModel>('User', userSchema);
+const User = mongoose.model<IUser, IUserModel>("User", userSchema);
 
 // 使用
-const user = await User.findByEmail('tanaka@example.com');
+const user = await User.findByEmail("tanaka@example.com");
 const activeUsers = await User.findActive();
 ```
 
 ### 仮想フィールド（Virtual）
 
 ```typescript
-userSchema.virtual('fullName').get(function () {
+userSchema.virtual("fullName").get(function () {
   return `${this.firstName} ${this.lastName}`;
 });
 
-userSchema.virtual('fullName').set(function (name: string) {
-  const [firstName, lastName] = name.split(' ');
+userSchema.virtual("fullName").set(function (name: string) {
+  const [firstName, lastName] = name.split(" ");
   this.firstName = firstName;
   this.lastName = lastName;
 });
 
 // JSON に含める
-userSchema.set('toJSON', { virtuals: true });
-userSchema.set('toObject', { virtuals: true });
+userSchema.set("toJSON", { virtuals: true });
+userSchema.set("toObject", { virtuals: true });
 ```
 
 ## ミドルウェア（Hooks）
@@ -402,22 +399,22 @@ userSchema.set('toObject', { virtuals: true });
 
 ```typescript
 // save 前
-userSchema.pre('save', async function (next) {
-  if (this.isModified('password')) {
+userSchema.pre("save", async function (next) {
+  if (this.isModified("password")) {
     this.password = await bcrypt.hash(this.password, 10);
   }
   next();
 });
 
 // find 前
-userSchema.pre('find', function (next) {
+userSchema.pre("find", function (next) {
   // デフォルトで削除済みを除外
   this.where({ deletedAt: { $exists: false } });
   next();
 });
 
 // deleteOne 前
-userSchema.pre('deleteOne', { document: true }, async function (next) {
+userSchema.pre("deleteOne", { document: true }, async function (next) {
   // 関連データを削除
   await Comment.deleteMany({ userId: this._id });
   next();
@@ -428,14 +425,14 @@ userSchema.pre('deleteOne', { document: true }, async function (next) {
 
 ```typescript
 // save 後
-userSchema.post('save', function (doc) {
+userSchema.post("save", function (doc) {
   console.log(`ユーザー ${doc.name} が保存されました`);
 });
 
 // エラーハンドリング
-userSchema.post('save', function (error, doc, next) {
-  if (error.name === 'MongoServerError' && error.code === 11000) {
-    next(new Error('メールアドレスは既に使用されています'));
+userSchema.post("save", function (error, doc, next) {
+  if (error.name === "MongoServerError" && error.code === 11000) {
+    next(new Error("メールアドレスは既に使用されています"));
   } else {
     next(error);
   }
@@ -451,33 +448,33 @@ const postSchema = new Schema({
   content: String,
   author: {
     type: Schema.Types.ObjectId,
-    ref: 'User',
+    ref: "User",
     required: true,
   },
   comments: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'Comment',
+      ref: "Comment",
     },
   ],
 });
 
 // 使用
 const post = await Post.findById(id)
-  .populate('author', 'name email') // フィールド指定
+  .populate("author", "name email") // フィールド指定
   .populate({
-    path: 'comments',
+    path: "comments",
     populate: {
       // ネストした populate
-      path: 'author',
-      select: 'name',
+      path: "author",
+      select: "name",
     },
   });
 
 // 条件付き populate
 const posts = await Post.find().populate({
-  path: 'comments',
-  match: { status: 'approved' },
+  path: "comments",
+  match: { status: "approved" },
   options: { sort: { createdAt: -1 }, limit: 5 },
 });
 ```
@@ -487,13 +484,13 @@ const posts = await Post.find().populate({
 ```typescript
 // メソッドチェーン
 const users = await User.find()
-  .where('status')
-  .equals('active')
-  .where('age')
+  .where("status")
+  .equals("active")
+  .where("age")
   .gte(18)
   .lte(65)
-  .select('name email')
-  .sort('-createdAt')
+  .select("name email")
+  .sort("-createdAt")
   .limit(10)
   .lean();
 
@@ -503,34 +500,34 @@ userSchema.query.byStatus = function (status: string) {
 };
 
 userSchema.query.active = function () {
-  return this.where({ status: 'active' });
+  return this.where({ status: "active" });
 };
 
 // 使用
-const users = await User.find().active().byStatus('premium');
+const users = await User.find().active().byStatus("premium");
 ```
 
 ## Aggregation
 
 ```typescript
 const result = await Order.aggregate([
-  { $match: { status: 'completed' } },
+  { $match: { status: "completed" } },
   {
     $group: {
-      _id: '$userId',
-      totalAmount: { $sum: '$amount' },
+      _id: "$userId",
+      totalAmount: { $sum: "$amount" },
       orderCount: { $sum: 1 },
     },
   },
   {
     $lookup: {
-      from: 'users',
-      localField: '_id',
-      foreignField: '_id',
-      as: 'user',
+      from: "users",
+      localField: "_id",
+      foreignField: "_id",
+      as: "user",
     },
   },
-  { $unwind: '$user' },
+  { $unwind: "$user" },
   { $sort: { totalAmount: -1 } },
   { $limit: 10 },
 ]);
@@ -540,13 +537,13 @@ const result = await Order.aggregate([
 
 ```typescript
 // models/User.ts
-import mongoose, { Schema, Document, Model, Types } from 'mongoose';
+import mongoose, { Schema, Document, Model, Types } from "mongoose";
 
 // ドキュメントインターフェース
 export interface IUser {
   name: string;
   email: string;
-  status: 'active' | 'inactive';
+  status: "active" | "inactive";
   createdAt: Date;
   updatedAt: Date;
 }
@@ -566,9 +563,9 @@ const userSchema = new Schema<IUser, IUserModel, IUserMethods>(
   {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    status: { type: String, enum: ['active', 'inactive'], default: 'active' },
+    status: { type: String, enum: ["active", "inactive"], default: "active" },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 userSchema.methods.getDisplayName = function () {
@@ -581,7 +578,7 @@ userSchema.statics.findByEmail = function (email: string) {
 
 const User =
   (mongoose.models.User as IUserModel) ||
-  mongoose.model<IUser, IUserModel>('User', userSchema);
+  mongoose.model<IUser, IUserModel>("User", userSchema);
 
 export default User;
 ```

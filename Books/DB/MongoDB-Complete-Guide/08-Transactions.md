@@ -70,11 +70,11 @@ volumes:
 ```javascript
 // レプリカセット初期化
 rs.initiate({
-  _id: 'rs0',
+  _id: "rs0",
   members: [
-    { _id: 0, host: 'mongo1:27017' },
-    { _id: 1, host: 'mongo2:27017' },
-    { _id: 2, host: 'mongo3:27017' },
+    { _id: 0, host: "mongo1:27017" },
+    { _id: 1, host: "mongo2:27017" },
+    { _id: 2, host: "mongo3:27017" },
   ],
 });
 ```
@@ -84,61 +84,58 @@ rs.initiate({
 ### MongoDB Driver
 
 ```typescript
-import { MongoClient } from 'mongodb';
+import { MongoClient } from "mongodb";
 
 async function transferFunds(
   client: MongoClient,
   fromAccountId: string,
   toAccountId: string,
-  amount: number
+  amount: number,
 ) {
   const session = client.startSession();
 
   try {
     await session.withTransaction(async () => {
-      const accounts = client.db('bank').collection('accounts');
+      const accounts = client.db("bank").collection("accounts");
 
       // 送金元から引き落とし
       const fromResult = await accounts.updateOne(
         { _id: fromAccountId, balance: { $gte: amount } },
         { $inc: { balance: -amount } },
-        { session }
+        { session },
       );
 
       if (fromResult.modifiedCount === 0) {
-        throw new Error('残高不足または口座が存在しません');
+        throw new Error("残高不足または口座が存在しません");
       }
 
       // 送金先に入金
       const toResult = await accounts.updateOne(
         { _id: toAccountId },
         { $inc: { balance: amount } },
-        { session }
+        { session },
       );
 
       if (toResult.modifiedCount === 0) {
-        throw new Error('送金先口座が存在しません');
+        throw new Error("送金先口座が存在しません");
       }
 
       // 取引履歴を記録
-      await client
-        .db('bank')
-        .collection('transactions')
-        .insertOne(
-          {
-            from: fromAccountId,
-            to: toAccountId,
-            amount,
-            type: 'transfer',
-            createdAt: new Date(),
-          },
-          { session }
-        );
+      await client.db("bank").collection("transactions").insertOne(
+        {
+          from: fromAccountId,
+          to: toAccountId,
+          amount,
+          type: "transfer",
+          createdAt: new Date(),
+        },
+        { session },
+      );
     });
 
-    console.log('送金が完了しました');
+    console.log("送金が完了しました");
   } catch (error) {
-    console.error('送金に失敗しました:', error);
+    console.error("送金に失敗しました:", error);
     throw error;
   } finally {
     await session.endSession();
@@ -178,12 +175,9 @@ async function manualTransaction(client: MongoClient) {
 ### Mongoose でのトランザクション
 
 ```typescript
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-async function createOrderWithTransaction(
-  userId: string,
-  items: OrderItem[]
-) {
+async function createOrderWithTransaction(userId: string, items: OrderItem[]) {
   const session = await mongoose.startSession();
 
   try {
@@ -198,7 +192,7 @@ async function createOrderWithTransaction(
             stock: { $gte: item.quantity },
           },
           { $inc: { stock: -item.quantity } },
-          { session, new: true }
+          { session, new: true },
         );
 
         if (!product) {
@@ -212,18 +206,18 @@ async function createOrderWithTransaction(
           {
             userId,
             items,
-            status: 'pending',
+            status: "pending",
             total: calculateTotal(items),
           },
         ],
-        { session }
+        { session },
       );
 
       // ユーザーの注文履歴を更新
       await User.updateOne(
         { _id: userId },
         { $push: { orderHistory: order._id } },
-        { session }
+        { session },
       );
     });
 
@@ -240,18 +234,18 @@ async function createOrderWithTransaction(
 session.startTransaction({
   // Read Concern
   readConcern: {
-    level: 'snapshot', // 'local' | 'available' | 'majority' | 'linearizable' | 'snapshot'
+    level: "snapshot", // 'local' | 'available' | 'majority' | 'linearizable' | 'snapshot'
   },
 
   // Write Concern
   writeConcern: {
-    w: 'majority', // 'majority' | number | 'majority'
+    w: "majority", // 'majority' | number | 'majority'
     j: true, // ジャーナリング
     wtimeout: 5000, // タイムアウト（ms）
   },
 
   // Read Preference
-  readPreference: 'primary', // 'primary' | 'primaryPreferred' | 'secondary' | 'secondaryPreferred' | 'nearest'
+  readPreference: "primary", // 'primary' | 'primaryPreferred' | 'secondary' | 'secondaryPreferred' | 'nearest'
 
   // 最大コミット時間
   maxCommitTimeMS: 5000,
@@ -326,26 +320,29 @@ await runTransactionWithRetry(client, async (session) => {
 async function processOrder(
   client: MongoClient,
   orderId: string,
-  paymentInfo: PaymentInfo
+  paymentInfo: PaymentInfo,
 ) {
   const session = client.startSession();
 
   try {
     await session.withTransaction(async () => {
-      const db = client.db('ecommerce');
+      const db = client.db("ecommerce");
 
       // 1. 注文を取得
       const order = await db
-        .collection('orders')
-        .findOne({ _id: new ObjectId(orderId), status: 'pending' }, { session });
+        .collection("orders")
+        .findOne(
+          { _id: new ObjectId(orderId), status: "pending" },
+          { session },
+        );
 
       if (!order) {
-        throw new Error('注文が見つからないか、既に処理済みです');
+        throw new Error("注文が見つからないか、既に処理済みです");
       }
 
       // 2. 在庫を確保
       for (const item of order.items) {
-        const result = await db.collection('products').updateOne(
+        const result = await db.collection("products").updateOne(
           {
             _id: item.productId,
             stock: { $gte: item.quantity },
@@ -360,7 +357,7 @@ async function processOrder(
               },
             },
           },
-          { session }
+          { session },
         );
 
         if (result.modifiedCount === 0) {
@@ -372,27 +369,27 @@ async function processOrder(
       // 注: 決済APIはトランザクションに含めない
 
       // 4. 注文ステータス更新
-      await db.collection('orders').updateOne(
+      await db.collection("orders").updateOne(
         { _id: order._id },
         {
           $set: {
-            status: 'confirmed',
+            status: "confirmed",
             paymentInfo,
             confirmedAt: new Date(),
           },
         },
-        { session }
+        { session },
       );
 
       // 5. 通知を記録
-      await db.collection('notifications').insertOne(
+      await db.collection("notifications").insertOne(
         {
           userId: order.userId,
-          type: 'order_confirmed',
+          type: "order_confirmed",
           orderId: order._id,
           createdAt: new Date(),
         },
-        { session }
+        { session },
       );
     });
 
@@ -411,36 +408,36 @@ async function awardPoints(
   client: MongoClient,
   userId: string,
   points: number,
-  reason: string
+  reason: string,
 ) {
   const session = client.startSession();
 
   try {
     await session.withTransaction(async () => {
-      const db = client.db('app');
+      const db = client.db("app");
 
       // ポイント残高を更新
-      const result = await db.collection('users').findOneAndUpdate(
+      const result = await db.collection("users").findOneAndUpdate(
         { _id: new ObjectId(userId) },
         {
-          $inc: { 'points.balance': points },
+          $inc: { "points.balance": points },
           $push: {
-            'points.history': {
+            "points.history": {
               amount: points,
               reason,
               createdAt: new Date(),
             },
           },
         },
-        { session, returnDocument: 'after' }
+        { session, returnDocument: "after" },
       );
 
       if (!result) {
-        throw new Error('ユーザーが見つかりません');
+        throw new Error("ユーザーが見つかりません");
       }
 
       // ポイント履歴を記録
-      await db.collection('pointTransactions').insertOne(
+      await db.collection("pointTransactions").insertOne(
         {
           userId: new ObjectId(userId),
           amount: points,
@@ -448,7 +445,7 @@ async function awardPoints(
           balanceAfter: result.points.balance,
           createdAt: new Date(),
         },
-        { session }
+        { session },
       );
     });
   } finally {
@@ -488,11 +485,11 @@ await externalPaymentAPI.charge(amount);
 await Order.updateOne(
   { _id: orderId },
   {
-    $set: { status: 'paid' },
+    $set: { status: "paid" },
     $push: {
       payments: { amount, method, paidAt: new Date() },
     },
-  }
+  },
 );
 ```
 
@@ -504,9 +501,9 @@ try {
     // ...
   });
 } catch (error: any) {
-  if (error.hasErrorLabel?.('TransientTransactionError')) {
+  if (error.hasErrorLabel?.("TransientTransactionError")) {
     // ネットワークエラー等、リトライ可能
-  } else if (error.hasErrorLabel?.('UnknownTransactionCommitResult')) {
+  } else if (error.hasErrorLabel?.("UnknownTransactionCommitResult")) {
     // コミット結果不明、確認が必要
   } else {
     // その他のエラー
@@ -523,26 +520,26 @@ session.startTransaction({
 });
 
 // 接続文字列でも設定可能
-const uri = 'mongodb://...?wtimeoutMS=5000';
+const uri = "mongodb://...?wtimeoutMS=5000";
 ```
 
 ## トランザクションが不要なケース
 
 ```typescript
 // 1. 単一ドキュメントの更新（常にアトミック）
-await User.updateOne({ _id: userId }, { $set: { name: '新しい名前' } });
+await User.updateOne({ _id: userId }, { $set: { name: "新しい名前" } });
 
 // 2. 埋め込みドキュメントの更新
 await Order.updateOne(
   { _id: orderId },
-  { $push: { items: newItem }, $inc: { total: newItem.price } }
+  { $push: { items: newItem }, $inc: { total: newItem.price } },
 );
 
 // 3. findOneAndUpdate（読み取りと更新がアトミック）
 const result = await Counter.findOneAndUpdate(
-  { _id: 'orderId' },
+  { _id: "orderId" },
   { $inc: { seq: 1 } },
-  { returnDocument: 'after', upsert: true }
+  { returnDocument: "after", upsert: true },
 );
 ```
 

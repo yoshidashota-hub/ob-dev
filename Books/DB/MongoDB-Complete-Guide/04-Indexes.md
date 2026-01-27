@@ -39,7 +39,7 @@ db.users.createIndex({ email: 1 }); // 1: 昇順, -1: 降順
 db.users.createIndex({ email: 1 }, { unique: true });
 
 // 名前を指定
-db.users.createIndex({ email: 1 }, { name: 'idx_users_email' });
+db.users.createIndex({ email: 1 }, { name: "idx_users_email" });
 ```
 
 ### 複合インデックス
@@ -67,16 +67,18 @@ db.orders.createIndex({ userId: 1, createdAt: -1 });
 // 3. Range: 範囲条件のフィールド
 
 // クエリ例
-db.orders.find({
-  status: 'completed',     // Equality
-  amount: { $gte: 1000 }   // Range
-}).sort({ createdAt: -1 }) // Sort
+db.orders
+  .find({
+    status: "completed", // Equality
+    amount: { $gte: 1000 }, // Range
+  })
+  .sort({ createdAt: -1 }); // Sort
 
 // 最適なインデックス
 db.orders.createIndex({
-  status: 1,     // E: 等価
+  status: 1, // E: 等価
   createdAt: -1, // S: ソート
-  amount: 1      // R: 範囲
+  amount: 1, // R: 範囲
 });
 ```
 
@@ -87,8 +89,8 @@ db.orders.createIndex({
 db.articles.createIndex({ tags: 1 });
 
 // クエリ
-db.articles.find({ tags: 'mongodb' });
-db.articles.find({ tags: { $all: ['mongodb', 'nodejs'] } });
+db.articles.find({ tags: "mongodb" });
+db.articles.find({ tags: { $all: ["mongodb", "nodejs"] } });
 ```
 
 ### テキストインデックス
@@ -96,25 +98,25 @@ db.articles.find({ tags: { $all: ['mongodb', 'nodejs'] } });
 ```javascript
 // 全文検索用
 db.articles.createIndex({
-  title: 'text',
-  content: 'text',
-  tags: 'text',
+  title: "text",
+  content: "text",
+  tags: "text",
 });
 
 // 重み付け
 db.articles.createIndex(
   {
-    title: 'text',
-    content: 'text',
+    title: "text",
+    content: "text",
   },
   {
     weights: { title: 10, content: 1 },
-    default_language: 'japanese',
-  }
+    default_language: "japanese",
+  },
 );
 
 // 検索
-db.articles.find({ $text: { $search: 'MongoDB チュートリアル' } });
+db.articles.find({ $text: { $search: "MongoDB チュートリアル" } });
 ```
 
 ### 地理空間インデックス
@@ -150,7 +152,7 @@ db.places.find({
 
 ```javascript
 // シャーディングキー用（等価検索のみ）
-db.users.createIndex({ referenceId: 'hashed' });
+db.users.createIndex({ referenceId: "hashed" });
 ```
 
 ## インデックスオプション
@@ -173,9 +175,9 @@ db.orders.createIndex(
   { createdAt: -1 },
   {
     partialFilterExpression: {
-      status: { $in: ['pending', 'processing'] },
+      status: { $in: ["pending", "processing"] },
     },
-  }
+  },
 );
 
 // アクティブユーザーのみ
@@ -185,7 +187,7 @@ db.users.createIndex(
     partialFilterExpression: {
       deletedAt: { $exists: false },
     },
-  }
+  },
 );
 ```
 
@@ -224,8 +226,8 @@ db.users.getIndexes();
 
 // 出力例
 [
-  { v: 2, key: { _id: 1 }, name: '_id_' },
-  { v: 2, key: { email: 1 }, name: 'email_1', unique: true },
+  { v: 2, key: { _id: 1 }, name: "_id_" },
+  { v: 2, key: { email: 1 }, name: "email_1", unique: true },
 ];
 ```
 
@@ -233,7 +235,7 @@ db.users.getIndexes();
 
 ```javascript
 // 名前で削除
-db.users.dropIndex('email_1');
+db.users.dropIndex("email_1");
 
 // キーで削除
 db.users.dropIndex({ email: 1 });
@@ -264,13 +266,13 @@ db.users.aggregate([{ $indexStats: {} }]);
 
 ```javascript
 // 実行計画を確認
-db.users.find({ email: 'test@example.com' }).explain();
+db.users.find({ email: "test@example.com" }).explain();
 
 // 詳細な実行統計
-db.users.find({ email: 'test@example.com' }).explain('executionStats');
+db.users.find({ email: "test@example.com" }).explain("executionStats");
 
 // 全プラン比較
-db.users.find({ email: 'test@example.com' }).explain('allPlansExecution');
+db.users.find({ email: "test@example.com" }).explain("allPlansExecution");
 ```
 
 ### explain の読み方
@@ -302,14 +304,14 @@ db.users.find({ email: 'test@example.com' }).explain('allPlansExecution');
 ### よくある stage
 
 ```javascript
-COLLSCAN;    // コレクションスキャン（インデックスなし）⚠️
-IXSCAN;      // インデックススキャン ✓
-FETCH;       // ドキュメント取得
-SORT;        // メモリ内ソート ⚠️
+COLLSCAN; // コレクションスキャン（インデックスなし）⚠️
+IXSCAN; // インデックススキャン ✓
+FETCH; // ドキュメント取得
+SORT; // メモリ内ソート ⚠️
 SORT_KEY_GENERATOR; // ソートキー生成
-PROJECTION;  // フィールド選択
-LIMIT;       // 件数制限
-SKIP;        // オフセット
+PROJECTION; // フィールド選択
+LIMIT; // 件数制限
+SKIP; // オフセット
 ```
 
 ## カバリングインデックス
@@ -320,7 +322,7 @@ db.users.createIndex({ email: 1, name: 1, status: 1 });
 
 // カバリングクエリ（FETCH 不要で高速）
 db.users
-  .find({ email: 'test@example.com' }, { name: 1, status: 1, _id: 0 })
+  .find({ email: "test@example.com" }, { name: 1, status: 1, _id: 0 })
   .explain();
 
 // stage: "PROJECTION_COVERED" ← FETCH なし
@@ -376,20 +378,24 @@ db.users.stats().totalIndexSize;
 // 起動時にインデックスを作成
 async function ensureIndexes(db: Db) {
   // ユーザー
-  await db.collection('users').createIndexes([
-    { key: { email: 1 }, unique: true },
-    { key: { createdAt: -1 } },
-  ]);
+  await db
+    .collection("users")
+    .createIndexes([
+      { key: { email: 1 }, unique: true },
+      { key: { createdAt: -1 } },
+    ]);
 
   // 注文
-  await db.collection('orders').createIndexes([
-    { key: { userId: 1, createdAt: -1 } },
-    { key: { status: 1 }, partialFilterExpression: { status: 'pending' } },
-  ]);
+  await db
+    .collection("orders")
+    .createIndexes([
+      { key: { userId: 1, createdAt: -1 } },
+      { key: { status: 1 }, partialFilterExpression: { status: "pending" } },
+    ]);
 
   // セッション（TTL）
   await db
-    .collection('sessions')
+    .collection("sessions")
     .createIndex({ createdAt: 1 }, { expireAfterSeconds: 86400 });
 }
 ```
