@@ -42,7 +42,7 @@ const result = await generateObject({
         z.object({
           name: z.string(),
           amount: z.string(),
-        })
+        }),
       ),
       steps: z.array(z.string()),
     }),
@@ -97,7 +97,7 @@ const schema = z.object({
         name: z.string(),
         price: z.number(),
         category: z.string(),
-      })
+      }),
     ),
   }),
 });
@@ -138,7 +138,7 @@ const result = streamObject({
       z.object({
         name: z.string(),
         description: z.string(),
-      })
+      }),
     ),
   }),
   prompt: "ファンタジー小説のキャラクターを5人作成してください。",
@@ -164,13 +164,13 @@ const extractionSchema = z.object({
       name: z.string(),
       role: z.string().optional(),
       organization: z.string().optional(),
-    })
+    }),
   ),
   dates: z.array(
     z.object({
       date: z.string(),
       event: z.string(),
-    })
+    }),
   ),
   locations: z.array(z.string()),
 });

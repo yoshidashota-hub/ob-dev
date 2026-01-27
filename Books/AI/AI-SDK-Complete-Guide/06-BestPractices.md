@@ -43,7 +43,7 @@ const models = {
 
 export function getModel(
   provider: ModelProvider = "openai",
-  type: "default" | "fast" = "default"
+  type: "default" | "fast" = "default",
 ) {
   return models[provider][type];
 }
@@ -51,7 +51,7 @@ export function getModel(
 
 ## プロンプト管理
 
-```typescript
+````typescript
 // lib/ai/prompts.ts
 
 // システムプロンプト
@@ -73,20 +73,20 @@ export const systemPrompts = {
 // プロンプトテンプレート
 export function createPrompt(
   template: string,
-  variables: Record<string, string>
+  variables: Record<string, string>,
 ): string {
   return Object.entries(variables).reduce(
     (prompt, [key, value]) => prompt.replace(`{{${key}}}`, value),
-    template
+    template,
   );
 }
 
 // 使用例
 const reviewPrompt = createPrompt(
   "以下のコードをレビューしてください:\n\n```{{language}}\n{{code}}\n```",
-  { language: "typescript", code: "const x = 1;" }
+  { language: "typescript", code: "const x = 1;" },
 );
-```
+````
 
 ## エラーハンドリング
 
@@ -96,7 +96,7 @@ export class AIError extends Error {
   constructor(
     message: string,
     public code: string,
-    public retryable: boolean = false
+    public retryable: boolean = false,
   ) {
     super(message);
     this.name = "AIError";
@@ -314,7 +314,7 @@ export function validateMessages(messages: unknown): boolean {
       typeof msg === "object" &&
       msg !== null &&
       ["user", "assistant", "system"].includes(msg.role) &&
-      typeof msg.content === "string"
+      typeof msg.content === "string",
   );
 }
 ```
@@ -393,7 +393,7 @@ const CACHE_TTL = 5 * 60 * 1000; // 5分
 
 export async function cachedGenerate(
   prompt: string,
-  generator: () => Promise<string>
+  generator: () => Promise<string>,
 ): Promise<string> {
   const cacheKey = prompt;
   const cached = cache.get(cacheKey);
@@ -462,7 +462,7 @@ interface AIMetrics {
 
 export async function withMonitoring<T>(
   operation: () => Promise<T>,
-  metadata: { model: string }
+  metadata: { model: string },
 ): Promise<T> {
   const startTime = Date.now();
 

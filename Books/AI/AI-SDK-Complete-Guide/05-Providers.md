@@ -377,7 +377,7 @@ import { openai } from "@ai-sdk/openai";
 
 async function generateWithRetry(
   prompt: string,
-  maxRetries = 3
+  maxRetries = 3,
 ): Promise<string> {
   for (let i = 0; i < maxRetries; i++) {
     try {

@@ -134,15 +134,13 @@ const {
   handleSubmit,
   isLoading,
   error,
-  reload,       // 最後のメッセージを再生成
-  stop,         // ストリーミングを停止
-  setMessages,  // メッセージを手動で設定
-  append,       // メッセージを追加
+  reload, // 最後のメッセージを再生成
+  stop, // ストリーミングを停止
+  setMessages, // メッセージを手動で設定
+  append, // メッセージを追加
 } = useChat({
   api: "/api/chat",
-  initialMessages: [
-    { id: "1", role: "assistant", content: "こんにちは！" },
-  ],
+  initialMessages: [{ id: "1", role: "assistant", content: "こんにちは！" }],
   onFinish: (message) => {
     console.log("完了:", message);
   },

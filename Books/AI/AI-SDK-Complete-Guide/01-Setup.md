@@ -117,7 +117,10 @@ const result = await generateText({
   messages: [
     { role: "system", content: "あなたは親切なアシスタントです。" },
     { role: "user", content: "こんにちは" },
-    { role: "assistant", content: "こんにちは！何かお手伝いできることはありますか？" },
+    {
+      role: "assistant",
+      content: "こんにちは！何かお手伝いできることはありますか？",
+    },
     { role: "user", content: "天気について教えて" },
   ],
 });
