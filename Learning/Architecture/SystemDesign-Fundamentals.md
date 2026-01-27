@@ -716,7 +716,7 @@ async function retryWithBackoff<T>(
     initialDelay: number;
     maxDelay: number;
     factor: number;
-  }
+  },
 ): Promise<T> {
   let attempt = 0;
   let delay = options.initialDelay;
@@ -817,13 +817,11 @@ class CrossRegionReplication {
 ### 主要リポジトリ
 
 1. **[system-design-primer](https://github.com/donnemartin/system-design-primer)**
-
    - 包括的な学習リソース
    - 図解付き解説
    - 日本語翻訳あり
 
 2. **[awesome-scalability](https://github.com/binhnguyennus/awesome-scalability)**
-
    - 実企業の事例集
    - Netflix, Twitter, Uber 等
    - パフォーマンスチューニング
@@ -850,13 +848,11 @@ class CrossRegionReplication {
 ## 次のステップ
 
 1. **実践練習**
-
    - 設計問題を解く（URL 短縮、Twitter、YouTube 等）
    - トレードオフを言語化する
    - ボトルネックを特定する
 
 2. **深い学習**
-
    - 特定のコンポーネント（DB、キャッシュ）を深掘り
    - 実際のシステムのアーキテクチャを分析
    - 障害事例（ポストモーテム）を読む

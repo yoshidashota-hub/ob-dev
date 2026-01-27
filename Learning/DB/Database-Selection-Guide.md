@@ -414,3 +414,8 @@ async function updateUser(id: string, data: Partial<User>) {
 - メインDB + キャッシュ（Redis）は定番
 - それ以上は運用コストを考慮
 - マネージドサービスで負荷軽減
+
+## 関連
+
+- [サーバーレス vs サーバー構成](../Architecture/Serverless-vs-Server.md) - インフラ選択ガイド
+- [MongoDB 完全ガイド](../../Books/DB/MongoDB-Complete-Guide/README.md)
