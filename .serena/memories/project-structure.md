@@ -6,77 +6,59 @@ Obsidian Vault として管理される学習・開発用リポジトリ。Claud
 
 ## 主要ディレクトリ
 
-### 📥 +Inbox/
-
-一時的なメモやアイデアを入れる場所
-
 ### 📚 Learning/
 
-学習ノートの管理
+学習ノートの管理（カテゴリ別）
 
-- **In-Progress/**: 進行中の学習トピック
-  - AI-Driven-Development.md
-  - Claude.md
-  - CleanArchitecture.md
-  - DDD-CQRS.md
-  - EventDrivenArchitecture.md
-  - Hono.md
-  - Microservices.md
-  - NestJS.md
-  - Next.js 16.md
-  - OpenAPI.md
-  - SDD.md
-  - SystemDesign-Fundamentals.md
-  - TanStack.md
-  - Vercel.md
-  - next-admin.md
-- **Mastered/**: 習得済みのトピック
+- **Frontend/**: Next.js 16, TanStack, next-admin, Interview-Frontend
+- **Backend/**: NestJS, Hono, OpenAPI, SDD, GraphQL, Prisma, Testing, Security
+- **Architecture/**: CleanArchitecture, DDD-CQRS, EventDrivenArchitecture, Microservices, SystemDesign-Fundamentals, API-Design, Caching, Observability
+- **DevOps/**: Vercel, Docker, CI-CD, Kubernetes, Terraform
+- **AI/**: Claude, AI-Driven-Development, Prompt-Engineering, AI-SDK, RAG, MCP
 
 ### 📖 Books/
 
 体系的な学習ガイド集
 
-- **\_template/**: Book 作成用テンプレート
-- **Next.js-Complete-Guide/**: Next.js 完全ガイド
-- **TypeScript-Complete-Guide/**: TypeScript 完全ガイド
+- **_template/**: Book 作成用テンプレート
+- **Frontend/**: 
+  - Next.js-Complete-Guide
+  - TypeScript-Complete-Guide
+  - React-Complete-Guide
+  - Tailwind-Guide, Vite-Guide
+  - tRPC-Complete-Guide
+  - Server-Actions-Guide
+- **Backend/**: 
+  - NestJS-Complete-Guide
+  - Hono-Complete-Guide
+- **Architecture/**: 
+  - Clean-Architecture-Guide
+- **DevOps/**: 
+  - Docker-Complete-Guide
+- **AI/**: 
+  - AI-SDK-Complete-Guide
+- **DB/**: 
+  - Prisma-Complete-Guide
 
 ### 🛠️ Projects/
 
-実践プロジェクト
+実践プロジェクト（カテゴリ別）
 
-#### next16-sandbox/
-
-Next.js 16 の機能を試すサンドボックス
-
-- Server Actions, Streaming, Cache のデモ
-- Route Groups, Parallel/Intercepting Routes
-- API Routes, Middleware
-
-#### advanced-memo-app/
-
-高度なメモアプリプロジェクト
-
-- Prisma による DB 管理
-- 認証機能
-- Vitest によるテスト
-
-#### Knowledge/
-
-プロジェクト内のナレッジベース
-
-### 📅 Daily/
-
-日次メモ（YYYY-MM-DD.md 形式）
+- **Frontend/**: next16-sandbox, advanced-memo-app
+- **Backend/**: (nestjs-notes, hono-notes 等を追加予定)
+- **Architecture/**: (アーキテクチャ実践プロジェクト)
+- **DevOps/**: (インフラ設定プロジェクト)
+- **AI/**: (AI 機能実装プロジェクト)
 
 ### 🧠 Knowledge/
 
-ナレッジベース
+ナレッジベース（サンプル集）
 
-- **Examples/**: コード例集
-  - Next.js 関連（middleware, error-handling, server-actions 等）
-  - Vercel 関連（blob, kv, postgres, ai-sdk 等）
-- **Concepts/**: 概念説明
-- **HowTo/**: ハウツーガイド
+- **Frontend/**: middleware, error-handling, server-actions, streaming-suspense 等
+- **Backend/**: nestjs-examples, hono-examples, prisma-examples
+- **Architecture/**: clean-architecture-examples, ddd-examples
+- **DevOps/**: vercel-blob, vercel-kv, vercel-postgres 等
+- **AI/**: vercel-ai-sdk-examples, ai-sdk-advanced-examples
 
 ### 📝 Templates/
 
@@ -88,30 +70,11 @@ Next.js 16 の機能を試すサンドボックス
 - 概念メモ.md
 - プロジェクト.md
 
-### 🎨 Excalidraw/
-
-図解・ダイアグラム
-
-### 📁 Index/
-
-インデックス・ホームページ
-
 ## 設定ファイル
 
 ### .obsidian/
 
 Obsidian 設定（プラグイン含む）
-
-- obsidian-icon-folder
-- obsidian-tasks-plugin
-- calendar
-- obsidian-git
-- dataview
-- obsidian-style-settings
-- obsidian-excalidraw-plugin
-- obsidian-kanban
-- obsidian-memos
-- templater-obsidian
 
 ### .serena/
 
@@ -130,8 +93,10 @@ Claude Code 設定
 ## 技術スタック
 
 - **言語**: TypeScript, Markdown
-- **フレームワーク**: Next.js 16
-- **データベース**: Prisma
-- **テスト**: Vitest
+- **フレームワーク**: Next.js 16, NestJS, Hono
+- **データベース**: Prisma, PostgreSQL
+- **テスト**: Vitest, Playwright
 - **スタイリング**: Tailwind CSS
+- **AI**: Vercel AI SDK, Claude API
+- **DevOps**: Docker, GitHub Actions, Vercel
 - **ノート管理**: Obsidian
