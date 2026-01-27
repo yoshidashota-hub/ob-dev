@@ -19,12 +19,11 @@ const distribution = new cloudfront.Distribution(this, "CDN", {
       // クエリ文字列でキャッシュを分ける
       queryStringBehavior: cloudfront.CacheQueryStringBehavior.allowList(
         "v",
-        "version"
+        "version",
       ),
       // ヘッダーでキャッシュを分ける（必要最小限）
-      headerBehavior: cloudfront.CacheHeaderBehavior.allowList(
-        "Accept-Encoding"
-      ),
+      headerBehavior:
+        cloudfront.CacheHeaderBehavior.allowList("Accept-Encoding"),
     }),
     // 圧縮を有効化
     compress: true,
@@ -242,7 +241,7 @@ const redis = new Redis({
 async function getWithCache<T>(
   key: string,
   fetchFn: () => Promise<T>,
-  ttl: number = 300
+  ttl: number = 300,
 ): Promise<T> {
   const cached = await redis.get(key);
   if (cached) return JSON.parse(cached);
@@ -257,7 +256,7 @@ async function setWithCache<T>(
   key: string,
   data: T,
   saveFn: (data: T) => Promise<void>,
-  ttl: number = 300
+  ttl: number = 300,
 ): Promise<void> {
   await saveFn(data);
   await redis.setex(key, ttl, JSON.stringify(data));

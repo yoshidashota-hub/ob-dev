@@ -35,14 +35,18 @@ interface LogContext {
   [key: string]: any;
 }
 
-function log(level: "INFO" | "WARN" | "ERROR", message: string, context: LogContext) {
+function log(
+  level: "INFO" | "WARN" | "ERROR",
+  message: string,
+  context: LogContext,
+) {
   console.log(
     JSON.stringify({
       timestamp: new Date().toISOString(),
       level,
       message,
       ...context,
-    })
+    }),
   );
 }
 
@@ -74,7 +78,10 @@ export async function handler(event: APIGatewayProxyEvent) {
       stack: error instanceof Error ? error.stack : undefined,
     });
 
-    return { statusCode: 500, body: JSON.stringify({ error: "Internal Error" }) };
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: "Internal Error" }),
+    };
   }
 }
 ```
@@ -141,7 +148,7 @@ const cloudwatch = new CloudWatchClient({ region: "ap-northeast-1" });
 export async function putMetric(
   metricName: string,
   value: number,
-  dimensions: Record<string, string> = {}
+  dimensions: Record<string, string> = {},
 ) {
   await cloudwatch.send(
     new PutMetricDataCommand({
@@ -158,7 +165,7 @@ export async function putMetric(
           Timestamp: new Date(),
         },
       ],
-    })
+    }),
   );
 }
 
@@ -174,7 +181,7 @@ await putMetric("OrderAmount", 5000, { Environment: "prod" });
 function emitMetric(
   namespace: string,
   metrics: Record<string, number>,
-  dimensions: Record<string, string>
+  dimensions: Record<string, string>,
 ) {
   const emfLog = {
     _aws: {
@@ -201,7 +208,7 @@ function emitMetric(
 emitMetric(
   "MyApp",
   { RequestCount: 1, Latency: 150 },
-  { Service: "OrderService", Environment: "prod" }
+  { Service: "OrderService", Environment: "prod" },
 );
 ```
 
@@ -259,13 +266,17 @@ const throttleAlarm = new cloudwatch.Alarm(this, "DynamoThrottleAlarm", {
 
 ```typescript
 // 複合アラーム（複数条件）
-const compositeAlarm = new cloudwatch.CompositeAlarm(this, "ServiceHealthAlarm", {
-  alarmRule: cloudwatch.AlarmRule.anyOf(
-    errorAlarm,
-    cloudwatch.AlarmRule.allOf(latencyAlarm, throttleAlarm)
-  ),
-  alarmDescription: "Service health degraded",
-});
+const compositeAlarm = new cloudwatch.CompositeAlarm(
+  this,
+  "ServiceHealthAlarm",
+  {
+    alarmRule: cloudwatch.AlarmRule.anyOf(
+      errorAlarm,
+      cloudwatch.AlarmRule.allOf(latencyAlarm, throttleAlarm),
+    ),
+    alarmDescription: "Service health degraded",
+  },
+);
 ```
 
 ## X-Ray トレーシング
@@ -287,7 +298,7 @@ import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 
 // SDK をラップ
 const dynamodb = AWSXRay.captureAWSv3Client(
-  new DynamoDBClient({ region: "ap-northeast-1" })
+  new DynamoDBClient({ region: "ap-northeast-1" }),
 );
 
 export async function handler(event: any) {
@@ -357,7 +368,7 @@ dashboard.addWidgets(
       fn.metricDuration({ statistic: "p99", period: cdk.Duration.minutes(5) }),
     ],
     width: 12,
-  })
+  }),
 );
 
 // DynamoDB メトリクス
@@ -369,7 +380,7 @@ dashboard.addWidgets(
       table.metricConsumedWriteCapacityUnits(),
     ],
     width: 12,
-  })
+  }),
 );
 
 // カスタムメトリクス
@@ -385,7 +396,7 @@ dashboard.addWidgets(
       }),
     ],
     width: 6,
-  })
+  }),
 );
 ```
 

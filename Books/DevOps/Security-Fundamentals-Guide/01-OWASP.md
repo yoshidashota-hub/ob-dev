@@ -156,7 +156,10 @@ export function requireRole(allowedRoles: string[]) {
 }
 
 // 使用例
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(
+  req: Request,
+  { params }: { params: { id: string } },
+) {
   const authError = await requireRole(["admin"])(req);
   if (authError) return authError;
 
@@ -190,7 +193,7 @@ async function hashPassword(password: string): Promise<string> {
 
 async function verifyPassword(
   password: string,
-  hash: string
+  hash: string,
 ): Promise<boolean> {
   return bcrypt.compare(password, hash);
 }
@@ -263,7 +266,8 @@ module.exports = {
           },
           {
             key: "Content-Security-Policy",
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
+            value:
+              "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';",
           },
           {
             key: "Strict-Transport-Security",
@@ -335,15 +339,9 @@ export function generateCSRFToken(sessionId: string): string {
     .digest("hex");
 }
 
-export function validateCSRFToken(
-  token: string,
-  sessionId: string
-): boolean {
+export function validateCSRFToken(token: string, sessionId: string): boolean {
   const expected = generateCSRFToken(sessionId);
-  return crypto.timingSafeEqual(
-    Buffer.from(token),
-    Buffer.from(expected)
-  );
+  return crypto.timingSafeEqual(Buffer.from(token), Buffer.from(expected));
 }
 ```
 

@@ -23,7 +23,7 @@ app.use(
       const contentType = res.getHeader("Content-Type");
       return /json|text|javascript|css|html/.test(contentType as string);
     },
-  })
+  }),
 );
 ```
 
@@ -176,7 +176,7 @@ const cache = new LRUCache<string, any>({
 export async function cached<T>(
   key: string,
   fn: () => Promise<T>,
-  ttl?: number
+  ttl?: number,
 ): Promise<T> {
   const cachedValue = cache.get(key);
   if (cachedValue !== undefined) {
@@ -192,7 +192,7 @@ export async function cached<T>(
 const products = await cached(
   "products:featured",
   () => prisma.product.findMany({ where: { featured: true } }),
-  60000 // 1分
+  60000, // 1分
 );
 ```
 
@@ -207,7 +207,7 @@ const redis = new Redis(process.env.REDIS_URL);
 export async function cachedRedis<T>(
   key: string,
   fn: () => Promise<T>,
-  ttlSeconds: number = 300
+  ttlSeconds: number = 300,
 ): Promise<T> {
   // キャッシュから取得
   const cached = await redis.get(key);
@@ -233,7 +233,7 @@ export async function invalidateCache(pattern: string) {
 const user = await cachedRedis(
   `user:${userId}`,
   () => prisma.user.findUnique({ where: { id: userId } }),
-  3600 // 1時間
+  3600, // 1時間
 );
 
 // 更新時にキャッシュ無効化
@@ -263,7 +263,7 @@ export async function createOrder(req: Request) {
         type: "process_order",
         orderId: order.id,
       }),
-    })
+    }),
   );
 
   // 即座にレスポンス
@@ -294,9 +294,7 @@ export async function GET() {
     async start(controller) {
       for (let i = 0; i < 10; i++) {
         const data = await fetchData(i);
-        controller.enqueue(
-          encoder.encode(`data: ${JSON.stringify(data)}\n\n`)
-        );
+        controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
         await new Promise((r) => setTimeout(r, 100));
       }
       controller.close();

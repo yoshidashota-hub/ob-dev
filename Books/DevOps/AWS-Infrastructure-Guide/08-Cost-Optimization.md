@@ -365,7 +365,9 @@ new ce.CfnAnomalyMonitor(this, "AnomalyMonitor", {
 
 new ce.CfnAnomalySubscription(this, "AnomalySubscription", {
   subscriptionName: "CostAnomalyAlert",
-  monitorArnList: [/* monitor ARN */],
+  monitorArnList: [
+    /* monitor ARN */
+  ],
   subscribers: [
     {
       type: "EMAIL",

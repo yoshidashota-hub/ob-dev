@@ -202,7 +202,7 @@ export async function POST(req: Request) {
       },
       {
         idempotencyKey: `order_${orderId}`,
-      }
+      },
     );
 
     // PaymentIntent ID を保存
@@ -218,7 +218,7 @@ export async function POST(req: Request) {
     console.error("Stripe error:", error);
     return Response.json(
       { error: "Payment initialization failed" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -317,7 +317,7 @@ interface FraudCheckResult {
 export async function checkFraud(
   userId: string,
   amount: number,
-  ipAddress: string
+  ipAddress: string,
 ): Promise<FraudCheckResult> {
   const flags: string[] = [];
   let riskScore = 0;
@@ -335,7 +335,8 @@ export async function checkFraud(
   });
 
   const avgOrderAmount =
-    user?.orders.reduce((sum, o) => sum + o.amount, 0) / (user?.orders.length || 1);
+    user?.orders.reduce((sum, o) => sum + o.amount, 0) /
+    (user?.orders.length || 1);
 
   if (amount > avgOrderAmount * 3) {
     flags.push("UNUSUAL_AMOUNT");
@@ -430,7 +431,7 @@ const paypay = new PAYPAY({
 export async function createPayPayPayment(
   orderId: string,
   amount: number,
-  orderDescription: string
+  orderDescription: string,
 ) {
   const payload = {
     merchantPaymentId: orderId,

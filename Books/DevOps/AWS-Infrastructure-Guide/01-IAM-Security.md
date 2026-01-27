@@ -62,10 +62,7 @@ aws iam attach-group-policy \
     {
       "Sid": "AllowS3Access",
       "Effect": "Allow",
-      "Action": [
-        "s3:GetObject",
-        "s3:PutObject"
-      ],
+      "Action": ["s3:GetObject", "s3:PutObject"],
       "Resource": "arn:aws:s3:::my-bucket/*",
       "Condition": {
         "IpAddress": {
@@ -134,10 +131,7 @@ aws iam attach-group-policy \
     },
     {
       "Effect": "Allow",
-      "Action": [
-        "dynamodb:GetItem",
-        "dynamodb:PutItem"
-      ],
+      "Action": ["dynamodb:GetItem", "dynamodb:PutItem"],
       "Resource": "arn:aws:dynamodb:*:*:table/MyTable"
     }
   ]
@@ -184,7 +178,7 @@ const client = new SecretsManagerClient({ region: "ap-northeast-1" });
 
 async function getSecret(secretName: string) {
   const response = await client.send(
-    new GetSecretValueCommand({ SecretId: secretName })
+    new GetSecretValueCommand({ SecretId: secretName }),
   );
   return JSON.parse(response.SecretString!);
 }

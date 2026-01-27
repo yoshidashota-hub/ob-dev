@@ -62,7 +62,7 @@ const badFn = new lambda.Function(this, "BadFunction", {
 const secret = secretsmanager.Secret.fromSecretNameV2(
   this,
   "DbSecret",
-  "my-app/database"
+  "my-app/database",
 );
 
 const goodFn = new lambda.Function(this, "GoodFunction", {
@@ -202,7 +202,7 @@ export async function apiHandler(event: APIGatewayProxyEvent) {
     new SendMessageCommand({
       QueueUrl: process.env.QUEUE_URL,
       MessageBody: JSON.stringify(message),
-    })
+    }),
   );
 
   // 即座にレスポンス
@@ -281,9 +281,7 @@ const pipeline = new pipelines.CodePipeline(this, "Pipeline", {
 pipeline.addStage(new MyAppStage(this, "Dev", { stage: "dev" }));
 
 pipeline.addStage(new MyAppStage(this, "Prod", { stage: "prod" }), {
-  pre: [
-    new pipelines.ManualApprovalStep("PromoteToProd"),
-  ],
+  pre: [new pipelines.ManualApprovalStep("PromoteToProd")],
 });
 ```
 

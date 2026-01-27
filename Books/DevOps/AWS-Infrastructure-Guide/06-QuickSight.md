@@ -242,7 +242,7 @@ const quicksight = new QuickSightClient({ region: "ap-northeast-1" });
 
 export async function generateEmbedUrl(
   userArn: string,
-  dashboardId: string
+  dashboardId: string,
 ): Promise<string> {
   const response = await quicksight.send(
     new GenerateEmbedUrlForRegisteredUserCommand({
@@ -255,7 +255,7 @@ export async function generateEmbedUrl(
       },
       AllowedDomains: ["https://example.com"],
       SessionLifetimeInMinutes: 600,
-    })
+    }),
   );
 
   return response.EmbedUrl!;
@@ -342,7 +342,10 @@ export async function GET(req: NextRequest) {
   const dashboardId = searchParams.get("id");
 
   if (!dashboardId) {
-    return NextResponse.json({ error: "Dashboard ID required" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Dashboard ID required" },
+      { status: 400 },
+    );
   }
 
   // ユーザー認証チェック
@@ -360,7 +363,7 @@ export async function GET(req: NextRequest) {
     console.error("Embed URL generation error:", error);
     return NextResponse.json(
       { error: "Failed to generate embed URL" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

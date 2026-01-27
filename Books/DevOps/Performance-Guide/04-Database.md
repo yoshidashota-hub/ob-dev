@@ -84,13 +84,12 @@ LIMIT 20;
 
 ```typescript
 const prisma = new PrismaClient({
-  log: [
-    { emit: "event", level: "query" },
-  ],
+  log: [{ emit: "event", level: "query" }],
 });
 
 prisma.$on("query", (e) => {
-  if (e.duration > 100) { // 100ms以上
+  if (e.duration > 100) {
+    // 100ms以上
     console.warn("Slow query:", {
       query: e.query,
       params: e.params,
@@ -193,7 +192,7 @@ const result = await dynamodb.send(
     TableName: "Orders",
     FilterExpression: "userId = :userId",
     ExpressionAttributeValues: { ":userId": { S: userId } },
-  })
+  }),
 );
 
 // ✅ Query（パーティションキー指定）
@@ -207,7 +206,7 @@ const result = await dynamodb.send(
     },
     ScanIndexForward: false, // 降順
     Limit: 20,
-  })
+  }),
 );
 ```
 
@@ -222,7 +221,7 @@ const result = await dynamodb.send(
     ProjectionExpression: "orderId, #status, amount",
     ExpressionAttributeNames: { "#status": "status" },
     ExpressionAttributeValues: { ":pk": { S: `USER#${userId}` } },
-  })
+  }),
 );
 
 // Eventually Consistent Read（デフォルト、安い）
@@ -232,7 +231,7 @@ const result = await dynamodb.send(
     TableName: "Orders",
     ConsistentRead: false, // Eventually Consistent（推奨）
     // ...
-  })
+  }),
 );
 ```
 
@@ -246,10 +245,9 @@ import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 import { DynamoDB } from "@aws-sdk/client-dynamodb";
 
 // 本番環境では DAX エンドポイントを使用
-const client =
-  process.env.DAX_ENDPOINT
-    ? new DaxClient({ endpoints: [process.env.DAX_ENDPOINT] })
-    : new DynamoDB({ region: "ap-northeast-1" });
+const client = process.env.DAX_ENDPOINT
+  ? new DaxClient({ endpoints: [process.env.DAX_ENDPOINT] })
+  : new DynamoDB({ region: "ap-northeast-1" });
 
 const docClient = DynamoDBDocument.from(client);
 ```

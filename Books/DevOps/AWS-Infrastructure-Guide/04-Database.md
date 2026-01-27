@@ -21,12 +21,12 @@
 
 ### 選択基準
 
-| 要件 | RDS | DynamoDB | Aurora |
-|------|-----|----------|--------|
-| データモデル | リレーショナル | Key-Value/Document | リレーショナル |
-| スケーリング | 垂直 | 水平（自動） | 読み取りレプリカ |
-| 運用負荷 | 中 | 低 | 低 |
-| コスト | インスタンス課金 | 使用量課金 | インスタンス課金 |
+| 要件         | RDS              | DynamoDB           | Aurora           |
+| ------------ | ---------------- | ------------------ | ---------------- |
+| データモデル | リレーショナル   | Key-Value/Document | リレーショナル   |
+| スケーリング | 垂直             | 水平（自動）       | 読み取りレプリカ |
+| 運用負荷     | 中               | 低                 | 低               |
+| コスト       | インスタンス課金 | 使用量課金         | インスタンス課金 |
 
 ## DynamoDB
 
@@ -80,7 +80,7 @@ export async function createOrder(order: Order) {
       TableName: TABLE_NAME,
       Item: marshall(order),
       ConditionExpression: "attribute_not_exists(userId)", // 重複防止
-    })
+    }),
   );
 }
 
@@ -94,7 +94,7 @@ export async function getOrdersByUser(userId: string): Promise<Order[]> {
         ":userId": userId,
       }),
       ScanIndexForward: false, // 降順
-    })
+    }),
   );
 
   return (result.Items || []).map((item) => unmarshall(item) as Order);
@@ -104,7 +104,7 @@ export async function getOrdersByUser(userId: string): Promise<Order[]> {
 export async function updateOrderStatus(
   userId: string,
   orderId: string,
-  status: string
+  status: string,
 ) {
   await dynamodb.send(
     new UpdateItemCommand({
@@ -118,7 +118,7 @@ export async function updateOrderStatus(
         ":status": status,
         ":updatedAt": new Date().toISOString(),
       }),
-    })
+    }),
   );
 }
 
@@ -128,7 +128,7 @@ export async function deleteOrder(userId: string, orderId: string) {
     new DeleteItemCommand({
       TableName: TABLE_NAME,
       Key: marshall({ userId, orderId }),
-    })
+    }),
   );
 }
 ```
@@ -168,7 +168,7 @@ export async function getOrdersByStatus(status: string): Promise<Order[]> {
       ExpressionAttributeValues: marshall({
         ":status": status,
       }),
-    })
+    }),
   );
 
   return (result.Items || []).map((item) => unmarshall(item) as Order);
@@ -227,7 +227,10 @@ const database = new rds.DatabaseInstance(this, "Database", {
   engine: rds.DatabaseInstanceEngine.postgres({
     version: rds.PostgresEngineVersion.VER_15,
   }),
-  instanceType: ec2.InstanceType.of(ec2.InstanceClass.T3, ec2.InstanceSize.MICRO),
+  instanceType: ec2.InstanceType.of(
+    ec2.InstanceClass.T3,
+    ec2.InstanceSize.MICRO,
+  ),
   vpc,
   vpcSubnets: {
     subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
@@ -336,7 +339,7 @@ export async function executeQuery(sql: string, parameters: any[] = []) {
         name: `p${i}`,
         value: { stringValue: String(value) },
       })),
-    })
+    }),
   );
 
   return result.records;
@@ -397,7 +400,7 @@ export async function deleteCache(key: string) {
 export async function cachedQuery<T>(
   key: string,
   queryFn: () => Promise<T>,
-  ttl: number = 3600
+  ttl: number = 3600,
 ): Promise<T> {
   const cached = await getCache<T>(key);
   if (cached) return cached;

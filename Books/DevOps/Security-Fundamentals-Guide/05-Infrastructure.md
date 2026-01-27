@@ -57,7 +57,11 @@ const lambdaRole = new iam.Role(this, "LambdaRole", {
     main: new iam.PolicyDocument({
       statements: [
         new iam.PolicyStatement({
-          actions: ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"],
+          actions: [
+            "logs:CreateLogGroup",
+            "logs:CreateLogStream",
+            "logs:PutLogEvents",
+          ],
           resources: ["arn:aws:logs:*:*:*"],
         }),
         new iam.PolicyStatement({

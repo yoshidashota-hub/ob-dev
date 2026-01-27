@@ -27,7 +27,7 @@ dashboard.addWidgets(
     left: [fn.metricErrors()],
     right: [fn.metricThrottles()],
     width: 12,
-  })
+  }),
 );
 
 // API Gateway メトリクス
@@ -49,7 +49,7 @@ dashboard.addWidgets(
       }),
     ],
     width: 12,
-  })
+  }),
 );
 
 // カスタムメトリクス
@@ -86,7 +86,7 @@ dashboard.addWidgets(
       }),
     ],
     width: 4,
-  })
+  }),
 );
 ```
 
@@ -280,7 +280,10 @@ export default function () {
 
 ```typescript
 // scripts/performance-report.ts
-import { CloudWatchClient, GetMetricDataCommand } from "@aws-sdk/client-cloudwatch";
+import {
+  CloudWatchClient,
+  GetMetricDataCommand,
+} from "@aws-sdk/client-cloudwatch";
 
 const cloudwatch = new CloudWatchClient({ region: "ap-northeast-1" });
 
@@ -318,7 +321,7 @@ async function generateWeeklyReport() {
           },
         },
       ],
-    })
+    }),
   );
 
   // レポート生成
@@ -327,13 +330,19 @@ async function generateWeeklyReport() {
     webVitals: {
       lcp: {
         p75: calculateAverage(response.MetricDataResults[0].Values),
-        status: getStatus(calculateAverage(response.MetricDataResults[0].Values), 2500),
+        status: getStatus(
+          calculateAverage(response.MetricDataResults[0].Values),
+          2500,
+        ),
       },
     },
     api: {
       latency: {
         p95: calculateAverage(response.MetricDataResults[1].Values),
-        status: getStatus(calculateAverage(response.MetricDataResults[1].Values), 500),
+        status: getStatus(
+          calculateAverage(response.MetricDataResults[1].Values),
+          500,
+        ),
       },
     },
   };

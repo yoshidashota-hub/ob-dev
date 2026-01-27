@@ -21,12 +21,12 @@
 
 ### 選択基準
 
-| 要件 | Lambda | Fargate | EC2 |
-|------|--------|---------|-----|
-| 実行時間 | < 15分 | 無制限 | 無制限 |
-| スケーリング | 自動 | 自動 | 手動/Auto Scaling |
-| コスト | 実行時間課金 | vCPU/メモリ課金 | インスタンス課金 |
-| ユースケース | API, イベント処理 | Web アプリ, バッチ | 特殊要件 |
+| 要件         | Lambda            | Fargate            | EC2               |
+| ------------ | ----------------- | ------------------ | ----------------- |
+| 実行時間     | < 15分            | 無制限             | 無制限            |
+| スケーリング | 自動              | 自動               | 手動/Auto Scaling |
+| コスト       | 実行時間課金      | vCPU/メモリ課金    | インスタンス課金  |
+| ユースケース | API, イベント処理 | Web アプリ, バッチ | 特殊要件          |
 
 ## Lambda
 
@@ -37,7 +37,7 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 
 export async function handler(
-  event: APIGatewayProxyEvent
+  event: APIGatewayProxyEvent,
 ): Promise<APIGatewayProxyResult> {
   try {
     const body = JSON.parse(event.body || "{}");
@@ -344,7 +344,7 @@ export class Ec2Stack extends cdk.Stack {
       vpc,
       instanceType: ec2.InstanceType.of(
         ec2.InstanceClass.T3,
-        ec2.InstanceSize.MICRO
+        ec2.InstanceSize.MICRO,
       ),
       machineImage: ec2.MachineImage.latestAmazonLinux2023(),
       securityGroup: sg,

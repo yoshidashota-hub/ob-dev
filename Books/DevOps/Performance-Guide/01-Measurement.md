@@ -248,7 +248,7 @@ export function startTimer(): Timer {
 // ミドルウェアでの使用
 export async function withTiming<T>(
   name: string,
-  operation: () => Promise<T>
+  operation: () => Promise<T>,
 ): Promise<{ result: T; duration: number }> {
   const timer = startTimer();
   const result = await operation();
@@ -260,7 +260,7 @@ export async function withTiming<T>(
       name,
       duration,
       timestamp: new Date().toISOString(),
-    })
+    }),
   );
 
   return { result, duration };
@@ -269,7 +269,7 @@ export async function withTiming<T>(
 // 使用例
 export async function handler(req: Request) {
   const { result: users, duration } = await withTiming("fetchUsers", () =>
-    db.user.findMany()
+    db.user.findMany(),
   );
 
   return Response.json(users, {
@@ -324,7 +324,7 @@ prisma.$on("query", (e) => {
       params: e.params,
       duration: e.duration,
       timestamp: new Date().toISOString(),
-    })
+    }),
   );
 
   // 遅いクエリをアラート

@@ -54,7 +54,7 @@ const BUCKET = process.env.S3_BUCKET!;
 export async function uploadFile(
   key: string,
   body: Buffer | string,
-  contentType: string
+  contentType: string,
 ) {
   await s3.send(
     new PutObjectCommand({
@@ -62,7 +62,7 @@ export async function uploadFile(
       Key: key,
       Body: body,
       ContentType: contentType,
-    })
+    }),
   );
 
   return `https://${BUCKET}.s3.ap-northeast-1.amazonaws.com/${key}`;
@@ -74,7 +74,7 @@ export async function downloadFile(key: string): Promise<Buffer> {
     new GetObjectCommand({
       Bucket: BUCKET,
       Key: key,
-    })
+    }),
   );
 
   return Buffer.from(await response.Body!.transformToByteArray());
@@ -83,7 +83,7 @@ export async function downloadFile(key: string): Promise<Buffer> {
 // 署名付き URL（一時的なアクセス）
 export async function getPresignedUrl(
   key: string,
-  expiresIn: number = 3600
+  expiresIn: number = 3600,
 ): Promise<string> {
   const command = new GetObjectCommand({
     Bucket: BUCKET,
@@ -97,7 +97,7 @@ export async function getPresignedUrl(
 export async function getPresignedUploadUrl(
   key: string,
   contentType: string,
-  expiresIn: number = 3600
+  expiresIn: number = 3600,
 ): Promise<string> {
   const command = new PutObjectCommand({
     Bucket: BUCKET,
@@ -114,7 +114,7 @@ export async function listFiles(prefix: string) {
     new ListObjectsV2Command({
       Bucket: BUCKET,
       Prefix: prefix,
-    })
+    }),
   );
 
   return response.Contents || [];
@@ -126,7 +126,7 @@ export async function deleteFile(key: string) {
     new DeleteObjectCommand({
       Bucket: BUCKET,
       Key: key,
-    })
+    }),
   );
 }
 ```
@@ -250,13 +250,13 @@ new s3deploy.BucketDeployment(this, "DeployWebsite", {
 
 ### ボリュームタイプ
 
-| タイプ | 用途 | IOPS | スループット |
-|--------|------|------|------------|
-| gp3 | 汎用 SSD | 最大 16,000 | 最大 1,000 MB/s |
-| gp2 | 汎用 SSD（旧） | 容量に比例 | - |
-| io2 | 高性能 SSD | 最大 64,000 | - |
-| st1 | スループット最適化 HDD | - | 最大 500 MB/s |
-| sc1 | コールド HDD | - | 最大 250 MB/s |
+| タイプ | 用途                   | IOPS        | スループット    |
+| ------ | ---------------------- | ----------- | --------------- |
+| gp3    | 汎用 SSD               | 最大 16,000 | 最大 1,000 MB/s |
+| gp2    | 汎用 SSD（旧）         | 容量に比例  | -               |
+| io2    | 高性能 SSD             | 最大 64,000 | -               |
+| st1    | スループット最適化 HDD | -           | 最大 500 MB/s   |
+| sc1    | コールド HDD           | -           | 最大 250 MB/s   |
 
 ### CDK での設定
 

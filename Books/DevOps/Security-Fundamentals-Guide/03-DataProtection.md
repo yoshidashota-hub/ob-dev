@@ -62,7 +62,7 @@ export class Encryption {
     const decipher = crypto.createDecipheriv(
       ALGORITHM,
       this.key,
-      Buffer.from(iv, "hex")
+      Buffer.from(iv, "hex"),
     );
     decipher.setAuthTag(Buffer.from(tag, "hex"));
 
@@ -106,7 +106,7 @@ export async function encryptWithKMS(plaintext: string): Promise<string> {
     new EncryptCommand({
       KeyId: KEY_ID,
       Plaintext: Buffer.from(plaintext),
-    })
+    }),
   );
 
   return Buffer.from(response.CiphertextBlob!).toString("base64");
@@ -116,7 +116,7 @@ export async function decryptWithKMS(ciphertext: string): Promise<string> {
   const response = await kms.send(
     new DecryptCommand({
       CiphertextBlob: Buffer.from(ciphertext, "base64"),
-    })
+    }),
   );
 
   return Buffer.from(response.Plaintext!).toString("utf8");
@@ -135,7 +135,7 @@ export function middleware(request: NextRequest) {
   ) {
     return NextResponse.redirect(
       `https://${request.headers.get("host")}${request.nextUrl.pathname}`,
-      301
+      301,
     );
   }
 
@@ -169,7 +169,7 @@ export async function getSecret(secretName: string): Promise<any> {
   }
 
   const response = await client.send(
-    new GetSecretValueCommand({ SecretId: secretName })
+    new GetSecretValueCommand({ SecretId: secretName }),
   );
 
   const value = JSON.parse(response.SecretString!);
@@ -269,7 +269,7 @@ export function log(level: string, message: string, data?: any) {
       level,
       message,
       data: data ? sanitizeObject(data) : undefined,
-    })
+    }),
   );
 }
 
@@ -300,7 +300,9 @@ export async function cleanupExpiredData() {
   await prisma.log.deleteMany({
     where: {
       createdAt: {
-        lt: new Date(now.getTime() - RETENTION_POLICIES.logs * 24 * 60 * 60 * 1000),
+        lt: new Date(
+          now.getTime() - RETENTION_POLICIES.logs * 24 * 60 * 60 * 1000,
+        ),
       },
     },
   });
@@ -309,7 +311,9 @@ export async function cleanupExpiredData() {
   await prisma.user.deleteMany({
     where: {
       deletedAt: {
-        lt: new Date(now.getTime() - RETENTION_POLICIES.deletedUsers * 24 * 60 * 60 * 1000),
+        lt: new Date(
+          now.getTime() - RETENTION_POLICIES.deletedUsers * 24 * 60 * 60 * 1000,
+        ),
       },
     },
   });

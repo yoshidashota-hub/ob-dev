@@ -120,7 +120,9 @@ const securityHeaders = [
       font-src 'self';
       connect-src 'self' https://api.stripe.com;
       frame-src https://js.stripe.com;
-    `.replace(/\s+/g, " ").trim(),
+    `
+      .replace(/\s+/g, " ")
+      .trim(),
   },
   // 権限ポリシー
   {

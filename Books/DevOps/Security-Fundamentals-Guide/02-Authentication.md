@@ -67,7 +67,7 @@ export const authOptions = {
 
         const isValid = await bcrypt.compare(
           credentials.password,
-          user.hashedPassword
+          user.hashedPassword,
         );
 
         if (!isValid) {
@@ -146,7 +146,9 @@ import { SignJWT, jwtVerify } from "jose";
 
 const SECRET = new TextEncoder().encode(process.env.JWT_SECRET!);
 
-export async function createToken(payload: Record<string, any>): Promise<string> {
+export async function createToken(
+  payload: Record<string, any>,
+): Promise<string> {
   return new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
@@ -203,7 +205,9 @@ export async function createTokenPair(userId: string): Promise<TokenPair> {
   return { accessToken, refreshToken };
 }
 
-export async function refreshAccessToken(refreshToken: string): Promise<string | null> {
+export async function refreshAccessToken(
+  refreshToken: string,
+): Promise<string | null> {
   const payload = await verifyToken(refreshToken);
 
   if (!payload || payload.type !== "refresh") {
@@ -240,7 +244,7 @@ export function generateMFASecret(): string {
 // QRコード生成
 export async function generateMFAQRCode(
   email: string,
-  secret: string
+  secret: string,
 ): Promise<string> {
   const otpauth = authenticator.keyuri(email, "MyApp", secret);
   return QRCode.toDataURL(otpauth);
@@ -371,12 +375,16 @@ export const passwordSchema = z
 // 漏洩パスワードチェック（Have I Been Pwned API）
 export async function isPasswordBreached(password: string): Promise<boolean> {
   const crypto = await import("crypto");
-  const hash = crypto.createHash("sha1").update(password).digest("hex").toUpperCase();
+  const hash = crypto
+    .createHash("sha1")
+    .update(password)
+    .digest("hex")
+    .toUpperCase();
   const prefix = hash.substring(0, 5);
   const suffix = hash.substring(5);
 
   const response = await fetch(
-    `https://api.pwnedpasswords.com/range/${prefix}`
+    `https://api.pwnedpasswords.com/range/${prefix}`,
   );
   const text = await response.text();
 

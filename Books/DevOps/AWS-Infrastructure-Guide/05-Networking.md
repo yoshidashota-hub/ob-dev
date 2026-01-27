@@ -140,7 +140,10 @@ const httpApi = new apigatewayv2.HttpApi(this, "HttpApi", {
   apiName: "My HTTP API",
   corsPreflight: {
     allowOrigins: ["https://example.com"],
-    allowMethods: [apigatewayv2.CorsHttpMethod.GET, apigatewayv2.CorsHttpMethod.POST],
+    allowMethods: [
+      apigatewayv2.CorsHttpMethod.GET,
+      apigatewayv2.CorsHttpMethod.POST,
+    ],
   },
 });
 
@@ -196,7 +199,8 @@ const distribution = new cloudfront.Distribution(this, "Distribution", {
       origin: new origins.HttpOrigin(apiDomain),
       viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.HTTPS_ONLY,
       cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
-      originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
+      originRequestPolicy:
+        cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
       allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
     },
   },
@@ -253,7 +257,7 @@ new route53.ARecord(this, "SiteRecord", {
   zone,
   recordName: "www",
   target: route53.RecordTarget.fromAlias(
-    new targets.CloudFrontTarget(distribution)
+    new targets.CloudFrontTarget(distribution),
   ),
 });
 
@@ -261,9 +265,7 @@ new route53.ARecord(this, "SiteRecord", {
 new route53.ARecord(this, "ApiRecord", {
   zone,
   recordName: "api",
-  target: route53.RecordTarget.fromAlias(
-    new targets.ApiGateway(api)
-  ),
+  target: route53.RecordTarget.fromAlias(new targets.ApiGateway(api)),
 });
 ```
 
