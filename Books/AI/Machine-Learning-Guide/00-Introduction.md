@@ -33,14 +33,14 @@
 
 ## Web 開発での活用例
 
-| 用途 | 技術 | 例 |
-|------|------|-----|
-| 画像分類 | CNN | 商品画像の自動タグ付け |
-| 検索 | Embeddings | セマンティック検索 |
-| レコメンド | 協調フィルタリング | 商品おすすめ |
-| 感情分析 | NLP | レビュー分析 |
-| 異常検知 | 統計/ML | 不正検知 |
-| チャットボット | LLM | カスタマーサポート |
+| 用途           | 技術               | 例                     |
+| -------------- | ------------------ | ---------------------- |
+| 画像分類       | CNN                | 商品画像の自動タグ付け |
+| 検索           | Embeddings         | セマンティック検索     |
+| レコメンド     | 協調フィルタリング | 商品おすすめ           |
+| 感情分析       | NLP                | レビュー分析           |
+| 異常検知       | 統計/ML            | 不正検知               |
+| チャットボット | LLM                | カスタマーサポート     |
 
 ## ML vs AI vs LLM
 
@@ -66,7 +66,7 @@
 
 ```typescript
 // TensorFlow.js - クライアント/サーバーで ML
-import * as tf from '@tensorflow/tfjs';
+import * as tf from "@tensorflow/tfjs";
 
 const model = tf.sequential();
 model.add(tf.layers.dense({ units: 10, inputShape: [5] }));
@@ -77,12 +77,12 @@ model.add(tf.layers.dense({ units: 10, inputShape: [5] }));
 ```typescript
 // Hugging Face Inference API
 const response = await fetch(
-  'https://api-inference.huggingface.co/models/bert-base-uncased',
+  "https://api-inference.huggingface.co/models/bert-base-uncased",
   {
-    method: 'POST',
+    method: "POST",
     headers: { Authorization: `Bearer ${HF_TOKEN}` },
-    body: JSON.stringify({ inputs: 'Hello world' }),
-  }
+    body: JSON.stringify({ inputs: "Hello world" }),
+  },
 );
 ```
 
@@ -90,12 +90,12 @@ const response = await fetch(
 
 ```typescript
 // ベクトル化
-import { embed } from 'ai';
-import { openai } from '@ai-sdk/openai';
+import { embed } from "ai";
+import { openai } from "@ai-sdk/openai";
 
 const { embedding } = await embed({
-  model: openai.embedding('text-embedding-3-small'),
-  value: 'Machine learning is amazing',
+  model: openai.embedding("text-embedding-3-small"),
+  value: "Machine learning is amazing",
 });
 // embedding: number[] (1536次元のベクトル)
 ```
