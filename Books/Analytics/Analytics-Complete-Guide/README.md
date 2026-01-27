@@ -5,6 +5,7 @@
 ## 目次
 
 ### Part 1: BigQuery
+
 1. [BigQuery 入門](./01-BigQuery-Introduction.md) - 概要とセットアップ
 2. [SQL クエリ](./02-BigQuery-SQL.md) - 基本から応用まで
 3. [パーティションとクラスタ](./03-BigQuery-Optimization.md) - パフォーマンス最適化
@@ -12,6 +13,7 @@
 5. [ML](./05-BigQuery-ML.md) - BigQuery ML
 
 ### Part 2: Elasticsearch
+
 6. [Elasticsearch 入門](./06-Elasticsearch-Introduction.md) - 概要とセットアップ
 7. [インデックスとマッピング](./07-Elasticsearch-Indexing.md) - データ構造
 8. [検索クエリ](./08-Elasticsearch-Search.md) - 全文検索
@@ -19,6 +21,7 @@
 10. [日本語検索](./10-Elasticsearch-Japanese.md) - Kuromoji
 
 ### Part 3: 実践
+
 11. [イベントトラッキング](./11-Event-Tracking.md) - ユーザー行動分析
 12. [ダッシュボード](./12-Dashboards.md) - 可視化
 13. [アラート](./13-Alerts.md) - 異常検知
