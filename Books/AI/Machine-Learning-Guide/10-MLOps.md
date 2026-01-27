@@ -26,7 +26,11 @@
 
 ```typescript
 // lib/model-registry.ts
-import { S3Client, PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
+import {
+  S3Client,
+  PutObjectCommand,
+  GetObjectCommand,
+} from "@aws-sdk/client-s3";
 import { createHash } from "crypto";
 
 interface ModelMetadata {
@@ -90,7 +94,8 @@ class ModelRegistry {
 
   // モデルを取得
   async getModel(modelName: string, version?: string): Promise<Buffer> {
-    const targetVersion = version || (await this.getProductionVersion(modelName));
+    const targetVersion =
+      version || (await this.getProductionVersion(modelName));
 
     const response = await this.s3.send(
       new GetObjectCommand({
@@ -132,8 +137,14 @@ class ModelRegistry {
   }
 
   private generateVersion(modelBuffer: Buffer): string {
-    const hash = createHash("sha256").update(modelBuffer).digest("hex").slice(0, 8);
-    const timestamp = new Date().toISOString().replace(/[-:T]/g, "").slice(0, 14);
+    const hash = createHash("sha256")
+      .update(modelBuffer)
+      .digest("hex")
+      .slice(0, 8);
+    const timestamp = new Date()
+      .toISOString()
+      .replace(/[-:T]/g, "")
+      .slice(0, 14);
     return `${timestamp}-${hash}`;
   }
 }
@@ -331,7 +342,10 @@ let modelVersion: string | null = null;
 
 async function loadModel(): Promise<tf.LayersModel> {
   if (!model) {
-    const registry = new ModelRegistry({ bucket: "my-models", region: "ap-northeast-1" });
+    const registry = new ModelRegistry({
+      bucket: "my-models",
+      region: "ap-northeast-1",
+    });
     const modelBuffer = await registry.getModel("sentiment-classifier");
     modelVersion = await registry.getProductionVersion("sentiment-classifier");
 
@@ -515,7 +529,8 @@ class ModelMonitor {
     const labeled = recentLogs.filter((l) => l.actualLabel !== undefined);
     const accuracy =
       labeled.length > 0
-        ? labeled.filter((l) => l.prediction === l.actualLabel).length / labeled.length
+        ? labeled.filter((l) => l.prediction === l.actualLabel).length /
+          labeled.length
         : undefined;
 
     return {
@@ -704,7 +719,8 @@ interface ABTestConfig {
 
 class ABTestManager {
   private tests: Map<string, ABTestConfig> = new Map();
-  private results: Map<string, { control: any[]; treatment: any[] }> = new Map();
+  private results: Map<string, { control: any[]; treatment: any[] }> =
+    new Map();
 
   createTest(config: ABTestConfig): void {
     this.tests.set(config.name, config);
@@ -750,7 +766,9 @@ class ABTestManager {
     if (!results) throw new Error(`Test not found: ${testName}`);
 
     const controlValues = results.control.map((r) => r.metrics.accuracy || 0);
-    const treatmentValues = results.treatment.map((r) => r.metrics.accuracy || 0);
+    const treatmentValues = results.treatment.map(
+      (r) => r.metrics.accuracy || 0,
+    );
 
     const controlMean = this.mean(controlValues);
     const treatmentMean = this.mean(treatmentValues);
@@ -782,8 +800,10 @@ class ABTestManager {
     // 簡易的な t 検定
     const meanA = this.mean(a);
     const meanB = this.mean(b);
-    const varA = a.reduce((sum, v) => sum + Math.pow(v - meanA, 2), 0) / (a.length - 1);
-    const varB = b.reduce((sum, v) => sum + Math.pow(v - meanB, 2), 0) / (b.length - 1);
+    const varA =
+      a.reduce((sum, v) => sum + Math.pow(v - meanA, 2), 0) / (a.length - 1);
+    const varB =
+      b.reduce((sum, v) => sum + Math.pow(v - meanB, 2), 0) / (b.length - 1);
 
     const pooledSE = Math.sqrt(varA / a.length + varB / b.length);
     const t = (meanA - meanB) / pooledSE;

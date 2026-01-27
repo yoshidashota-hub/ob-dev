@@ -39,11 +39,19 @@ type Label = "spam" | "not_spam";
 // 学習データ
 const trainingData: Array<{ email: EmailData; label: Label }> = [
   {
-    email: { subject: "お金を稼ぐ方法", body: "...", senderDomain: "unknown.com" },
+    email: {
+      subject: "お金を稼ぐ方法",
+      body: "...",
+      senderDomain: "unknown.com",
+    },
     label: "spam",
   },
   {
-    email: { subject: "会議のお知らせ", body: "...", senderDomain: "company.com" },
+    email: {
+      subject: "会議のお知らせ",
+      body: "...",
+      senderDomain: "company.com",
+    },
     label: "not_spam",
   },
 ];
@@ -65,7 +73,10 @@ interface HouseFeatures {
 // 学習データ
 const trainingData: Array<{ features: HouseFeatures; price: number }> = [
   { features: { area: 80, rooms: 3, age: 5, distance: 0.5 }, price: 45000000 },
-  { features: { area: 120, rooms: 4, age: 10, distance: 1.0 }, price: 55000000 },
+  {
+    features: { area: 120, rooms: 4, age: 10, distance: 1.0 },
+    price: 55000000,
+  },
 ];
 
 // 予測: 特徴量 → 価格（連続値）
@@ -372,10 +383,7 @@ function calculateRegressionMetrics(
     (sum, p, i) => sum + Math.pow(actual[i] - p, 2),
     0,
   );
-  const ssTot = actual.reduce(
-    (sum, a) => sum + Math.pow(a - actualMean, 2),
-    0,
-  );
+  const ssTot = actual.reduce((sum, a) => sum + Math.pow(a - actualMean, 2), 0);
   const r2 = 1 - ssRes / ssTot;
 
   return { mse, rmse, mae, r2 };

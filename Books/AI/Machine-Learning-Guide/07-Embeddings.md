@@ -155,7 +155,9 @@ class SemanticSearch {
   private documents: Document[] = [];
 
   // ドキュメントを追加
-  async addDocuments(docs: Array<{ id: string; content: string; metadata?: any }>) {
+  async addDocuments(
+    docs: Array<{ id: string; content: string; metadata?: any }>,
+  ) {
     const contents = docs.map((d) => d.content);
     const embeddings = await getEmbeddings(contents);
 
@@ -219,8 +221,8 @@ class SemanticSearch {
     this.documents.forEach((doc) => {
       const keywordScore = (keywordScores.get(doc.id) || 0) / maxKeyword;
       const semanticScore =
-        (semanticResults.find((r) => r.document.id === doc.id)?.similarity || 0) /
-        maxSemantic;
+        (semanticResults.find((r) => r.document.id === doc.id)?.similarity ||
+          0) / maxSemantic;
 
       combinedScores.set(
         doc.id,

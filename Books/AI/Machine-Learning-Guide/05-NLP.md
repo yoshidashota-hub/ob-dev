@@ -47,22 +47,129 @@ function tokenize(text: string): string[] {
 
 // ストップワード除去
 const stopWords = new Set([
-  "the", "a", "an", "is", "are", "was", "were", "be", "been",
-  "being", "have", "has", "had", "do", "does", "did", "will",
-  "would", "could", "should", "may", "might", "must", "shall",
-  "can", "of", "at", "by", "for", "with", "about", "against",
-  "between", "into", "through", "during", "before", "after",
-  "above", "below", "to", "from", "up", "down", "in", "out",
-  "on", "off", "over", "under", "again", "further", "then",
-  "once", "here", "there", "when", "where", "why", "how", "all",
-  "each", "few", "more", "most", "other", "some", "such", "no",
-  "nor", "not", "only", "own", "same", "so", "than", "too",
-  "very", "just", "and", "but", "if", "or", "because", "as",
-  "until", "while", "this", "that", "these", "those", "i", "me",
-  "my", "myself", "we", "our", "ours", "ourselves", "you", "your",
-  "yours", "yourself", "yourselves", "he", "him", "his", "himself",
-  "she", "her", "hers", "herself", "it", "its", "itself", "they",
-  "them", "their", "theirs", "themselves", "what", "which", "who",
+  "the",
+  "a",
+  "an",
+  "is",
+  "are",
+  "was",
+  "were",
+  "be",
+  "been",
+  "being",
+  "have",
+  "has",
+  "had",
+  "do",
+  "does",
+  "did",
+  "will",
+  "would",
+  "could",
+  "should",
+  "may",
+  "might",
+  "must",
+  "shall",
+  "can",
+  "of",
+  "at",
+  "by",
+  "for",
+  "with",
+  "about",
+  "against",
+  "between",
+  "into",
+  "through",
+  "during",
+  "before",
+  "after",
+  "above",
+  "below",
+  "to",
+  "from",
+  "up",
+  "down",
+  "in",
+  "out",
+  "on",
+  "off",
+  "over",
+  "under",
+  "again",
+  "further",
+  "then",
+  "once",
+  "here",
+  "there",
+  "when",
+  "where",
+  "why",
+  "how",
+  "all",
+  "each",
+  "few",
+  "more",
+  "most",
+  "other",
+  "some",
+  "such",
+  "no",
+  "nor",
+  "not",
+  "only",
+  "own",
+  "same",
+  "so",
+  "than",
+  "too",
+  "very",
+  "just",
+  "and",
+  "but",
+  "if",
+  "or",
+  "because",
+  "as",
+  "until",
+  "while",
+  "this",
+  "that",
+  "these",
+  "those",
+  "i",
+  "me",
+  "my",
+  "myself",
+  "we",
+  "our",
+  "ours",
+  "ourselves",
+  "you",
+  "your",
+  "yours",
+  "yourself",
+  "yourselves",
+  "he",
+  "him",
+  "his",
+  "himself",
+  "she",
+  "her",
+  "hers",
+  "herself",
+  "it",
+  "its",
+  "itself",
+  "they",
+  "them",
+  "their",
+  "theirs",
+  "themselves",
+  "what",
+  "which",
+  "who",
   "whom",
 ]);
 
@@ -72,10 +179,7 @@ function removeStopWords(tokens: string[]): string[] {
 
 // ステミング（簡易版）
 function stem(word: string): string {
-  return word
-    .replace(/ing$/, "")
-    .replace(/ed$/, "")
-    .replace(/s$/, "");
+  return word.replace(/ing$/, "").replace(/ed$/, "").replace(/s$/, "");
 }
 
 // 前処理パイプライン
@@ -109,13 +213,17 @@ let tokenizer: kuromoji.Tokenizer<kuromoji.IpadicFeatures> | null = null;
 async function getTokenizer() {
   if (tokenizer) return tokenizer;
 
-  return new Promise<kuromoji.Tokenizer<kuromoji.IpadicFeatures>>((resolve, reject) => {
-    kuromoji.builder({ dicPath: "node_modules/kuromoji/dict" }).build((err, t) => {
-      if (err) reject(err);
-      tokenizer = t;
-      resolve(t);
-    });
-  });
+  return new Promise<kuromoji.Tokenizer<kuromoji.IpadicFeatures>>(
+    (resolve, reject) => {
+      kuromoji
+        .builder({ dicPath: "node_modules/kuromoji/dict" })
+        .build((err, t) => {
+          if (err) reject(err);
+          tokenizer = t;
+          resolve(t);
+        });
+    },
+  );
 }
 
 async function tokenizeJapanese(text: string): Promise<Token[]> {
@@ -282,7 +390,9 @@ async function findSimilar(
     similarity: cosineSimilarity(queryEmbedding, docEmbeddings[i]),
   }));
 
-  return similarities.sort((a, b) => b.similarity - a.similarity).slice(0, topK);
+  return similarities
+    .sort((a, b) => b.similarity - a.similarity)
+    .slice(0, topK);
 }
 ```
 
@@ -340,7 +450,10 @@ class SentimentClassifier {
     if (sequence.length > this.maxLength) {
       return sequence.slice(0, this.maxLength);
     }
-    return [...sequence, ...new Array(this.maxLength - sequence.length).fill(0)];
+    return [
+      ...sequence,
+      ...new Array(this.maxLength - sequence.length).fill(0),
+    ];
   }
 
   // 語彙を構築
@@ -440,10 +553,7 @@ async function classifyText(
 
 // 日本語感情分析
 async function analyzeJapaneseSentiment(text: string) {
-  return classifyText(
-    text,
-    "koheiduck/bert-japanese-finetuned-sentiment",
-  );
+  return classifyText(text, "koheiduck/bert-japanese-finetuned-sentiment");
 }
 
 // 使用例

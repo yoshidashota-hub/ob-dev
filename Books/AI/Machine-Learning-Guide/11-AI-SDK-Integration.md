@@ -132,7 +132,9 @@ class RAGSystem {
   private documents: Document[] = [];
 
   // ドキュメントを追加
-  async addDocuments(docs: Array<{ id: string; content: string; metadata?: any }>) {
+  async addDocuments(
+    docs: Array<{ id: string; content: string; metadata?: any }>,
+  ) {
     for (const doc of docs) {
       const { embedding } = await embed({
         model: openai.embedding("text-embedding-3-small"),
@@ -547,7 +549,12 @@ async function mlClassify(text: string): Promise<{
       body: JSON.stringify({
         inputs: text,
         parameters: {
-          candidate_labels: ["technology", "business", "sports", "entertainment"],
+          candidate_labels: [
+            "technology",
+            "business",
+            "sports",
+            "entertainment",
+          ],
         },
       }),
     },
@@ -605,7 +612,10 @@ async function hybridClassify(text: string): Promise<ClassificationResult> {
     // 一致する場合は信頼度を上げる
     return {
       category: mlResult.category,
-      confidence: Math.min(1, (mlResult.confidence + llmResult.confidence) / 2 + 0.1),
+      confidence: Math.min(
+        1,
+        (mlResult.confidence + llmResult.confidence) / 2 + 0.1,
+      ),
       method: "hybrid",
       explanation: llmResult.explanation,
     };

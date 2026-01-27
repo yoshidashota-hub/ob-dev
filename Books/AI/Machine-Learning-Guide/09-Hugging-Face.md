@@ -119,11 +119,9 @@ async function classifyZeroShot(
   text: string,
   labels: string[],
 ): Promise<{ labels: string[]; scores: number[] }> {
-  return await callInferenceAPI(
-    "facebook/bart-large-mnli",
-    text,
-    { candidate_labels: labels },
-  );
+  return await callInferenceAPI("facebook/bart-large-mnli", text, {
+    candidate_labels: labels,
+  });
 }
 
 // 使用例
@@ -159,7 +157,10 @@ async function extractEntities(text: string): Promise<NEREntity[]> {
 
 // 日本語 NER
 async function extractJapaneseEntities(text: string): Promise<NEREntity[]> {
-  return await callInferenceAPI("cl-tohoku/bert-base-japanese-whole-word-masking", text);
+  return await callInferenceAPI(
+    "cl-tohoku/bert-base-japanese-whole-word-masking",
+    text,
+  );
 }
 
 // 使用例
@@ -212,7 +213,10 @@ It was released by Google in March 2018.
 It allows developers to train and deploy ML models in the browser.
 `;
 
-const answer = await answerQuestion("When was TensorFlow.js released?", context);
+const answer = await answerQuestion(
+  "When was TensorFlow.js released?",
+  context,
+);
 console.log(answer);
 // { answer: "March 2018", score: 0.95, start: 70, end: 80 }
 ```
@@ -240,11 +244,10 @@ async function generateText(
     do_sample: true,
   };
 
-  const result = await callInferenceAPI(
-    "gpt2",
-    prompt,
-    { ...defaultParams, ...params },
-  );
+  const result = await callInferenceAPI("gpt2", prompt, {
+    ...defaultParams,
+    ...params,
+  });
 
   return result[0].generated_text;
 }
@@ -287,11 +290,10 @@ async function summarize(
     do_sample: false,
   };
 
-  const result = await callInferenceAPI(
-    "facebook/bart-large-cnn",
-    text,
-    { ...defaultParams, ...params },
-  );
+  const result = await callInferenceAPI("facebook/bart-large-cnn", text, {
+    ...defaultParams,
+    ...params,
+  });
 
   return result[0].summary_text;
 }
@@ -427,13 +429,7 @@ console.log(`次元数: ${embeddings[0].length}`); // 384
 
 import { NextRequest } from "next/server";
 
-type Task =
-  | "sentiment"
-  | "ner"
-  | "qa"
-  | "summarize"
-  | "translate"
-  | "classify";
+type Task = "sentiment" | "ner" | "qa" | "summarize" | "translate" | "classify";
 
 interface NLPRequest {
   task: Task;
@@ -464,7 +460,10 @@ export async function POST(request: NextRequest) {
 
       case "qa":
         if (!options?.context) {
-          return Response.json({ error: "Context required for QA" }, { status: 400 });
+          return Response.json(
+            { error: "Context required for QA" },
+            { status: 400 },
+          );
         }
         result = await answerQuestion(text, options.context);
         break;

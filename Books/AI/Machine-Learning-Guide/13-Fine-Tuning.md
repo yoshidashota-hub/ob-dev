@@ -388,23 +388,26 @@ async function createAutoTrainProject(
   task: string,
   datasetId: string,
 ): Promise<string> {
-  const response = await fetch("https://api.huggingface.co/autotrain/projects", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${process.env.HF_TOKEN}`,
-      "Content-Type": "application/json",
+  const response = await fetch(
+    "https://api.huggingface.co/autotrain/projects",
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.HF_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        project_name: projectName,
+        task,
+        base_model: "bert-base-uncased",
+        dataset_id: datasetId,
+        train_split: "train",
+        valid_split: "validation",
+        text_column: "text",
+        label_column: "label",
+      }),
     },
-    body: JSON.stringify({
-      project_name: projectName,
-      task,
-      base_model: "bert-base-uncased",
-      dataset_id: datasetId,
-      train_split: "train",
-      valid_split: "validation",
-      text_column: "text",
-      label_column: "label",
-    }),
-  });
+  );
 
   const result = await response.json();
   return result.project_id;

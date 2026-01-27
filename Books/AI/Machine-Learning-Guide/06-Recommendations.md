@@ -104,9 +104,7 @@ interface ProductWithEmbedding {
 async function generateProductEmbeddings(
   products: ProductWithEmbedding[],
 ): Promise<ProductWithEmbedding[]> {
-  const texts = products.map(
-    (p) => `${p.name}. ${p.description}`,
-  );
+  const texts = products.map((p) => `${p.name}. ${p.description}`);
 
   const { embeddings } = await embedMany({
     model: openai.embedding("text-embedding-3-small"),
@@ -131,7 +129,10 @@ function findSimilarProducts(
     .filter((p) => p.id !== targetProduct.id && p.embedding)
     .map((product) => ({
       product,
-      similarity: cosineSimilarity(targetProduct.embedding!, product.embedding!),
+      similarity: cosineSimilarity(
+        targetProduct.embedding!,
+        product.embedding!,
+      ),
     }))
     .sort((a, b) => b.similarity - a.similarity)
     .slice(0, topK);
@@ -155,7 +156,9 @@ interface UserBasedCF {
 }
 
 // ユーザー-アイテム行列を構築
-function buildUserItemMatrix(ratings: Rating[]): Map<string, Map<string, number>> {
+function buildUserItemMatrix(
+  ratings: Rating[],
+): Map<string, Map<string, number>> {
   const matrix = new Map<string, Map<string, number>>();
 
   for (const { userId, itemId, rating } of ratings) {
@@ -259,7 +262,9 @@ function recommendUserBased(
     }
   });
 
-  return results.sort((a, b) => b.predictedRating - a.predictedRating).slice(0, topK);
+  return results
+    .sort((a, b) => b.predictedRating - a.predictedRating)
+    .slice(0, topK);
 }
 ```
 
@@ -346,7 +351,9 @@ function recommendItemBased(
     });
   });
 
-  return results.sort((a, b) => b.predictedRating - a.predictedRating).slice(0, topK);
+  return results
+    .sort((a, b) => b.predictedRating - a.predictedRating)
+    .slice(0, topK);
 }
 ```
 
@@ -399,14 +406,21 @@ class MatrixFactorization {
     this.itemBias = tf.variable(tf.zeros([this.numItems]));
 
     // グローバルバイアス
-    this.globalBias = ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length;
+    this.globalBias =
+      ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length;
   }
 
   // 予測
   private predict(userIdx: number, itemIdx: number): tf.Scalar {
     return tf.tidy(() => {
-      const userVec = this.userFactors!.slice([userIdx, 0], [1, this.numFactors]);
-      const itemVec = this.itemFactors!.slice([itemIdx, 0], [1, this.numFactors]);
+      const userVec = this.userFactors!.slice(
+        [userIdx, 0],
+        [1, this.numFactors],
+      );
+      const itemVec = this.itemFactors!.slice(
+        [itemIdx, 0],
+        [1, this.numFactors],
+      );
 
       const dotProduct = userVec.mul(itemVec).sum();
       const userB = this.userBias!.slice([userIdx], [1]).squeeze();
@@ -443,13 +457,17 @@ class MatrixFactorization {
             const mse = pred.sub(rating).square();
 
             // L2 正則化
-            const userReg = this.userFactors!
-              .slice([userIdx, 0], [1, this.numFactors])
+            const userReg = this.userFactors!.slice(
+              [userIdx, 0],
+              [1, this.numFactors],
+            )
               .square()
               .sum()
               .mul(regularization);
-            const itemReg = this.itemFactors!
-              .slice([itemIdx, 0], [1, this.numFactors])
+            const itemReg = this.itemFactors!.slice(
+              [itemIdx, 0],
+              [1, this.numFactors],
+            )
               .square()
               .sum()
               .mul(regularization);
@@ -457,7 +475,12 @@ class MatrixFactorization {
             return mse.add(userReg).add(itemReg);
           },
           true,
-          [this.userFactors!, this.itemFactors!, this.userBias!, this.itemBias!],
+          [
+            this.userFactors!,
+            this.itemFactors!,
+            this.userBias!,
+            this.itemBias!,
+          ],
         ) as tf.Scalar;
 
         totalLoss += loss.dataSync()[0];
@@ -465,13 +488,18 @@ class MatrixFactorization {
       }
 
       if (epoch % 10 === 0) {
-        console.log(`Epoch ${epoch}: Loss = ${(totalLoss / ratings.length).toFixed(4)}`);
+        console.log(
+          `Epoch ${epoch}: Loss = ${(totalLoss / ratings.length).toFixed(4)}`,
+        );
       }
     }
   }
 
   // 推薦
-  recommend(userId: string, topK: number = 10): Array<{ itemId: string; score: number }> {
+  recommend(
+    userId: string,
+    topK: number = 10,
+  ): Array<{ itemId: string; score: number }> {
     const userIdx = this.userIdMap.get(userId);
     if (userIdx === undefined) return [];
 
@@ -578,7 +606,9 @@ async function getPersonalizedRecommendations(
   }
 
   // 3. 協調フィルタリングの結果を追加
-  const cfRecommendations = await getCollaborativeRecommendations(history.userId);
+  const cfRecommendations = await getCollaborativeRecommendations(
+    history.userId,
+  );
   recommendations.push(
     ...cfRecommendations.map((r) => ({
       ...r,
@@ -666,7 +696,8 @@ function calculateDiversity(
 
   for (let i = 0; i < recommendations.length; i++) {
     for (let j = i + 1; j < recommendations.length; j++) {
-      const sim = similarityMatrix.get(recommendations[i])?.get(recommendations[j]) || 0;
+      const sim =
+        similarityMatrix.get(recommendations[i])?.get(recommendations[j]) || 0;
       totalDissimilarity += 1 - sim;
       pairs++;
     }

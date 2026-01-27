@@ -447,12 +447,16 @@ async function trainCustomClassifier(
 
   const xTrain = tf.stack(imageTensors);
   const yTrain = tf.oneHot(
-    tf.tensor1d(images.map((img) => img.label), "int32"),
+    tf.tensor1d(
+      images.map((img) => img.label),
+      "int32",
+    ),
     numClasses,
   );
 
   // モデル作成
-  const { featureModel, classificationModel } = await createTransferLearningModel(numClasses);
+  const { featureModel, classificationModel } =
+    await createTransferLearningModel(numClasses);
 
   // 特徴抽出
   const features = featureModel.predict(xTrain) as tf.Tensor2D;
@@ -517,8 +521,14 @@ function evaluateClassifier(
 
   for (let c = 0; c < numClasses; c++) {
     const tp = confusionMatrix[c][c];
-    const fp = confusionMatrix.reduce((sum, row, i) => (i !== c ? sum + row[c] : sum), 0);
-    const fn = confusionMatrix[c].reduce((sum, val, i) => (i !== c ? sum + val : sum), 0);
+    const fp = confusionMatrix.reduce(
+      (sum, row, i) => (i !== c ? sum + row[c] : sum),
+      0,
+    );
+    const fn = confusionMatrix[c].reduce(
+      (sum, val, i) => (i !== c ? sum + val : sum),
+      0,
+    );
 
     const p = tp / (tp + fp) || 0;
     const r = tp / (tp + fn) || 0;

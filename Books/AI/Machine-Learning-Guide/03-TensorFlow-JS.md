@@ -72,8 +72,14 @@ console.log(matrix.shape); // [2, 3]
 
 // 3次元テンソル
 const tensor3d = tf.tensor3d([
-  [[1, 2], [3, 4]],
-  [[5, 6], [7, 8]],
+  [
+    [1, 2],
+    [3, 4],
+  ],
+  [
+    [5, 6],
+    [7, 8],
+  ],
 ]);
 console.log(tensor3d.shape); // [2, 2, 2]
 
@@ -101,8 +107,14 @@ const product = a.mul(b); // [4, 10, 18]
 const quotient = a.div(b); // [0.25, 0.4, 0.5]
 
 // 行列演算
-const matA = tf.tensor2d([[1, 2], [3, 4]]);
-const matB = tf.tensor2d([[5, 6], [7, 8]]);
+const matA = tf.tensor2d([
+  [1, 2],
+  [3, 4],
+]);
+const matB = tf.tensor2d([
+  [5, 6],
+  [7, 8],
+]);
 
 const matMul = matA.matMul(matB); // 行列積
 const transpose = matA.transpose(); // 転置
@@ -115,7 +127,10 @@ console.log(tensor.max().dataSync()[0]); // 5
 console.log(tensor.min().dataSync()[0]); // 1
 
 // 軸を指定
-const matrix2 = tf.tensor2d([[1, 2], [3, 4]]);
+const matrix2 = tf.tensor2d([
+  [1, 2],
+  [3, 4],
+]);
 console.log(matrix2.sum(0).dataSync()); // [4, 6] (列方向)
 console.log(matrix2.sum(1).dataSync()); // [3, 7] (行方向)
 ```
@@ -196,13 +211,21 @@ const dense1 = tf.layers.dense({ units: 64, activation: "relu" }).apply(input);
 const dense2 = tf.layers.dense({ units: 32, activation: "relu" }).apply(dense1);
 
 // 分岐
-const branch1 = tf.layers.dense({ units: 16, activation: "relu" }).apply(dense2);
-const branch2 = tf.layers.dense({ units: 16, activation: "relu" }).apply(dense2);
+const branch1 = tf.layers
+  .dense({ units: 16, activation: "relu" })
+  .apply(dense2);
+const branch2 = tf.layers
+  .dense({ units: 16, activation: "relu" })
+  .apply(dense2);
 
 // 結合
-const concat = tf.layers.concatenate().apply([branch1, branch2]) as tf.SymbolicTensor;
+const concat = tf.layers
+  .concatenate()
+  .apply([branch1, branch2]) as tf.SymbolicTensor;
 
-const output = tf.layers.dense({ units: 2, activation: "softmax" }).apply(concat);
+const output = tf.layers
+  .dense({ units: 2, activation: "softmax" })
+  .apply(concat);
 
 const model = tf.model({ inputs: input, outputs: output as tf.SymbolicTensor });
 ```
@@ -212,10 +235,7 @@ const model = tf.model({ inputs: input, outputs: output as tf.SymbolicTensor });
 ```typescript
 // データの準備
 const xTrain = tf.randomNormal([1000, 10]); // 1000サンプル、10特徴量
-const yTrain = tf.oneHot(
-  tf.randomUniform([1000], 0, 2, "int32"),
-  2,
-);
+const yTrain = tf.oneHot(tf.randomUniform([1000], 0, 2, "int32"), 2);
 
 // 訓練
 async function trainModel() {
@@ -343,7 +363,9 @@ async function housePricePrediction() {
 
   // モデル定義
   const model = tf.sequential();
-  model.add(tf.layers.dense({ units: 64, inputShape: [3], activation: "relu" }));
+  model.add(
+    tf.layers.dense({ units: 64, inputShape: [3], activation: "relu" }),
+  );
   model.add(tf.layers.dense({ units: 32, activation: "relu" }));
   model.add(tf.layers.dense({ units: 1 })); // 回帰なので活性化関数なし
 
@@ -381,9 +403,27 @@ async function housePricePrediction() {
 async function irisClassification() {
   // アイリスデータセット（簡略化）
   const irisData = [
-    { sepalLength: 5.1, sepalWidth: 3.5, petalLength: 1.4, petalWidth: 0.2, species: 0 },
-    { sepalLength: 7.0, sepalWidth: 3.2, petalLength: 4.7, petalWidth: 1.4, species: 1 },
-    { sepalLength: 6.3, sepalWidth: 3.3, petalLength: 6.0, petalWidth: 2.5, species: 2 },
+    {
+      sepalLength: 5.1,
+      sepalWidth: 3.5,
+      petalLength: 1.4,
+      petalWidth: 0.2,
+      species: 0,
+    },
+    {
+      sepalLength: 7.0,
+      sepalWidth: 3.2,
+      petalLength: 4.7,
+      petalWidth: 1.4,
+      species: 1,
+    },
+    {
+      sepalLength: 6.3,
+      sepalWidth: 3.3,
+      petalLength: 6.0,
+      petalWidth: 2.5,
+      species: 2,
+    },
     // ... more data
   ];
 
@@ -397,24 +437,42 @@ async function irisClassification() {
 
   // テンソルに変換
   const xTrain = tf.tensor2d(
-    trainData.map((d) => [d.sepalLength, d.sepalWidth, d.petalLength, d.petalWidth]),
+    trainData.map((d) => [
+      d.sepalLength,
+      d.sepalWidth,
+      d.petalLength,
+      d.petalWidth,
+    ]),
   );
   const yTrain = tf.oneHot(
-    tf.tensor1d(trainData.map((d) => d.species), "int32"),
+    tf.tensor1d(
+      trainData.map((d) => d.species),
+      "int32",
+    ),
     3,
   );
 
   const xTest = tf.tensor2d(
-    testData.map((d) => [d.sepalLength, d.sepalWidth, d.petalLength, d.petalWidth]),
+    testData.map((d) => [
+      d.sepalLength,
+      d.sepalWidth,
+      d.petalLength,
+      d.petalWidth,
+    ]),
   );
   const yTest = tf.oneHot(
-    tf.tensor1d(testData.map((d) => d.species), "int32"),
+    tf.tensor1d(
+      testData.map((d) => d.species),
+      "int32",
+    ),
     3,
   );
 
   // モデル定義
   const model = tf.sequential();
-  model.add(tf.layers.dense({ units: 16, inputShape: [4], activation: "relu" }));
+  model.add(
+    tf.layers.dense({ units: 16, inputShape: [4], activation: "relu" }),
+  );
   model.add(tf.layers.dense({ units: 8, activation: "relu" }));
   model.add(tf.layers.dense({ units: 3, activation: "softmax" }));
 

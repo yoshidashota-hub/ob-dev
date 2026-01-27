@@ -117,7 +117,10 @@ class IQRDetector {
     return data.map((value, index) => {
       const isAnomaly = value < this.lowerBound || value > this.upperBound;
       const score = isAnomaly
-        ? Math.abs(value - (value < this.lowerBound ? this.lowerBound : this.upperBound))
+        ? Math.abs(
+            value -
+              (value < this.lowerBound ? this.lowerBound : this.upperBound),
+          )
         : 0;
 
       return { index, value, score, isAnomaly };
@@ -149,7 +152,8 @@ class MovingWindowDetector {
       const window = data.slice(i - this.windowSize, i);
       const mean = window.reduce((a, b) => a + b, 0) / window.length;
       const std = Math.sqrt(
-        window.reduce((sum, x) => sum + Math.pow(x - mean, 2), 0) / window.length,
+        window.reduce((sum, x) => sum + Math.pow(x - mean, 2), 0) /
+          window.length,
       );
 
       const value = data[i];
@@ -239,7 +243,11 @@ class IsolationForest {
     };
   }
 
-  private pathLength(point: number[], tree: TreeNode, depth: number = 0): number {
+  private pathLength(
+    point: number[],
+    tree: TreeNode,
+    depth: number = 0,
+  ): number {
     if (tree.size !== undefined) {
       // リーフノード
       return depth + this.c(tree.size);
@@ -317,7 +325,10 @@ class AnomalyAutoencoder {
       .dense({ units: 64, activation: "relu" })
       .apply(encoderInput);
     x = tf.layers.dense({ units: encodingDim, activation: "relu" }).apply(x);
-    this.encoder = tf.model({ inputs: encoderInput, outputs: x as tf.SymbolicTensor });
+    this.encoder = tf.model({
+      inputs: encoderInput,
+      outputs: x as tf.SymbolicTensor,
+    });
 
     // デコーダー
     const decoderInput = tf.input({ shape: [encodingDim] });
@@ -325,7 +336,10 @@ class AnomalyAutoencoder {
       .dense({ units: 64, activation: "relu" })
       .apply(decoderInput);
     y = tf.layers.dense({ units: inputDim, activation: "sigmoid" }).apply(y);
-    this.decoder = tf.model({ inputs: decoderInput, outputs: y as tf.SymbolicTensor });
+    this.decoder = tf.model({
+      inputs: decoderInput,
+      outputs: y as tf.SymbolicTensor,
+    });
 
     // オートエンコーダー（結合）
     const autoInput = tf.input({ shape: [inputDim] });
@@ -416,7 +430,10 @@ class TimeSeriesAnomalyDetector {
   private trendCoefficients: { slope: number; intercept: number } | null = null;
 
   // 季節性分解
-  decomposeSeasonality(data: number[], period: number): {
+  decomposeSeasonality(
+    data: number[],
+    period: number,
+  ): {
     trend: number[];
     seasonal: number[];
     residual: number[];
@@ -473,7 +490,8 @@ class TimeSeriesAnomalyDetector {
 
     // 残差の統計量
     const validResiduals = residual.filter((r) => !isNaN(r));
-    const mean = validResiduals.reduce((a, b) => a + b, 0) / validResiduals.length;
+    const mean =
+      validResiduals.reduce((a, b) => a + b, 0) / validResiduals.length;
     const std = Math.sqrt(
       validResiduals.reduce((sum, r) => sum + Math.pow(r - mean, 2), 0) /
         validResiduals.length,
@@ -510,7 +528,8 @@ class TimeSeriesAnomalyDetector {
       // 履歴からの標準偏差
       const mean = history.reduce((a, b) => a + b, 0) / history.length;
       const std = Math.sqrt(
-        history.reduce((sum, x) => sum + Math.pow(x - mean, 2), 0) / history.length,
+        history.reduce((sum, x) => sum + Math.pow(x - mean, 2), 0) /
+          history.length,
       );
 
       const score = std > 0 ? error / std : 0;
@@ -551,8 +570,24 @@ class TimeSeriesAnomalyDetector {
 // 使用例
 const detector = new TimeSeriesAnomalyDetector();
 const timeSeriesData = [
-  10, 12, 11, 13, 12, 11, 10, 12, 100, // 異常
-  11, 13, 12, 11, 10, 12, 11, 13, 12,
+  10,
+  12,
+  11,
+  13,
+  12,
+  11,
+  10,
+  12,
+  100, // 異常
+  11,
+  13,
+  12,
+  11,
+  10,
+  12,
+  11,
+  13,
+  12,
 ];
 
 const results = detector.detectWithPrediction(timeSeriesData);
@@ -591,7 +626,8 @@ class FraudDetectionSystem {
     const amounts = userTxns.map((t) => t.amount);
     const avgAmount = amounts.reduce((a, b) => a + b, 0) / amounts.length;
     const stdAmount = Math.sqrt(
-      amounts.reduce((sum, a) => sum + Math.pow(a - avgAmount, 2), 0) / amounts.length,
+      amounts.reduce((sum, a) => sum + Math.pow(a - avgAmount, 2), 0) /
+        amounts.length,
     );
 
     // 時間帯パターン
@@ -603,7 +639,10 @@ class FraudDetectionSystem {
     // 加盟店カテゴリパターン
     const categoryFreq = new Map<string, number>();
     userTxns.forEach((t) => {
-      categoryFreq.set(t.merchantCategory, (categoryFreq.get(t.merchantCategory) || 0) + 1);
+      categoryFreq.set(
+        t.merchantCategory,
+        (categoryFreq.get(t.merchantCategory) || 0) + 1,
+      );
     });
 
     return {
@@ -620,9 +659,12 @@ class FraudDetectionSystem {
   transactionToVector(txn: Transaction, profile: UserProfile): number[] {
     const hourOfDay = txn.timestamp.getHours();
     const dayOfWeek = txn.timestamp.getDay();
-    const amountZScore = (txn.amount - profile.avgAmount) / (profile.stdAmount || 1);
+    const amountZScore =
+      (txn.amount - profile.avgAmount) / (profile.stdAmount || 1);
     const hourAbnormality = 1 - profile.hourPattern[hourOfDay];
-    const isNewLocation = profile.recentLocations.includes(txn.location) ? 0 : 1;
+    const isNewLocation = profile.recentLocations.includes(txn.location)
+      ? 0
+      : 1;
     const categoryFreq =
       (profile.categoryPattern.get(txn.merchantCategory) || 0) /
       (profile.categoryPattern.size || 1);

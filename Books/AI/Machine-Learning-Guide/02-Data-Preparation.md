@@ -41,12 +41,14 @@ function calculateStatistics(values: number[]): Statistics {
   const n = sorted.length;
 
   const mean = values.reduce((a, b) => a + b, 0) / n;
-  const variance = values.reduce((sum, v) => sum + Math.pow(v - mean, 2), 0) / n;
+  const variance =
+    values.reduce((sum, v) => sum + Math.pow(v - mean, 2), 0) / n;
   const std = Math.sqrt(variance);
 
-  const median = n % 2 === 0
-    ? (sorted[n / 2 - 1] + sorted[n / 2]) / 2
-    : sorted[Math.floor(n / 2)];
+  const median =
+    n % 2 === 0
+      ? (sorted[n / 2 - 1] + sorted[n / 2]) / 2
+      : sorted[Math.floor(n / 2)];
 
   const q1Index = Math.floor(n * 0.25);
   const q3Index = Math.floor(n * 0.75);
@@ -88,7 +90,8 @@ function analyzeMissingValues<T extends Record<string, any>>(
 
   return columns.map((column) => {
     const missingCount = data.filter(
-      (row) => row[column] === null || row[column] === undefined || row[column] === "",
+      (row) =>
+        row[column] === null || row[column] === undefined || row[column] === "",
     ).length;
 
     return {
@@ -165,7 +168,10 @@ class MissingValueImputer {
   }
 
   // 欠損値を補完
-  transform(data: Record<string, any>[], columns: string[]): Record<string, any>[] {
+  transform(
+    data: Record<string, any>[],
+    columns: string[],
+  ): Record<string, any>[] {
     if (this.strategy === "drop") {
       return data.filter((row) =>
         columns.every((col) => row[col] !== null && row[col] !== undefined),
@@ -228,7 +234,8 @@ class OutlierDetector {
         // Z-score
         const mean = values.reduce((a, b) => a + b, 0) / values.length;
         const std = Math.sqrt(
-          values.reduce((sum, v) => sum + Math.pow(v - mean, 2), 0) / values.length,
+          values.reduce((sum, v) => sum + Math.pow(v - mean, 2), 0) /
+            values.length,
         );
         this.bounds.set(col, {
           lower: mean - this.threshold * std,
@@ -239,13 +246,19 @@ class OutlierDetector {
   }
 
   // 外れ値をクリップ
-  clip(data: Record<string, number>[], columns: string[]): Record<string, number>[] {
+  clip(
+    data: Record<string, number>[],
+    columns: string[],
+  ): Record<string, number>[] {
     return data.map((row) => {
       const newRow = { ...row };
       for (const col of columns) {
         const bounds = this.bounds.get(col);
         if (bounds) {
-          newRow[col] = Math.max(bounds.lower, Math.min(bounds.upper, row[col]));
+          newRow[col] = Math.max(
+            bounds.lower,
+            Math.min(bounds.upper, row[col]),
+          );
         }
       }
       return newRow;
@@ -280,7 +293,10 @@ class OneHotEncoder {
     }
   }
 
-  transform(data: Record<string, any>[], columns: string[]): Record<string, any>[] {
+  transform(
+    data: Record<string, any>[],
+    columns: string[],
+  ): Record<string, any>[] {
     return data.map((row) => {
       const newRow: Record<string, any> = { ...row };
 
@@ -311,7 +327,10 @@ class LabelEncoder {
     }
   }
 
-  transform(data: Record<string, any>[], columns: string[]): Record<string, any>[] {
+  transform(
+    data: Record<string, any>[],
+    columns: string[],
+  ): Record<string, any>[] {
     return data.map((row) => {
       const newRow = { ...row };
       for (const col of columns) {
@@ -357,7 +376,10 @@ class MinMaxScaler {
     }
   }
 
-  transform(data: Record<string, number>[], columns: string[]): Record<string, number>[] {
+  transform(
+    data: Record<string, number>[],
+    columns: string[],
+  ): Record<string, number>[] {
     return data.map((row) => {
       const newRow = { ...row };
       for (const col of columns) {
@@ -369,7 +391,10 @@ class MinMaxScaler {
     });
   }
 
-  inverseTransform(data: Record<string, number>[], columns: string[]): Record<string, number>[] {
+  inverseTransform(
+    data: Record<string, number>[],
+    columns: string[],
+  ): Record<string, number>[] {
     return data.map((row) => {
       const newRow = { ...row };
       for (const col of columns) {
@@ -392,14 +417,18 @@ class StandardScaler {
       const values = data.map((row) => row[col]);
       const mean = values.reduce((a, b) => a + b, 0) / values.length;
       const std = Math.sqrt(
-        values.reduce((sum, v) => sum + Math.pow(v - mean, 2), 0) / values.length,
+        values.reduce((sum, v) => sum + Math.pow(v - mean, 2), 0) /
+          values.length,
       );
       this.means.set(col, mean);
       this.stds.set(col, std || 1);
     }
   }
 
-  transform(data: Record<string, number>[], columns: string[]): Record<string, number>[] {
+  transform(
+    data: Record<string, number>[],
+    columns: string[],
+  ): Record<string, number>[] {
     return data.map((row) => {
       const newRow = { ...row };
       for (const col of columns) {
@@ -460,7 +489,8 @@ function createInteractionFeatures(
 
   for (const [col1, col2] of pairs) {
     features[`${col1}_x_${col2}`] = row[col1] * row[col2];
-    features[`${col1}_div_${col2}`] = row[col2] !== 0 ? row[col1] / row[col2] : 0;
+    features[`${col1}_div_${col2}`] =
+      row[col2] !== 0 ? row[col1] / row[col2] : 0;
     features[`${col1}_plus_${col2}`] = row[col1] + row[col2];
   }
 
@@ -546,9 +576,7 @@ function dataToTensors(
   featureColumns: string[],
   labelColumn: string,
 ): { features: tf.Tensor2D; labels: tf.Tensor1D } {
-  const features = data.map((row) =>
-    featureColumns.map((col) => row[col]),
-  );
+  const features = data.map((row) => featureColumns.map((col) => row[col]));
 
   const labels = data.map((row) => row[labelColumn]);
 
